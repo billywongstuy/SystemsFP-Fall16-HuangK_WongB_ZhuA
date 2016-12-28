@@ -1,3 +1,3 @@
 # SystemsFP-Fall16-HuangK_WongB_ZhuA
 
-# Chinese Poker
+# Big Two aka Chinese Poker
