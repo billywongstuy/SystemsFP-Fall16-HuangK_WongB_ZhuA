@@ -4,21 +4,47 @@ Members: Karen Huang, Billy Wong, Alvin Zhu
 Description:
 A statement of the problem you are solving and/or a high level description of the project.
 
-A description as to how the project will be used (describe the user interface).
+Big Two
+We will be implementing a terminal based version of the card game Big Two, colloquially referred to as Chinese Poker. This will allow for 2-4 players on different computers to play the game together.
 
-A description of your technical design. This should include:
-  How you will be using the topics covered in class in the project.
-  How you are breaking down the project and who is responsible for which parts.
-  What data structures you will be using and how.
-  What algorithms you will be using, and how.
+User Interface/How It Will Be Used:
+-Player will have their hand on bottom
+-Number of cards other players have will be on left, top, right
+-Center will have most recently player card(s)
+-Turn player can select their option with keyboard commands:
+  -Will be told what option they have (single, double, triples, 5 card combinations, freebie)
+  -P for Pass
+  -Choose by numerical value (Each card in their hand is given a numerical value)
+  -Numerical values separated by commas
+  -Will be told if a move is valid or not
+  
 
-Networking between computers to play the game
-Structs for the different card types
-File reading/writing and shared memory to keep track of hands and most recently played card(s)
-Semaphores to block other players from doing an action
-Arrays for hands
-Signals
+Technical Design (topics, data structures, algorithms):
 
+-Networking between computers to play the game
+-Structs for the different card types
+-File reading/writing and shared memory to keep track of hands and most recently played card(s) and used cards
+-Semaphores to block other players from doing an action
+-Arrays for player hands
+-Signals to determine sigterms
+-Sorting to align the cards for 5 card combinations
+-Inputs and string parsing to determine the turn player's move
+
+
+Breakdown:
+
+Karen:
+Billy:
+Alvin: 
 
   
-A timeline with expected completion dates of parts of the project.
+Timeline of Expected Completed Parts:
+
+-Data components (Cards, hands, used stack)
+-Graphics
+-Rules
+-Player interactions (Networking and semaphores)
+
+
+
+straight < flush < full house < bomb < straight flush < royal flush 
