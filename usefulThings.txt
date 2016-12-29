@@ -1,0 +1,21 @@
+GNET: maybe to view used cards.
+
+
+straight < flush < full house < bomb < straight flush < royal flush 
+
+Alt code 3 = Heart
+Alt code 4 = Diamond
+Alt code 5 = Clover
+Alt code 6 = Spade
+
+Alt Codes for Box:
+
+218   196 196 196   191
+
+179                 179
+179                 179
+179                 179
+
+192   196 196 196   217
+
+
