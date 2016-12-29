@@ -14,6 +14,7 @@ User Interface/How It Will Be Used:
 -Turn player can select their option with keyboard commands:
   -Will be told what option they have (single, double, triples, 5 card combinations, freebie)
   -P for Pass
+  -C to check used cards pile
   -Choose by numerical value (Each card in their hand is given a numerical value)
   -Numerical values separated by commas
   -Will be told if a move is valid or not
@@ -39,11 +40,21 @@ Alvin:
 
   
 Timeline of Expected Completed Parts:
+(when is the due date?)
 
 -Data components (Cards, hands, used stack)
--Graphics
+  -Around 1-2 days?
 -Rules
+  -Around 5-7 days?
+-Graphics
+  -Around 2-3 days?
 -Player interactions (Networking and semaphores)
+  -Around 4-6 days?
+
+
+
+
+
 
 
 
