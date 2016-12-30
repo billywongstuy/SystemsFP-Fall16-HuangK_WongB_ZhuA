@@ -1,20 +1,23 @@
 
 Members: Karen Huang, Billy Wong, Alvin Zhu
 
+
 Description:
 A statement of the problem you are solving and/or a high level description of the project.
 
 Big Two
 We will be implementing a terminal based version of the card game Big Two, colloquially referred to as Chinese Poker. This will allow for 2-4 players on different computers to play the game together.
 
+
 User Interface/How It Will Be Used:
+
 -Player will have their hand on bottom
--Number of cards other players have will be on left, top, right
--Center will have most recently player card(s)
--Turn player can select their option with keyboard commands:
-  -Will be told what option they have (single, double, triples, 5 card combinations, freebie)
+-Number of cards other players have will be on left, top, and right (Player is not shown their hand)
+-Center of the screen will show the most recent card(s)
+-Players can select their option with keyboard commands:
   -P for Pass
   -C to check used cards pile
+-Players will be told what options they have to play (single, double, triples, 5 card combinations, freebie)
   -Choose by numerical value (Each card in their hand is given a numerical value)
   -Numerical values separated by commas
   -Will be told if a move is valid or not
@@ -25,10 +28,10 @@ Technical Design (topics, data structures, algorithms):
 -Networking between computers to play the game
 -Structs for the different card types
 -File reading/writing and shared memory to keep track of hands and most recently played card(s) and used cards
--Semaphores to block other players from doing an action
--Arrays for player hands
+-Semaphores to block other players from performing an invalid action
+-Arrays for players' hands
 -Signals to determine sigterms
--Sorting to align the cards for 5 card combinations
+-Sorting to align the cards for 5-card combinations
 -Inputs and string parsing to determine the turn player's move
 
 
