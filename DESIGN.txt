@@ -23,7 +23,7 @@ User Interface/How It Will Be Used:
   -Will be told if a move is valid or not
   
 
-Technical Design (topics, data structures, algorithms):
+Technical Design (Topics -> Data structures -> Algorithms -> Other):
 
 -Memory allocation for every C program
 -Networking between computers to play the game
@@ -33,13 +33,23 @@ Technical Design (topics, data structures, algorithms):
 -Signals to determine sigterms and handle errors
 -Inputs and string parsing to determine the turn player's move
 
--Structs for the different card types
--Arrays for players' hands
 
--Sorting to align the cards for 5-card combinations
+-Structs for the different card types
+  -struct card {int value; String suit};
+-Arrays for players' hands
+  -card[13];
+-Array to track used cards
+  -card[52];
+
+
+-Sorting (bubble) to align the cards for 5-card combinations
 -Randomization to shuffle the cards and randomly distribute
 
-Breakdown:
+
+*May incorporate GTK library for viewing used cards. Else, use a file.
+
+
+Breakdown (TBD):
 
 Karen:
 Billy:
