@@ -25,15 +25,18 @@ User Interface/How It Will Be Used:
 
 Technical Design (topics, data structures, algorithms):
 
+-Memory allocation for every C program
 -Networking between computers to play the game
--Structs for the different card types
 -File reading/writing and shared memory to keep track of hands and most recently played card(s) and used cards
 -Semaphores to block other players from performing an invalid action
--Arrays for players' hands
 -Signals to determine sigterms
--Sorting to align the cards for 5-card combinations
 -Inputs and string parsing to determine the turn player's move
 
+-Structs for the different card types
+-Arrays for players' hands
+
+-Sorting to align the cards for 5-card combinations
+-Randomization to shuffle the cards and randomly distribute
 
 Breakdown:
 
