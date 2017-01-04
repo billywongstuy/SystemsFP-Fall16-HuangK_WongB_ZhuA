@@ -1,0 +1,7 @@
+typedef card  {
+  int value;  // 11 is Jack, 12 is Queen, 13 is King
+  char suit;  //chars is actually better: D, C, H, S no need to strcmp, == is fine
+} card;
+
+card greaterCard(struct card c1, struct card c2);
+
