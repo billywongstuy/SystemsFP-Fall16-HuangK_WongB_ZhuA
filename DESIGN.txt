@@ -28,8 +28,8 @@ Technical Design (topics, data structures, algorithms):
 -Memory allocation for every C program
 -Networking between computers to play the game
 -File reading/writing and shared memory to keep track of hands and most recently played card(s) and used cards
--Semaphores to block other players from performing an invalid action
--Signals to determine sigterms
+-Semaphores and shared memory to prevent other players from an action when it is not their turn
+-Signals to determine sigterms and handle errors
 -Inputs and string parsing to determine the turn player's move
 
 -Structs for the different card types
