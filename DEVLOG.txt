@@ -1,0 +1,10 @@
+1/4/17
+Billy:
+-Created the card struct along with a basic compare method
+
+1/6/17
+Billy:
+-Created a basic player struct
+-Added a main
+-Added a makefile
+-Added guards for header files
