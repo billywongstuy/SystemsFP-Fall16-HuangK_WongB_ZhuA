@@ -1,15 +1,14 @@
-1/4/17
-Billy:
+Team Members: Karen Huang, Billy Wong, Alvin Zhu
+
+billyW -- 01/04/17 18:09
 -Created the card struct along with a basic compare method
 
-1/6/17
-Billy:
+billyW -- 01/06/17 22:16
 -Created a basic player struct
 -Added a main
 -Added a makefile
 -Added guards for header files
 
-1/8/17
-Billy:
+billyW -- 1/8/17 20:24
 -Added a printMethods file
 -Added method to randomly distribute the cards
