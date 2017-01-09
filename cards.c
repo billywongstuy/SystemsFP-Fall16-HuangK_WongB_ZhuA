@@ -77,7 +77,7 @@ card greaterCard(struct card c1, struct card c2) {
   return c2;
 }
 
-int main() {
+int mainCard() {
   struct card test;
   test.value = 4;
   test.suit = 'S';

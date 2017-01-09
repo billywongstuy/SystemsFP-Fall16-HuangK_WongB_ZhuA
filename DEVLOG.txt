@@ -8,3 +8,8 @@ Billy:
 -Added a main
 -Added a makefile
 -Added guards for header files
+
+1/8/17
+Billy:
+-Added a printMethods file
+-Added method to randomly distribute the cards
