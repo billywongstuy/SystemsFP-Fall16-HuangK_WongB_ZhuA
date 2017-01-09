@@ -15,7 +15,7 @@ printMethods.o: printMethods.c printMethods.h
 	gcc -c printMethods.c
 
 clean:
-	rm *~
+	rm *~ *.o chinesePoker 
 
-run: chinesePoker
+run: all
 	./chinesePoker

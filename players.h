@@ -9,9 +9,11 @@ typedef struct player {
   int id;
 } player;
 
-
+//deprecated
 void initializePlayer(struct player *p);
 
-void distributeCards(struct card * deck, struct player *p1, struct player *p2, struct player *p3, struct player *p4);
+void initializePlayers(struct player **p, int numP);
+
+void distributeCards(struct card * deck, struct player ** players, int numP);
 
 #endif

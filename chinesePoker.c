@@ -13,9 +13,17 @@ int main() {
   
   struct card deck[52];
   struct player p1,p2,p3,p4;
+  struct player *players[4];
+
+  players[0] = &p1;
+  players[1] = &p2;
+  players[2] = &p3;
+  players[3] = &p4;
+
+  
   
   setupDeck(deck);
-  distributeCards(deck,&p1,&p2,&p3,&p4);
+  distributeCards(deck,players,4);
   
   
   printPlayer(p1);
