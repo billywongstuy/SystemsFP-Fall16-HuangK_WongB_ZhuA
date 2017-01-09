@@ -8,16 +8,14 @@
 
 
 int main() {
-  player p1;
+  struct card deck[52];
+  struct player p1,p2,p3,p4;
+  
+  setupDeck(deck);
+  distributeCards(deck,p1,p2,p3,p4);
+  
+  
   struct card b[13];
   int i;
-  for (i = 0; i < 13; i++) {
-    p1.hand[i].suit = 'D';
-    p1.hand[i].value = i+1;
-  }
-  p1.cardsLeft = 13;
-  p1.id = 0;
-  for (i = 0; i < 13; i++) {
-    printf("%d of %c\n",p1.hand[i].value,p1.hand[i].suit);
-  }
+  
 }
