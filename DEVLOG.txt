@@ -1,17 +1,20 @@
 Team Members: Karen Huang, Billy Wong, Alvin Zhu
 
-billyW -- 01/04/17 18:09
+billyW -- 01/04/2017 18:09
 -Created the card struct along with a basic compare method
 
-billyW -- 01/06/17 22:16
+billyW -- 01/06/2017 22:16
 -Created a basic player struct
 -Added a main
 -Added a makefile
 -Added guards for header files
 
-billyW -- 1/8/17 20:24
+billyW -- 01/08/2017 20:24
 -Added a printMethods file
 -Added method to randomly distribute the cards
 
-karenH -- 1/9/17 15:26
+karenH -- 01/09/2017 15:26
 -Made makefile better 
+
+billyW -- 01/09/2017 15:34
+-Changed distributeCards to take player * array to accomodate for n amount of players
