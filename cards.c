@@ -13,15 +13,15 @@ void setupDeck(struct card * deck) {
 
   for (v = 1; v <= 13; v++) {
     for (s = 0; s < 4; s++) {
-      char su = 'D';
+      char su = 0;
       if (s == 1) {
-	su = 'C';
+	su = 1;
       }
       if (s == 2) {
-	su = 'H';
+	su = 2;
       }
       if (s == 3) {
-	su = 'S';
+	su = 3;
       }
       struct card c;
       c.suit = su;
@@ -33,7 +33,7 @@ void setupDeck(struct card * deck) {
 }
 
 
-int suitNum(card c) {
+/*int suitNum(card c) {
   if (c.suit == 'D') {
     return 0;
   }
@@ -47,7 +47,7 @@ int suitNum(card c) {
     return 3;
   }
   return -1;
-}
+  }*/
 
 
 int valNum(card c) {
@@ -59,8 +59,8 @@ int valNum(card c) {
 
 //special cases for 2 and A
 card greaterCard(struct card c1, struct card c2) {
-  int c1Suit = suitNum(c1);
-  int c2Suit = suitNum(c2);
+  int c1Suit = c1.suit;
+  int c2Suit = c2.suit;
   int c1Val = valNum(c1);
   int c2Val = valNum(c2);
   
@@ -80,7 +80,7 @@ card greaterCard(struct card c1, struct card c2) {
 int mainCard() {
   struct card test;
   test.value = 4;
-  test.suit = 'S';
+  test.suit = 3;
   
   setupDeck(deck);
 
