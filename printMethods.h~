@@ -1,5 +1,0 @@
-#include "cards.h"
-#include "players.h"
-
-
-void printCard(struct card c);

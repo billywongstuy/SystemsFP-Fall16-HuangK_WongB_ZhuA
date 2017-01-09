@@ -12,3 +12,6 @@ billyW -- 01/06/17 22:16
 billyW -- 1/8/17 20:24
 -Added a printMethods file
 -Added method to randomly distribute the cards
+
+karenH -- 1/9/17 15:26
+-Made makefile better 
