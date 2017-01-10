@@ -8,7 +8,7 @@ typedef struct card {
 
 
 //special cases are A and 2
-card greaterCard(struct card c1, struct card c2);
+int compareCards(struct card c1, struct card c2);
 
 void setupDeck(struct card * deck);
 

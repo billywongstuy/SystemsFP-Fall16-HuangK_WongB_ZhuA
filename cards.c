@@ -58,7 +58,7 @@ int valNum(card c) {
 }
 
 //special cases for 2 and A
-card greaterCard(struct card c1, struct card c2) {
+int compareCards(struct card c1, struct card c2) {
   int c1Suit = c1.suit;
   int c2Suit = c2.suit;
   int c1Val = valNum(c1);
@@ -67,15 +67,20 @@ card greaterCard(struct card c1, struct card c2) {
   
   if (c1Val == c2Val) {
     if (c1Suit >= c2Suit) {
-      return c1;
+      //return c1;
+      return 1;
     }
-    return c2;
+    //return c2;
+    return -1;
   }
   else if (c1Val > c2Val) {
-    return c1;
+    //return c1;
+    return 1;
   }
-  return c2;
+  //case of c2Val > c1Val
+  return -1;
 }
+
 
 int mainCard() {
   struct card test;
@@ -84,8 +89,8 @@ int mainCard() {
   
   setupDeck(deck);
 
-  struct card g = greaterCard(deck[0],deck[23]);
+  //struct card g = greaterCard(deck[0],deck[23]);
   
-  printf("Card %d of %c\n",g.value,g.suit);
+  //printf("Card %d of %c\n",g.value,g.suit);
   
 }

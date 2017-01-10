@@ -21,3 +21,7 @@ billyW -- 01/09/2017 15:34
 
 alvinZ -- 01/09/2017 15:35
 -Worked on printMethods
+
+billyW -- 01/09/2017 20:20
+-Changed compare method to return int
+-Added sort for hands (card arrays)

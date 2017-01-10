@@ -20,9 +20,11 @@ void printPlayer(struct player p) {
   printf("Hand: \n");
   for (i = 0; i < 13; i++) {
     if(p.hand[i].suit % 2 == 0){
-      printf(" %s%s |",values[p.hand[i].value],suits[p.hand[i].suit]);
+      //Red Suits
+      printf(" %s\x1B[31m %s\x1B[37m |",values[p.hand[i].value],suits[p.hand[i].suit]);
     }else{
-      printf(" %s\x1B[31m%s\x1B[37m |",values[p.hand[i].value],suits[p.hand[i].suit]);
+      //Black Suits
+      printf(" %s\x1B[30m %s\x1B[37m |",values[p.hand[i].value],suits[p.hand[i].suit]);
     }
   }
   printf("\n");
