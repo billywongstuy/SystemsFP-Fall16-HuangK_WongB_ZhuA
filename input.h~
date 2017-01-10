@@ -1,0 +1,8 @@
+#ifndef INPUT_H_
+#define INPUT_H_
+
+
+char* stripper(char* stripping);
+
+
+#endif

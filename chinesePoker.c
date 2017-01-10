@@ -3,17 +3,20 @@
 #include <unistd.h>
 #include <fcntl.h>
 #include <time.h>
+#include <string.h>
+#include <signal.h>
 
 #include "cards.h"
 #include "players.h"
 #include "printMethods.h"
+#include "input.h"
 
 int main() {
   srand(time(NULL));
 
   //  \e[37m\e[46m
   printf("\033[2J\033[;H");
-  printf("\x1B[37m");
+  printf("\x1B[46m\x1B[37m");
 
   
   struct card deck[52];
@@ -38,5 +41,42 @@ int main() {
   printPlayer(p3);
   printPlayer(p4);
 
+  
+  /*
+  char in[500];
+  printf("Enter your move: ");
+  fgets(in,sizeof(in),stdin);
+
+  strtok(in,"\n");
+  printf("In: %s\n",in);
+
+  char * chosen[5];
+  char *ina = in;
+  int count = 0;
+  while (chosen[count] = (strsep(&ina,","))) {
+    chosen[count] = stripper(chosen[count]);
+    count++;
+  }
+
+  count = 0;
+  while (chosen[count] && count < 5) {
+    printf("c: %s\n",chosen[count]);
+    count++;
+  }
+  */
+  
+  
+  int choice[5];
+  int len = getInput(choice);
+
+
+  int count = 0;
+  while (choice[count] && count < len) {
+    printf("c: %d\n",choice[count]);
+    count++;
+  }
+
+  
+  //atoi returns 0 if no int found
   
 }

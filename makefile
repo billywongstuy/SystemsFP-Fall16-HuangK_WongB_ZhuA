@@ -1,5 +1,5 @@
-all: chinesePoker.o cards.o players.o printMethods.o
-	gcc cards.o players.o printMethods.o chinesePoker.o -o chinesePoker
+all: chinesePoker.o cards.o players.o printMethods.o input.o
+	gcc cards.o players.o printMethods.o input.o chinesePoker.o -o chinesePoker
 
 chinesePoker.o: chinesePoker.c cards.h players.h
 	gcc -c chinesePoker.c
@@ -13,6 +13,9 @@ players.o: players.c players.h
 
 printMethods.o: printMethods.c printMethods.h
 	gcc -c printMethods.c
+
+input.o: input.c input.h
+	gcc -c input.c
 
 clean:
 	rm *~ *.o chinesePoker 
