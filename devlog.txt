@@ -20,7 +20,7 @@ billyW -- 01/09/2017 15:34
 -Changed distributeCards to take player * array to accomodate for n amount of players
 
 alvinZ -- 01/09/2017 15:35
--Worked on printMethods
+-Better way of printing out cards (displays suit symbol)
 
 billyW -- 01/09/2017 20:20
 -Changed compare method to return int
@@ -32,3 +32,7 @@ billyW -- 01/10/2017 9:58
 billyw -- 01/10/2017 21:33
 -Changed sort method to insertion
 -Basic getting cards from card slot chosen
+
+alvinZ -- 1/10/2017 23:24
+-Changed basis of assigning cards so we don't have to deal with annoying things like how 2>3
+-Updated printMethods to print more aesthetically
