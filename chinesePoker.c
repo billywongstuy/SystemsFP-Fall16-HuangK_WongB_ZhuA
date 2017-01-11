@@ -15,10 +15,10 @@ int main() {
   srand(time(NULL));
 
   //  \e[37m\e[46m
-  printf("\033[2J\033[;H");
-  printf("\x1B[46m\x1B[37m");
+  //printf("\033[2J\033[;H");
+  //printf("\x1B[46m\x1B[37m");
 
-  
+
   struct card deck[52];
   struct player p1,p2,p3,p4;
   struct player *players[4];
@@ -30,18 +30,18 @@ int main() {
 
   setupDeck(deck);
   distributeCards(deck,players,4);
-  
+
   sortCards(p1.hand,13);
   sortCards(p2.hand,13);
   sortCards(p3.hand,13);
   sortCards(p4.hand,13);
-  
+
   printPlayer(p1);
   printPlayer(p2);
   printPlayer(p3);
   printPlayer(p4);
 
-  
+
   /*
   char in[500];
   printf("Enter your move: ");
@@ -64,12 +64,12 @@ int main() {
     count++;
   }
   */
-  
-  
+
+
   int chosen[5];
   int len = getInput(chosen);
 
-  
+
   int count = 0;
   while (chosen[count] && count < len) {
     printf("c: %d\n",chosen[count]);
@@ -84,7 +84,7 @@ int main() {
     selected[count] = p1.hand[chosen[count]-1];
     count++;
   }
-  
+
   sortCards(selected,len);
 
   count = 0;
@@ -93,9 +93,9 @@ int main() {
     count++;
   }
 
-  
-  
-  
+
+
+
   //atoi returns 0 if no int found
-  
+
 }

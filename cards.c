@@ -11,20 +11,10 @@ void setupDeck(struct card * deck) {
   int v;
   int s;
 
-  for (v = 1; v <= 13; v++) {
+  for (v = 0; v < 13; v++) {
     for (s = 0; s < 4; s++) {
-      char su = 0;
-      if (s == 1) {
-	su = 1;
-      }
-      if (s == 2) {
-	su = 2;
-      }
-      if (s == 3) {
-	su = 3;
-      }
       struct card c;
-      c.suit = su;
+      c.suit = s;
       c.value = v;
       deck[i] = c;
       i++;
@@ -59,12 +49,12 @@ int valNum(card c) {
 
 //special cases for 2 and A
 int compareCards(struct card c1, struct card c2) {
-  int c1Suit = c1.suit;
+  /*int c1Suit = c1.suit;
   int c2Suit = c2.suit;
   int c1Val = valNum(c1);
   int c2Val = valNum(c2);
-  
-  
+
+
   if (c1Val == c2Val) {
     if (c1Suit >= c2Suit) {
       //return c1;
@@ -78,7 +68,19 @@ int compareCards(struct card c1, struct card c2) {
     return 1;
   }
   //case of c2Val > c1Val
-  return -1;
+  return -1;*/
+  /*int c1Val = c1.value;
+  int c2Val = c2.value;
+  int c1Suit = c1.suit;
+  int c2Suit = c2.suit;*/
+
+  int c1Val = c1.value*10 + c1.suit;
+  int c2Val = c2.value*10 + c2.suit;
+  if(c1Val > c2Val){
+      return c1Val;
+  }else{
+      return c2Val;
+  }
 }
 
 
@@ -86,11 +88,11 @@ int mainCard() {
   struct card test;
   test.value = 4;
   test.suit = 3;
-  
+
   setupDeck(deck);
 
   //struct card g = greaterCard(deck[0],deck[23]);
-  
+
   //printf("Card %d of %c\n",g.value,g.suit);
-  
+
 }
