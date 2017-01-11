@@ -33,36 +33,7 @@ char* stripper(char* stripping){
 }
 
 
-//not working
-/*
-char * getInput() {
-  char in[500];
-  printf("Enter your move: ");
-  fgets(in,sizeof(in),stdin);
 
-  
-
-  //atoi returns if none found
-  return in;
-  }*/
-
-
-/*void getInput(int * chosen) {
-  char in[500];
-  printf("Enter your move: ");
-  fgets(in,sizeof(in),stdin);
-
-  strtok(in,"\n");
-  char * inB = in;
-  int count = 0;
-  int val;
-
-  while (chosen[count] = atoi(stripper(strsep(&inB,",")))) {
-    count++;
-  }
-  
-}
-*/
 
 int getInput(int * chosen) {
   char in[500];
@@ -71,12 +42,21 @@ int getInput(int * chosen) {
 
   strtok(in,"\n");
 
-  char *ina = in;
+  char *inS = in;
   int count = 0;
   char * t;
+  int n;
   
-  while (t = strsep(&ina,",")) {
-    chosen[count] = atoi(stripper(t));
+  while (t = strsep(&inS,",")) {
+    n = atoi(stripper(t));
+    //IF INVAlID OPTION, MAKES THE FIRST INDEX NULL
+    if (n == 0 || n > 13) {
+      chosen[0] = NULL;
+      return 0;
+    }
+    else {
+      chosen[count] = n;
+    }
     count++;
   }
 

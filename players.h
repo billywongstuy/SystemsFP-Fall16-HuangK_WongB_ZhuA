@@ -16,6 +16,6 @@ void initializePlayers(struct player **p, int numP);
 
 void distributeCards(struct card * deck, struct player ** players, int numP);
 
-void sortHand(struct card *hand);
+void sortCards(struct card *hand, int len);
 
 #endif

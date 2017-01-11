@@ -2,7 +2,7 @@
 #include <stdlib.h>
 
 #include "players.h"
-
+#include "printMethods.h"
 
 void initializePlayers(struct player **p, int numP) {
   int i;
@@ -38,39 +38,17 @@ void distributeCards(struct card * deck, struct player ** players, int numP) {
 }
 
 
-void sortHand(struct card *hand) {
-  int len = 13;
-  int i;
-  struct card tempC;
+void sortCards(struct card *hand, int len) {
+  //switched to insertion sort for effiency
   
-  while (len > 0) {
-    for (i = 0; i < len-1; i++) {
-      //use i+1,i  because WE WANT A REVERSE SORT
-      if (compareCards(hand[i+1],hand[i]) >= 1) {
-	tempC = hand[i];
-	hand[i] = hand[i+1];
-	hand[i+1] = tempC;
-      }
+  int i,k;
+  struct card val;
+  for (i = 1; i < len; i++) {
+    val = hand[i];
+    for (k = i - 1; k >= 0 && compareCards(hand[k],val) < 0; k--) {
+      hand[k+1] = hand[k];
     }
-    len--;
+    hand[k+1] = val;
   }
-
   
 }
-
-
-/*
-public static void bubbleSort(int[]data) {
-	int end = data.length;
-	while (end > 0) {
-	    for (int i = 0; i < end-1; i++) {
-		int toSwap;
-		if (data[i+1] < data[i]) {
-		    toSwap = data[i];
-		    data[i] = data[i+1];
-		    data[i+1] = toSwap;
-		}
-	    }
-	    end--;
-	}
-	}*/

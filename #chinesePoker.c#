@@ -94,8 +94,4 @@ int main() {
   }
 
   
-  
-  
-  //atoi returns 0 if no int found
-  
 }

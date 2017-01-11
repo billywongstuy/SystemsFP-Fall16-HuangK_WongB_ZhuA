@@ -28,3 +28,7 @@ billyW -- 01/09/2017 20:20
 
 billyW -- 01/10/2017 9:58
 -Started user input
+
+billyw -- 01/10/2017 21:33
+-Changed sort method to insertion
+-Basic getting cards from card slot chosen
