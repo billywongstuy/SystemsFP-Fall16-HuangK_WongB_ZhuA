@@ -77,9 +77,9 @@ int compareCards(struct card c1, struct card c2) {
   int c1Val = c1.value*10 + c1.suit;
   int c2Val = c2.value*10 + c2.suit;
   if(c1Val > c2Val){
-      return c1Val;
+      return 1;
   }else{
-      return c2Val;
+      return -1;
   }
 }
 
