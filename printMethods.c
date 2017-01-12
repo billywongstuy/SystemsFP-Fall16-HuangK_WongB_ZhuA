@@ -34,10 +34,10 @@ void printPlayer(struct player p) {
         printf(" %s", values[p.hand[i].value]);
     }
     if(p.hand[i].suit % 2 == 0){
-        printf("\x1B[1;31m %s\x1B[37m | ", suits[p.hand[i].suit]);
+        printf("\x1B[31m %s\x1B[37m | ", suits[p.hand[i].suit]);
     }else{
-        printf("\033[1;34m %s\x1B[37m | ", suits[p.hand[i].suit]);
+        printf("\x1B[34m %s\x1B[37m | ", suits[p.hand[i].suit]);
     }
   }
-  printf("\n\n");
+  printf("\x1B[0m\n\n");
 }
