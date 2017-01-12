@@ -34,10 +34,10 @@ char* stripper(char* stripping){
 
 
 
-
+//get input length
 int getInput(int * chosen) {
   char in[500];
-  printf("Enter your move: ");
+  printf("Choose your card(s): ");
   fgets(in,sizeof(in),stdin);
 
   strtok(in,"\n");
