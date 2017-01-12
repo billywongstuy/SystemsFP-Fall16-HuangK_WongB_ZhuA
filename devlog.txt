@@ -41,3 +41,6 @@ alvinZ -- 1/11/2017 23:23
 -Fixed error with sort function
 -Started on networking
 -Updated .gitignore for more streamlined repo
+
+karenH -- 1/12/2017 15:18
+-Fixed colors in printMethods
