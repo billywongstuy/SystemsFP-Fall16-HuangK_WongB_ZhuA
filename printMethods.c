@@ -16,7 +16,7 @@ void printPlayer(struct player p) {
   char *values[] = {"3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K", "A", "2"};
   char *suits[] = {"♦", "♣", "♥", "♠"};
 
-  printf("Player id: %d\n",p.id);
+  printf("\x1B[1;37mPlayer id: %d\n",p.id);
   printf("Cards left: %d\n",p.cardsLeft);
   int i;
   printf("Hand: \n");
