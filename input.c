@@ -29,6 +29,7 @@ char* stripper(char* stripping){
     }
 
     char *stripped = stripping;
+    printf("stripped: %s\n", stripped);
     return stripped;
 }
 
@@ -62,12 +63,35 @@ int getInput(int * chosen, char * in) {
     }
     count++;
   }
+  if(count == 1){
+    inS = stripper(in);
+    t = strsep(&inS, " ");
+    printf("Checking: |%s|\n", inS);
+    /*if(t == 0){
+      printf("go!");
+      t = strsep(&inS, " ");
+    }*/
+    while (t = strsep(&inS," ")) {
+      n = atoi(stripper(t));
+      //IF INVAlID OPTION, MAKES THE FIRST INDEX NULL
+      //VALID OPTIONS ARE 1-13
+      if (n <= 0 || n > 13) {
+	chosen[0] = 0;
+	return 0;
+      }
+      else {
+	chosen[count] = n;
+      }
+      count++;
+    }
+  }
 
   int c = count;
   for (c; c < 5; c++) {
     chosen[c] = 0;
   }
 
+  //printf("count: %d\n", count);
   return count;
 
 }
