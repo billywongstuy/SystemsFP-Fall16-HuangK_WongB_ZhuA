@@ -52,4 +52,7 @@ billyW -- 01/12/2017 19:54
 -Started turns
 
 billyW -- 01/12/2017 23:57
--Starte work on the server (not to much success as of time)
+-Started work on the server (not too much success as of time)
+
+karenH -- 01/13/2017 15:14
+-More things in makefile
