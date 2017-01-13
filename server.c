@@ -17,6 +17,18 @@
 //change setup and variables when it changes in cPoker.c
 //change setup in networking.c
 //change variables here, client.c, networking.c, networking.h
+/*
+struct card deck[52];
+struct player p1,p2,p3,p4;
+struct player *players[4];
+int mode;  //0 for debug, 1 for single, 2 for double, 3 for triple, 5 for 5-combo
+int turnPlayer; //is an index for player who has to make their move
+int turnNumber; //use this to check player turn
+char * turnPlayerInfo;
+int step;
+*/
+
+
 struct card deck[52];
 struct player p1,p2,p3,p4;
 struct player *players[4];
@@ -30,6 +42,7 @@ int step;
 void process( char * s );
 void sub_server( int sd );
 void step1();
+void initialize();
 
 int main() {
 
@@ -37,13 +50,12 @@ int main() {
 
   sd = server_setup();
 
-  printf("here we go");
   setup();
-  turnPlayerInfo = "hello";
+  initialize();
   
   while (1) {
 
-    printf("loop");
+    printf("loop\n");
     connection = server_connect( sd );
 
     int f = fork();
@@ -65,12 +77,21 @@ int main() {
 void sub_server( int sd ) {
 
   char buffer[MESSAGE_BUFFER_SIZE];
-  while (read( sd, buffer, sizeof(buffer) )) {
 
-    printf("[SERVER %d] received: %s\n", getpid(), buffer );
-    process( buffer );
-    printf("processed\n");
-    write( sd, buffer, sizeof(buffer));    //This is what is passed to client
+  int handMessage = 0;
+  char * start = printPlayerClient(p1);
+  
+  while (read( sd, buffer, sizeof(buffer) )) {
+    if (!handMessage) {
+      write(sd,start,sizeof(start));
+      handMessage = 1;
+    }
+    else {
+      printf("[SERVER %d] received: %s\n", getpid(), buffer );
+      process( buffer );
+      printf("processed\n");
+      write( sd, buffer, sizeof(buffer));    //This is what is passed to client
+    }
   }
   
 }
@@ -101,7 +122,7 @@ void step1(char *s) {
   }
 
   else {
-    
+    /*
     struct card selected[len];
 
     int first = getFirstPlayer(players,4,13);
@@ -115,8 +136,23 @@ void step1(char *s) {
       count++;
     }
 
-    
+    */
   }
+    
 }
+void initialize() {
+  
+  players[0] = &p1;
+  players[1] = &p2;
+  players[2] = &p3;
+  players[3] = &p4;
 
-
+  setupDeck(deck);
+  
+  distributeCards(deck,players,4);
+  
+  sortCards(p1.hand,13);
+  sortCards(p2.hand,13);
+  sortCards(p3.hand,13);
+  sortCards(p4.hand,13);
+}

@@ -45,29 +45,22 @@ void printPlayer(struct player p) {
 char * printPlayerClient(struct player p) {
   char buf[500];
   
-  printf("\x1B[1;37mPlayer id: %d\n",p.id);
-  printf("Cards left: %d\n",p.cardsLeft);
+  sprintf(buf + strlen(buf), "Cards left: %d\n",p.cardsLeft);
   int i;
-  printf("Hand: \n");
+  sprintf(buf + strlen(buf), "Hand: \n");
   for (i = 0; i < 13; i++) {
-    printf("before ifs\n");
     if(p.hand[i].value == 7){
-      printf("before if1\n");
       sprintf(buf + strlen(buf), "%s", values[p.hand[i].value]);
     }else{
-      printf("before if2\n");
       sprintf(buf + strlen(buf), "%s", values[p.hand[i].value]);
-      printf("after if2\n");
     }
     if(p.hand[i].suit % 2 == 0){
-      printf("before if2\n");
       sprintf(buf + strlen(buf), "\x1B[31m %s\x1B[37m | ", suits[p.hand[i].suit]);
     }else{
-      printf("before if3\n");
       sprintf(buf + strlen(buf), "\x1B[34m %s\x1B[37m | ", suits[p.hand[i].suit]);
     }
-    printf("end-a\n");
   }
-  printf("\x1B[0m\n\n");
-  return buf;
+  sprintf(buf + strlen(buf), "\x1B[0m\n\n");
+  char * s = buf;
+  return s;
 }
