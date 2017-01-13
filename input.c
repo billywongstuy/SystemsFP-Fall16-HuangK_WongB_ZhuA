@@ -88,9 +88,3 @@ char *  getCardsChosen(struct card *a, int * choices, int len, struct player ** 
   }
   return "";
 }
-
-
-//count = 0
-
-//chosen[0] = 4
-//target index = 3

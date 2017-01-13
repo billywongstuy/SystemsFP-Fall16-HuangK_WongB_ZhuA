@@ -21,7 +21,7 @@ int main() {
   struct player *players[4];
   int mode;  //0 for debug, 1 for single, 2 for double, 3 for triple, 5 for 5-combo
   int turnPlayer; //is an index for player who has to make their move
-  
+  int turnNumber = 0; //use this to check player turn
 
   players[0] = &p1;
   players[1] = &p2;
@@ -57,8 +57,8 @@ int main() {
     
     struct card selected[len];
 
-    //int first = getFirstPlayer(players,4,13);
-    int first = 0;
+    int first = getFirstPlayer(players,4,13);
+    //int first = 0;
     
     char * error = getCardsChosen(selected,chosen,len,players,first);
     sortCards(selected,len);

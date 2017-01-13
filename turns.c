@@ -17,7 +17,7 @@ int getFirstPlayer(struct player ** players, int numP, int handSize) {
   struct card check;
   for (i = 0; i < numP; i++) {
     check = players[i]->hand[handSize-1];
-    if (check.suit == 0 && check.value == 3) {
+    if (check.suit == 0 && check.value == 0) {
       return i;
     }
   }
