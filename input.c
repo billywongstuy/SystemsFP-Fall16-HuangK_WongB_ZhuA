@@ -3,7 +3,7 @@
 #include <string.h>
 
 #include "input.h"
-
+#include "printMethods.h"
 
 
 char* stripper(char* stripping){
@@ -34,24 +34,25 @@ char* stripper(char* stripping){
 
 
 
-
+//get input length
 int getInput(int * chosen) {
   char in[500];
-  printf("Enter your move: ");
+  printf("Choose your card(s): ");
   fgets(in,sizeof(in),stdin);
-
+  
   strtok(in,"\n");
 
   char *inS = in;
   int count = 0;
   char * t;
   int n;
-  
+
   while (t = strsep(&inS,",")) {
     n = atoi(stripper(t));
     //IF INVAlID OPTION, MAKES THE FIRST INDEX NULL
-    if (n == 0 || n > 13) {
-      chosen[0] = NULL;
+    //VALID OPTIONS ARE 1-13
+    if (n <= 0 || n > 13) {
+      chosen[0] = 0;
       return 0;
     }
     else {
@@ -60,6 +61,36 @@ int getInput(int * chosen) {
     count++;
   }
 
+  int c = count;
+  for (c; c < 5; c++) {
+    chosen[c] = 0;
+  }
+
   return count;
 
 }
+
+//Card choices will always be correct because of getInput handling
+char *  getCardsChosen(struct card *a, int * choices, int len, struct player ** players, int player) {
+  int i = 0;
+  struct card adding;
+  while (i < len) {
+    //SHOULDN'T TRIGGER THIS IF STATEMENT (DEBUG)
+    if (choices[i] <= 0) {
+      a[i].value = -1;
+      return "Invalid selection/s";
+    }
+    else {
+      adding = players[player]->hand[choices[i]-1];
+      a[i] = adding;
+      i++;
+    }
+  }
+  return "";
+}
+
+
+//count = 0
+
+//chosen[0] = 4
+//target index = 3

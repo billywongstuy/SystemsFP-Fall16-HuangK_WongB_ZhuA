@@ -10,18 +10,18 @@
 #include "players.h"
 #include "printMethods.h"
 #include "input.h"
+#include "turns.h"
+#include "rules.h"
 
 int main() {
   srand(time(NULL));
 
-  //  \e[37m\e[46m
-  //printf("\033[2J\033[;H");
-  //printf("\x1B[46m\x1B[37m");
-
-
   struct card deck[52];
   struct player p1,p2,p3,p4;
   struct player *players[4];
+  int mode;  //0 for debug, 1 for single, 2 for double, 3 for triple, 5 for 5-combo
+  int turnPlayer; //is an index for player who has to make their move
+  
 
   players[0] = &p1;
   players[1] = &p2;
@@ -29,8 +29,10 @@ int main() {
   players[3] = &p4;
 
   setupDeck(deck);
+  
   distributeCards(deck,players,4);
-
+  
+  
   sortCards(p1.hand,13);
   sortCards(p2.hand,13);
   sortCards(p3.hand,13);
@@ -40,62 +42,31 @@ int main() {
   printPlayer(p2);
   printPlayer(p3);
   printPlayer(p4);
-
-
-  /*
-  char in[500];
-  printf("Enter your move: ");
-  fgets(in,sizeof(in),stdin);
-
-  strtok(in,"\n");
-  printf("In: %s\n",in);
-
-  char * chosen[5];
-  char *ina = in;
+  
   int count = 0;
-  while (chosen[count] = (strsep(&ina,","))) {
-    chosen[count] = stripper(chosen[count]);
-    count++;
-  }
-
-  count = 0;
-  while (chosen[count] && count < 5) {
-    printf("c: %s\n",chosen[count]);
-    count++;
-  }
-  */
-
 
   int chosen[5];
   int len = getInput(chosen);
 
-
-  int count = 0;
-  while (chosen[count] && count < len) {
-    printf("c: %d\n",chosen[count]);
-    count++;
+  
+  if (len == 0) {
+    printf("Invalid selection(s)\n");
   }
 
+  else {
+    
+    struct card selected[len];
 
-  //get the specific cards and sort them
-  struct card selected[len];
-  count = 0;
-  while (count < len) {
-    selected[count] = p1.hand[chosen[count]-1];
-    count++;
+    //int first = getFirstPlayer(players,4,13);
+    int first = 0;
+    
+    char * error = getCardsChosen(selected,chosen,len,players,first);
+    sortCards(selected,len);
+    
+    while (count < len && selected[count].value != -1) {
+      printCard(selected[count]);
+      count++;
+    }
+
   }
-
-  sortCards(selected,len);
-
-  count = 0;
-  while (count < len) {
-    printCard(p1.hand[count]);
-    count++;
-  }
-
-
-
-
-  //atoi returns 0 if no int found
-
 }

@@ -36,3 +36,17 @@ billyw -- 01/10/2017 21:33
 alvinZ -- 1/10/2017 23:24
 -Changed basis of assigning cards so we don't have to deal with annoying things like how 2>3
 -Updated printMethods to print more aesthetically
+
+alvinZ -- 1/11/2017 23:23
+-Fixed error with sort function
+-Started on networking
+-Updated .gitignore for more streamlined repo
+
+karenH -- 1/12/2017 15:18
+-Fixed colors in printMethods
+
+billyW -- 1/12/2017 19:54
+-Started looking at networking
+-Moved part of main to a function in input
+-Revised invalid card selection guards
+-Started turns
