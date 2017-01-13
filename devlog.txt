@@ -33,20 +33,23 @@ billyw -- 01/10/2017 21:33
 -Changed sort method to insertion
 -Basic getting cards from card slot chosen
 
-alvinZ -- 1/10/2017 23:24
+alvinZ -- 01/10/2017 23:24
 -Changed basis of assigning cards so we don't have to deal with annoying things like how 2>3
 -Updated printMethods to print more aesthetically
 
-alvinZ -- 1/11/2017 23:23
+alvinZ -- 01/11/2017 23:23
 -Fixed error with sort function
 -Started on networking
 -Updated .gitignore for more streamlined repo
 
-karenH -- 1/12/2017 15:18
+karenH -- 01/12/2017 15:18
 -Fixed colors in printMethods
 
-billyW -- 1/12/2017 19:54
+billyW -- 01/12/2017 19:54
 -Started looking at networking
 -Moved part of main to a function in input
 -Revised invalid card selection guards
 -Started turns
+
+billyW -- 01/12/2017 23:57
+-Starte work on the server (not to much success as of time)

@@ -1,4 +1,6 @@
-all: chinesePoker.o cards.o players.o printMethods.o input.o turns.o rules.o
+all: main network
+
+main: chinesePoker.o cards.o players.o printMethods.o input.o turns.o rules.o
 	gcc cards.o players.o printMethods.o input.o turns.o rules.o chinesePoker.o -o chinesePoker
 
 chinesePoker.o: chinesePoker.c cards.h players.h
@@ -24,13 +26,15 @@ rules.o: rules.c rules.h
 
 
 
+
 network: server client
 
-server: server.o networking.o
-	gcc -o server server.o networking.o
 
-client: client.o networking.o
-	gcc -o client client.o networking.o
+server: server.o networking.o cards.o players.o printMethods.o input.o turns.o rules.o
+	gcc cards.o players.o printMethods.o input.o turns.o rules.o server.o networking.o -o server
+
+client: client.o networking.o cards.o players.o printMethods.o input.o turns.o rules.o
+	gcc cards.o players.o printMethods.o input.o turns.o rules.o client.o networking.o -o client
 
 server.o: server.c networking.h
 	gcc -c server.c
@@ -47,5 +51,5 @@ networking.o: networking.c networking.h
 clean:
 	rm *~ *.o chinesePoker 
 
-run: all
+run: main
 	./chinesePoker

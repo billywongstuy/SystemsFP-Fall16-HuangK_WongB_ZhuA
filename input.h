@@ -1,12 +1,11 @@
 #ifndef INPUT_H_
 #define INPUT_H_
 
-//char * getInput();
 
 #include "players.h"
 #include "cards.h"
 
-int getInput(int * chosen);
+int getInput(int * chosen, char * in);
 
 char* stripper(char* stripping);
 

@@ -35,10 +35,12 @@ char* stripper(char* stripping){
 
 
 //get input length
-int getInput(int * chosen) {
-  char in[500];
+int getInput(int * chosen, char * in) {
+
+  //Moved to main
+  /*char in[500];
   printf("Choose your card(s): ");
-  fgets(in,sizeof(in),stdin);
+  fgets(in,sizeof(in),stdin);*/
   
   strtok(in,"\n");
 

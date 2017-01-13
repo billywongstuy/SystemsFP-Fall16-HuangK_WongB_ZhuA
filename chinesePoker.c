@@ -13,16 +13,16 @@
 #include "turns.h"
 #include "rules.h"
 
-int main() {
-  srand(time(NULL));
 
-  struct card deck[52];
-  struct player p1,p2,p3,p4;
-  struct player *players[4];
-  int mode;  //0 for debug, 1 for single, 2 for double, 3 for triple, 5 for 5-combo
-  int turnPlayer; //is an index for player who has to make their move
-  int turnNumber = 0; //use this to check player turn
+struct card deck[52];
+struct player p1,p2,p3,p4;
+struct player *players[4];
+int mode;  //0 for debug, 1 for single, 2 for double, 3 for triple, 5 for 5-combo
+int turnPlayer; //is an index for player who has to make their move
+int turnNumber = 0; //use this to check player turn
 
+
+void setup() {
   players[0] = &p1;
   players[1] = &p2;
   players[2] = &p3;
@@ -32,11 +32,16 @@ int main() {
   
   distributeCards(deck,players,4);
   
-  
   sortCards(p1.hand,13);
   sortCards(p2.hand,13);
   sortCards(p3.hand,13);
   sortCards(p4.hand,13);
+}
+
+int main() {
+  srand(time(NULL));
+
+  setup();
 
   printPlayer(p1);
   printPlayer(p2);
@@ -46,7 +51,13 @@ int main() {
   int count = 0;
 
   int chosen[5];
-  int len = getInput(chosen);
+
+
+  char in[500];
+  printf("Choose your card(s): ");
+  fgets(in,sizeof(in),stdin);
+  
+  int len = getInput(chosen,in);
 
   
   if (len == 0) {

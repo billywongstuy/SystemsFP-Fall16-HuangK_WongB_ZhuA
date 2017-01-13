@@ -9,19 +9,6 @@
 #include <unistd.h>
 #include <arpa/inet.h>
 
-
-#include "networking.h"
-#include "printMethods.h"
-
-struct card deck[52];
-struct player p1,p2,p3,p4;
-struct player *players[4];
-int mode;  //0 for debug, 1 for single, 2 for double, 3 for triple, 5 for 5-combo
-int turnPlayer; //is an index for player who has to make their move
-int turnNumber; //use this to check player turn
-char * turnPlayerInfo;
-int step;
-
 void error_check( int i, char *s ) {
   if ( i < 0 ) {
     printf("%d\n", i);
@@ -82,42 +69,3 @@ int client_connect( char *host ) {
   
   return sd;
 }
-
-
-
-void setup() {
-  players[0] = &p1;
-  players[1] = &p2;
-  players[2] = &p3;
-  players[3] = &p4;
-  
-  setupDeck(deck);
-  
-  distributeCards(deck,players,4);
-  
-  sortCards(p1.hand,13);
-  sortCards(p2.hand,13);
-  sortCards(p3.hand,13);
-  sortCards(p4.hand,13);
-
-  step = 0;
-}
-
-
-char * getHand(struct player p1) {
-  return printPlayerClient(p1);
-}
-
-setup();
-
-struct card * getDeck() {return deck;}
-struct player getp1() {return p1;}
-struct player getp2() {return p2;}
-struct player getp3() {return p3;}
-struct player getp4() {return p4;}
-struct player ** getPlayers() {return players;}
-int getMode() {return mode;}
-int getTurnPlayer() {return turnPlayer;}
-int getTurnNumber() {return turnNumber;}
-char * getTurnPlayerInfo() {return turnPlayerInfo;}
-int getStep() {return step;}

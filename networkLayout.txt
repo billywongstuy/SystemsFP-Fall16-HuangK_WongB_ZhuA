@@ -1,0 +1,18 @@
+client:
+
+while (1):
+
+1. if it's not your turn : block
+2. if it's your turn : string = fgets    "Choose your card(s): "
+3. send string to server
+5b. If not valid : string = fgets ...    UNTIL VALID MOVE
+8. Gets the <valid move message> and waits until it's your turn again
+
+
+server (main):
+
+4. server gets string
+5. server checks for valid move
+5a. If not valid, sends an invalid message to the client
+6. If the move is valid, edits the appropriate variables
+7. Changes the turn and sends a <valid move message>

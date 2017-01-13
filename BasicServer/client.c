@@ -4,8 +4,6 @@
 #include <unistd.h>
 
 #include "networking.h"
-#include "printMethods.h"
-
 
 int main( int argc, char *argv[] ) {
 
@@ -22,12 +20,9 @@ int main( int argc, char *argv[] ) {
   sd = client_connect( host );
 
   char buffer[MESSAGE_BUFFER_SIZE];
-
-  //print the player hand
-  printPlayer(getp1());
   
   while (1) {
-    printf("Choose your card(s): ");
+    printf("enter message: ");
     fgets( buffer, sizeof(buffer), stdin );
     char *p = strchr(buffer, '\n');
     *p = 0;

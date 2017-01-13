@@ -7,6 +7,6 @@
 
 void printCard(struct card c);
 void printPlayer(struct player p);
-
+char * printPlayerClient(struct player p);
 
 #endif
