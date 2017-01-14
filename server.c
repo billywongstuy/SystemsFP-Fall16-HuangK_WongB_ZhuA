@@ -14,84 +14,90 @@
 #include "turns.h"
 #include "rules.h"
 
-//change setup and variables when it changes in cPoker.c
-//change setup in networking.c
-//change variables here, client.c, networking.c, networking.h
-/*
+
 struct card deck[52];
 struct player p1,p2,p3,p4;
-struct player *players[4];
+struct player *playersM[4];
 int mode;  //0 for debug, 1 for single, 2 for double, 3 for triple, 5 for 5-combo
 int turnPlayer; //is an index for player who has to make their move
 int turnNumber; //use this to check player turn
 char * turnPlayerInfo;
 int step;
-*/
-
-
-struct card deck[52];
-struct player p1,p2,p3,p4;
-struct player *players[4];
-int mode;  //0 for debug, 1 for single, 2 for double, 3 for triple, 5 for 5-combo
-int turnPlayer; //is an index for player who has to make their move
-int turnNumber; //use this to check player turn
-char * turnPlayerInfo;
-int step;
-
+int *idToPass;
+//use pointers to access stuff as part of the global
 
 void process( char * s );
 void sub_server( int sd );
 void step1();
 void initialize();
 
-int main() {
 
+void incID() {
+  (*idToPass) ++;
+}
+
+int main() {
+  
   int sd, connection;
 
   sd = server_setup();
 
-  setup();
+  //setup(); //try to phase this out
+
   initialize();
   
+  //how to make this stop after idToPass is 3 (*idToPass >= 4)
   while (1) {
-
-    printf("loop\n");
+  
     connection = server_connect( sd );
 
     int f = fork();
     if ( f == 0 ) {
 
       close(sd);
-      sub_server( connection );
 
+      sub_server( connection );
       exit(0);
     }
     else {
       close( connection );
     }
+    
+    
+    incID();
+    
   }
   return 0;
 }
 
 
 void sub_server( int sd ) {
-
   char buffer[MESSAGE_BUFFER_SIZE];
+  char *suits[] = {"♦", "♣", "♥", "♠"};
 
   int handMessage = 0;
-  char * start = printPlayerClient(p1);
+  int first = getFirstPlayer(playersM,4,13);
+  
+  char *start = (char *)malloc(sizeof(char));
+  strcpy(start,memPrintPlayerClient(playersM[*idToPass]));
+
+  
+  printf("pid: %d\n",*idToPass);
+  sprintf(buffer,"%d",*idToPass);
+  write(sd,buffer,sizeof(buffer));
+
+  
+  sprintf(buffer,"%s",start);	
+  write(sd,buffer,sizeof(buffer));
+  
+  
   
   while (read( sd, buffer, sizeof(buffer) )) {
-    if (!handMessage) {
-      write(sd,start,sizeof(start));
-      handMessage = 1;
-    }
-    else {
-      printf("[SERVER %d] received: %s\n", getpid(), buffer );
-      process( buffer );
-      printf("processed\n");
-      write( sd, buffer, sizeof(buffer));    //This is what is passed to client
-    }
+    printf("[SERVER %d] received: %s\n", getpid(), buffer );
+    process( buffer );
+    printf("processed\n");
+    write( sd, buffer, sizeof(buffer));    //This is what is passed to client
+    
   }
   
 }
@@ -122,13 +128,13 @@ void step1(char *s) {
   }
 
   else {
-    /*
+    
     struct card selected[len];
 
-    int first = getFirstPlayer(players,4,13);
+    int first = getFirstPlayer(playersM,4,13);
     //int first = 0;
     
-    char * error = getCardsChosen(selected,chosen,len,players,first);
+    char * error = getCardsChosen(selected,chosen,len,playersM,first);
     sortCards(selected,len);
     
     while (count < len && selected[count].value != -1) {
@@ -136,23 +142,28 @@ void step1(char *s) {
       count++;
     }
 
-    */
+    
   }
     
 }
+
+
 void initialize() {
   
-  players[0] = &p1;
-  players[1] = &p2;
-  players[2] = &p3;
-  players[3] = &p4;
+  playersM[0] = &p1;
+  playersM[1] = &p2;
+  playersM[2] = &p3;
+  playersM[3] = &p4;
 
   setupDeck(deck);
   
-  distributeCards(deck,players,4);
+  distributeCards(deck,playersM,4);
   
   sortCards(p1.hand,13);
   sortCards(p2.hand,13);
   sortCards(p3.hand,13);
   sortCards(p4.hand,13);
+
+  idToPass = (int *)malloc(sizeof(int));
+  *idToPass = 0;
 }

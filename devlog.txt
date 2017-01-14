@@ -56,3 +56,7 @@ billyW -- 01/12/2017 23:57
 
 karenH -- 01/13/2017 15:14
 -More things in makefile
+
+billyW -- 01/13/2017 22:01
+- Got the player hand in client side of networking to print properly
+- Added player ids to each client

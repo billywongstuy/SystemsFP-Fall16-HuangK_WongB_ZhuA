@@ -49,7 +49,12 @@ networking.o: networking.c networking.h
 
 
 clean:
-	rm *~ *# *.o chinesePoker client server
+	rm *.o
+	rm chinesePoker
+	rm client
+	rm server
+	rm *#
+	rm *~
 
 run: main
 	./chinesePoker

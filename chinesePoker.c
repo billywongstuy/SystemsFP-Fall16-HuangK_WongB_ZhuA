@@ -16,21 +16,35 @@
 
 struct card deck[52];
 struct player p1,p2,p3,p4;
-struct player *players[4];
+//struct player players[4];
+struct player *playersM[4];
 int mode;  //0 for debug, 1 for single, 2 for double, 3 for triple, 5 for 5-combo
 int turnPlayer; //is an index for player who has to make their move
 int turnNumber = 0; //use this to check player turn
 
 
 void setup() {
-  players[0] = &p1;
-  players[1] = &p2;
-  players[2] = &p3;
-  players[3] = &p4;
+  /*
+  players[0] = p1;
+  players[1] = p2;
+  players[2] = p3;
+  players[3] = p4;
+  
+  playersM = players;
+  */
 
+  playersM[0] = &p1;
+  playersM[1] = &p2;
+  playersM[2] = &p3;
+  playersM[3] = &p4;
+  
+  printf("lolol\n");
+  
   setupDeck(deck);
   
-  distributeCards(deck,players,4);
+  distributeCards(deck,playersM,4);
+
+  printf("11111\n");
   
   sortCards(p1.hand,13);
   sortCards(p2.hand,13);
@@ -41,7 +55,11 @@ void setup() {
 int main() {
   srand(time(NULL));
 
+  printf("start\n");
+  
   setup();
+
+  printf("222\n");
 
   printPlayer(p1);
   printPlayer(p2);
@@ -68,10 +86,10 @@ int main() {
     
     struct card selected[len];
 
-    int first = getFirstPlayer(players,4,13);
+    int first = getFirstPlayer(playersM,4,13);
     //int first = 0;
     
-    char * error = getCardsChosen(selected,chosen,len,players,first);
+    char * error = getCardsChosen(selected,chosen,len,playersM,first);
     sortCards(selected,len);
     
     while (count < len && selected[count].value != -1) {
@@ -79,5 +97,16 @@ int main() {
       count++;
     }
 
+    printPlayer(p1);
+    memPrintPlayer(playersM[0]);
+
   }
 }
+
+//use of players
+//getFirstPlayer
+//getCardsChosen
+//setup (also in server initialize)
+//distributeCards
+
+

@@ -92,81 +92,17 @@ int client_connect( char *host ) {
 
 
 void setup() {
-
-  
   int shmem;
   int shmemkey = ftok("cards.c",40);
   
   shmem = shmget(shmemkey, sizeof(int), IPC_CREAT | IPC_EXCL | 0644);
 
-  if (shmem == -1) {
-    printf("shmem error: %s\n",strerror(errno));
-  }
-  int *size = shmat(shmem,NULL,0);
+  if (shmem == -1) {printf("shmem error: %s\n",strerror(errno));}
+  int *pID = shmat(shmem,NULL,0);
 
-  if (*size == -1) {
-    printf("shmat error: %s\n",strerror(errno));
-  }
+  if (*pID == -1) {printf("shmat error: %s\n",strerror(errno));}
 
-  *size = 45;
-
-  /*
-  int sDeck,sPlay,sMode,sTP,sTN,sTPI,sStep;
-  int sDeckKey = ftok("cards.c",22);
-  int sPlayKey = ftok("cards.c",23);
-  int sModeKey = ftok("cards.c",24);
-  int sTPKey = ftok("cards.c",25);
-  int sTNKey = ftok("cards.c",26);
-  int sTPIKey = ftok("cards.c",27);
-  int sStepKey = ftok("cards.c",28);
-
-  sDeck = shmget(sDeckKey, sizeof(deck), IPC_CREAT | IPC_EXCL | 0644);
-  sPlay = shmget(sPlayKey, sizeof(players), IPC_CREAT | IPC_EXCL | 0644);
-  sMode = shmget(sModeKey, sizeof(int), IPC_CREAT | IPC_EXCL | 0644);
-  sTP = shmget(sTPKey, sizeof(int), IPC_CREAT | IPC_EXCL | 0644);
-  sTN = shmget(sTNKey, sizeof(int), IPC_CREAT | IPC_EXCL | 0644);
-  sTPI = shmget(sTPIKey, 1000, IPC_CREAT | IPC_EXCL | 0644);
-  sStep = shmget(sStepKey, sizeof(int), IPC_CREAT | IPC_EXCL | 0644);
-
-  struct card (*deckM)[52];
-  deckM = shmat(sDeck,NULL,0);
-
-  struct player (* *playersM)[4];
-  playersM  = shmat(sPlay,NULL,0);
-
-  int *modeM = shmat(sMode,NULL,0);
-  int *turnPlayerM = shmat(sTP,NULL,0);
-  char ** turnPlayerInfoM = shmat(sTPI,NULL,0);
-  int *stepM = shmat(sStep,NULL,0);
-  */
-
-  
-  /*
-  players[0] = &p1;
-  players[1] = &p2;
-  players[2] = &p3;
-  players[3] = &p4;
-
-  setupDeck(deck);
-  
-  distributeCards(deck,players,4);
-  
-  sortCards(p1.hand,13);
-  sortCards(p2.hand,13);
-  sortCards(p3.hand,13);
-  sortCards(p4.hand,13);
- */
-
-  
-  /*
-  *stepM = 45;
-  *turnPlayerM = 0;
-
-  deckM = &deck;
-  playersM = &players;
-  */
-
-  
+  *pID = 0;
 }
 
 /*
