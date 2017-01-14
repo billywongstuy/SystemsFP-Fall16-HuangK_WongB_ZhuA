@@ -6,6 +6,12 @@
 #include <fcntl.h>
 #include <signal.h>
 
+#include <sys/types.h>
+#include <sys/sem.h>
+#include <sys/shm.h>
+#include <sys/ipc.h>
+#include <errno.h>
+
 #include "networking.h"
 #include "cards.h"
 #include "players.h"
@@ -13,6 +19,14 @@
 #include "input.h"
 #include "turns.h"
 #include "rules.h"
+
+
+union semun {
+  int val;
+  struct semid_ds *buf;
+  unsigned short *array;
+  struct seminfo *__buf;
+};
 
 
 struct card deck[52];
@@ -37,11 +51,14 @@ void incID() {
 }
 
 int main() {
+
+  srand(time(NULL));
   
   int sd, connection;
 
   sd = server_setup();
 
+  //NOW NEED SEMAPHORES IN THIS
   initialize();
   
  
@@ -73,13 +90,19 @@ void sub_server( int sd ) {
   char buffer[MESSAGE_BUFFER_SIZE];
   char *suits[] = {"♦", "♣", "♥", "♠"};
 
-  int handMessage = 0;
-  int first = getFirstPlayer(playersM,4,13);
+  memPrintPlayer(playersM[0]);
+  memPrintPlayer(playersM[1]);
+  memPrintPlayer(playersM[2]);
+  memPrintPlayer(playersM[3]);
   
+  int first = getFirstPlayer(playersM,4,13);
+  setTurnPlayer(first);
+  printf("first: %d\n",first);
   char *start = (char *)malloc(sizeof(char));
-  strcpy(start,memPrintPlayerClient(playersM[*idToPass]));
-
-  //Checks to see if cap reached, if not then assigns id to client
+  
+  
+  //ASSIGNS PLAYER ID
+  //IF TOO MANY PLAYERS, WRITES A MESSAGE INSTEAD OF ID
   if (*idToPass < 4) {
     printf("pid: %d\n",*idToPass);
     sprintf(buffer,"%d",*idToPass);
@@ -91,15 +114,26 @@ void sub_server( int sd ) {
     exit(0);
   }
 
-  
+  //INITIAL PLAYER INFO
+  strcpy(start,memPrintPlayerClient(playersM[*idToPass]));
   sprintf(buffer,"%s",start);	
   write(sd,buffer,sizeof(buffer));  
   
   
   while (read( sd, buffer, sizeof(buffer) )) {
+
+    //CLIENT INPUT
     printf("[SERVER %d] received: %s\n", getpid(), buffer );
     process( buffer );
     printf("processed\n");
+
+    //PLAYER INFO
+    strcpy(start,memPrintPlayerClient(playersM[*idToPass]));
+    sprintf(buffer,"%s",start);	
+    write(sd,buffer,sizeof(buffer));
+    read(sd,buffer,sizeof(buffer));
+
+    //PROCESSED INFO
     write( sd, buffer, sizeof(buffer));    //This is what is passed to client
     
   }
@@ -109,7 +143,6 @@ void sub_server( int sd ) {
 
 
 void process( char * s ) {
-  srand(time(NULL));
 
   step1(s);
 }
@@ -170,4 +203,21 @@ void initialize() {
 
   idToPass = (int *)malloc(sizeof(int));
   *idToPass = 0;
+
+  //ALSO MAKE SURE SETTING FIRST PLAYER WORKS
+  //??? BLOCK UNTIL 4 PLAYERS CONNECTED
+  int sem;
+  int semkey = ftok("server.c",22);
+  int sc;
+  
+  sem = semget(semkey,1,IPC_CREAT | 0644);
+  printf("semaphore created: %d\n",sem);
+
+  union semun su;
+  su.val = 1;
+  sc = semctl(sem,0,SETVAL,su);
+  printf("value set: %d\n",sc);
+  
+  //now figure out blocking in scenarios with 
+  
 }

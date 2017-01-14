@@ -95,21 +95,42 @@ void setup() {
   int shmem;
   int shmemkey = ftok("cards.c",40);
   
-  shmem = shmget(shmemkey, sizeof(int), IPC_CREAT | IPC_EXCL | 0644);
+  shmem = shmget(shmemkey, sizeof(int), IPC_CREAT | 0644);
 
   if (shmem == -1) {printf("shmem error: %s\n",strerror(errno));}
-  int *pID = shmat(shmem,NULL,0);
+  int *turnP = shmat(shmem,NULL,0);
 
-  if (*pID == -1) {printf("shmat error: %s\n",strerror(errno));}
+  if (*turnP == -1) {printf("shmat error: %s\n",strerror(errno));}
 
-  *pID = 0;
+  *turnP = 0;
+}
+
+
+int getTurnPlayer() {
+  int shmem;
+  int shmemkey = ftok("cards.c",40);
+  shmem = shmget(shmemkey, sizeof(int), IPC_CREAT | 0644);
+  if (shmem == -1) {printf("shmem error: %s\n",strerror(errno));}
+  int *turnP = shmat(shmem,NULL,0);
+  if (*turnP == -1) {printf("shmat error: %s\n",strerror(errno));}
+  return *turnP;
+}
+
+
+void setTurnPlayer(int n) {
+  int shmem;
+  int shmemkey = ftok("cards.c",40);
+  shmem = shmget(shmemkey, sizeof(int), IPC_CREAT | 0644);
+  if (shmem == -1) {printf("shmem error: %s\n",strerror(errno));}
+  int *turnP = shmat(shmem,NULL,0);
+  if (*turnP == -1) {printf("shmat error: %s\n",strerror(errno));}
+  *turnP = n;
 }
 
 /*
 char * getHand(struct player p1) {
   return printPlayerClient(p1);
 }
-
 
 struct card * getDeck() {return deck;}
 struct player getp1() {return p1;}

@@ -28,4 +28,6 @@ char * getTurnPlayerInfo();
 int getStep();
 
 
+void setTurnPlayer(int n);
+
 #endif
