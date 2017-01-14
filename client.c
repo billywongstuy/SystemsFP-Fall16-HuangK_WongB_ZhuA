@@ -58,8 +58,13 @@ int main( int argc, char *argv[] ) {
 
 
   //Gets the playerId
-  //needs work
   read( sd, buffer, sizeof(buffer));
+
+  if (strcmp(buffer,"Player cap exceeded") == 0) {
+    printf("%s\n",buffer);
+    exit(0);
+  }
+  
   printf("pid: %s\n",buffer);
   playerId = atoi(buffer);
   

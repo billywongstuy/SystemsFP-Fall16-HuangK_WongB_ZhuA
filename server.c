@@ -51,17 +51,19 @@ int main() {
   
     connection = server_connect( sd );
 
-    int f = fork();
-    if ( f == 0 ) {
-
-      close(sd);
-
-      sub_server( connection );
-      exit(0);
-    }
-    else {
-      close( connection );
-    }
+    //if (*idToPass < 2) {
+      int f = fork();
+      if ( f == 0 ) {
+	
+	close(sd);
+	
+	sub_server( connection );
+	exit(0);
+      }
+      else {
+	close( connection );
+      }
+      //}
     
     
     incID();
@@ -81,11 +83,16 @@ void sub_server( int sd ) {
   char *start = (char *)malloc(sizeof(char));
   strcpy(start,memPrintPlayerClient(playersM[*idToPass]));
 
-  
-  printf("pid: %d\n",*idToPass);
-  sprintf(buffer,"%d",*idToPass);
-  write(sd,buffer,sizeof(buffer));
-
+  if (*idToPass < 4) {
+    printf("pid: %d\n",*idToPass);
+    sprintf(buffer,"%d",*idToPass);
+    write(sd,buffer,sizeof(buffer));
+  }
+  else {
+    sprintf(buffer,"Player cap exceeded");
+    write(sd,buffer,sizeof(buffer));
+    exit(0);
+  }
   
   sprintf(buffer,"%s",start);	
   write(sd,buffer,sizeof(buffer));

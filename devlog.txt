@@ -60,3 +60,6 @@ karenH -- 01/13/2017 15:14
 billyW -- 01/13/2017 22:01
 - Got the player hand in client side of networking to print properly
 - Added player ids to each client
+
+billyW -- 01/14/2017 10:49
+- Added a player check (only allows 4 players to connect)
