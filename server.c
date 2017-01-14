@@ -42,28 +42,24 @@ int main() {
 
   sd = server_setup();
 
-  //setup(); //try to phase this out
-
   initialize();
   
-  //how to make this stop after idToPass is 3 (*idToPass >= 4)
+ 
   while (1) {
   
     connection = server_connect( sd );
 
-    //if (*idToPass < 2) {
-      int f = fork();
-      if ( f == 0 ) {
-	
-	close(sd);
-	
-	sub_server( connection );
-	exit(0);
-      }
-      else {
-	close( connection );
-      }
-      //}
+    int f = fork();
+    if ( f == 0 ) {
+      
+      close(sd);
+      
+      sub_server( connection );
+      exit(0);
+    }
+    else {
+      close( connection );
+    }
     
     
     incID();
@@ -83,6 +79,7 @@ void sub_server( int sd ) {
   char *start = (char *)malloc(sizeof(char));
   strcpy(start,memPrintPlayerClient(playersM[*idToPass]));
 
+  //Checks to see if cap reached, if not then assigns id to client
   if (*idToPass < 4) {
     printf("pid: %d\n",*idToPass);
     sprintf(buffer,"%d",*idToPass);
@@ -93,10 +90,10 @@ void sub_server( int sd ) {
     write(sd,buffer,sizeof(buffer));
     exit(0);
   }
+
   
   sprintf(buffer,"%s",start);	
-  write(sd,buffer,sizeof(buffer));
-  
+  write(sd,buffer,sizeof(buffer));  
   
   
   while (read( sd, buffer, sizeof(buffer) )) {
