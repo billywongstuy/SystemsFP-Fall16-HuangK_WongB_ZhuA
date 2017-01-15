@@ -66,7 +66,7 @@ int getInput(int * chosen, char * in) {
   if(count == 1){
     inS = stripper(in);
     t = strsep(&inS, " ");
-    printf("Checking: |%s|\n", inS);
+    //printf("Checking: |%s|\n", inS);
     /*if(t == 0){
       printf("go!");
       t = strsep(&inS, " ");

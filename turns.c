@@ -6,9 +6,8 @@
 #include "turns.h"
 
 int nextPlayer(int numP, int currP) {
-  printf("index of current player: %d\n",currP);
-  printf("length: %d\n",numP);
   if (currP == numP - 1) {
+    printf("back to zero\n");
     return 0;
   }
   return currP + 1;

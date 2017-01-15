@@ -40,6 +40,9 @@ int step;
 int *idToPass;
 int sem;
 int semkey;
+
+int sems[4];
+
 int sc;
 struct sembuf sb;
 //use pointers to access stuff as part of the global
@@ -101,7 +104,6 @@ void sub_server( int sd ) {
   
   int first = getFirstPlayer(playersM,4,13);
   setTurnPlayer(first);
-  printf("first: %d\n",first);
   char *start = (char *)malloc(sizeof(char));
   
   
@@ -128,14 +130,12 @@ void sub_server( int sd ) {
   sprintf(buffer,"%s",start);	
   write(sd,buffer,sizeof(buffer));  
 
-  printf("b4 loop\n");
   
   while (read( sd, buffer, sizeof(buffer) )) {
 
     //CLIENT INPUT
     printf("[SERVER %d] received: %s\n", getpid(), buffer );
     process( buffer );
-    printf("processed\n");
 
     //PROCESSED INFO
     write( sd, buffer, sizeof(buffer));    //This is what is passed to client
@@ -144,9 +144,6 @@ void sub_server( int sd ) {
     strcpy(start,memPrintPlayerClient(playersM[*idToPass]));
     sprintf(buffer,"%s",start);	
     write(sd,buffer,sizeof(buffer));
-    
-
-    printf("given2\n");
     
   }
   
@@ -162,7 +159,6 @@ void process( char * s ) {
 
 void step1(char *s) {
 
-  printf("hero\n");
   int count = 0;
 
   int chosen[5];
@@ -172,6 +168,10 @@ void step1(char *s) {
   
   int len = getInput(chosen,in);
 
+
+
+  sb.sem_op = 1;
+  semop(sem,&sb,1);
   
   if (len == 0) {
     s = "Invalid selection(s)\n";
@@ -195,16 +195,23 @@ void step1(char *s) {
     setTurnPlayer(next);
     //blocks the client that just typed
     if (*idToPass != getTurnPlayer()) {
-      printf("AAblock curr: %d   shown: %d\n",getTurnPlayer(),*idToPass);
       sb.sem_op = 0;
       semop(sem,&sb,1);
-    }
-    //need to figure out how to unblock the next one
+      }
+    
   }
     
 }
 
 
+/*
+
+int sem;
+int semkey;
+int sc;
+struct sembuf sb;
+
+ */
 void initialize() {
   
   playersM[0] = &p1;
@@ -224,27 +231,35 @@ void initialize() {
   idToPass = (int *)malloc(sizeof(int));
   *idToPass = 0;
 
-  //ALSO MAKE SURE SETTING FIRST PLAYER WORKS
+
+  //SEMAPHORE
+  
   //??? BLOCK UNTIL 4 PLAYERS CONNECTED
   semkey = ftok("server.c",22);
    
   sem = semget(semkey,1,IPC_CREAT | 0644);
   printf("semaphore created: %d\n",sem);
 
+
+  //-------------------------
+  //ABOVE IS SINGULAR
+
+  sb.sem_num = 0;
+  sb.sem_flg = SEM_UNDO;
+  
   union semun su;
   su.val = 1;
   sc = semctl(sem,0,SETVAL,su);
   printf("value set: %d\n",sc);
 
   
-  struct sembuf sb;
-  sb.sem_num = 0;
-  sb.sem_flg = SEM_UNDO;
+  int i;
+  for (i = 0; i < 4; i++) {
+    sems[i] = semget(ftok("server.c",i),1,IPC_CREAT | 0644);
+    printf("semaphore created: %d\n",sems[i]);
+    sc = semctl(sems[i],0,SETVAL,su);
+    printf("value set: %d\n",sc);
+  }
 
-  //sb.sem_op = 0;
-
-  //semop(sem,&sb,1);
-
-  //now figure out blocking in scenarios with 
   
 }

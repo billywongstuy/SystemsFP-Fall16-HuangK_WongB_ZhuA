@@ -63,7 +63,14 @@ int main( int argc, char *argv[] ) {
   
   while (1) {
 
-    //NEED TO FIX FIGURE OUT HOW TO BLOCK IF NOT PLAYER TURN
+    sb.sem_op = -1;
+    semop(sem,&sb,1);
+
+    //NEED TO FIGURE OUT ORDERING
+    //CURRENTLY TURNS ARE LIKE tHIS
+
+    //first player -> 0 -> in order (exlcuding turn player)
+    
     //NEED TO FIGURE HOW TO NOT BLOCK IF INVALID INPUT
     printf("first player: %d\n",getTurnPlayer());
       
@@ -83,11 +90,12 @@ int main( int argc, char *argv[] ) {
     read( sd, buffer, sizeof(buffer) ); //This is what the server gets
     printf( "received: %s\n", buffer);
 
-
-    printf("unblock\n");
-    sb.sem_op = 1;
-    semop(sem,&sb,1);
     
+    //THE UNBLOCK UNLOCKS 0, NOT THE NEXTPLAYER
+    printf("unblock\n");
+    //sb.sem_op = 1;
+    //semop(sem,&sb,1);
+    printf("unblock done\n");
   }
   
   return 0;
