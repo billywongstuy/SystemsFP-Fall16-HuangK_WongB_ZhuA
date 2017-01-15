@@ -95,29 +95,37 @@ int main() {
 
 void sub_server( int sd ) {
   char buffer[MESSAGE_BUFFER_SIZE];
-  char *suits[] = {"♦", "♣", "♥", "♠"};
-
-  memPrintPlayer(playersM[0]);
-  memPrintPlayer(playersM[1]);
-  memPrintPlayer(playersM[2]);
-  memPrintPlayer(playersM[3]);
   
   int first = getFirstPlayer(playersM,4,13);
   setTurnPlayer(first);
   char *start = (char *)malloc(sizeof(char));
   
-  
   //ASSIGNS PLAYER ID
   //IF TOO MANY PLAYERS, WRITES A MESSAGE INSTEAD OF ID
   if (*idToPass < 4) {
-    printf("pid: %d\n",*idToPass);
+    printf("PID: %d\n",*idToPass);
     sprintf(buffer,"%d",*idToPass);
     write(sd,buffer,sizeof(buffer));
     if (*idToPass != getTurnPlayer()) {
-      printf("block curr: %d   shown: %d\n",getTurnPlayer(),*idToPass);
-      sb.sem_op = 0;
-      semop(sem,&sb,1);
+      printf("NOt connected turn\n");
+      printf("blocking %d\n",sems[*idToPass]);
+      sb.sem_op = -1;
+      semop(sems[*idToPass],&sb,1);
     }
+    
+
+    /*
+    sb.sem_op = -1;
+    semop(sems[*idToPass],&sb,1);
+    
+    if (*idToPass == getTurnPlayer()) {
+      printf("connected turn\n");
+      printf("unblocking %d\n",sems[*idToPass]);
+      sb.sem_op = 1;
+      semop(sems[*idToPass],&sb,1);
+    }
+    */
+    
   }
   else {
     sprintf(buffer,"Player cap exceeded");
@@ -130,9 +138,13 @@ void sub_server( int sd ) {
   sprintf(buffer,"%s",start);	
   write(sd,buffer,sizeof(buffer));  
 
+
+  //SEMAPHORE OF NEXT
+    sprintf(buffer,"%d",sems[nextPlayer(4,*idToPass)]);
+    write(sd,buffer,sizeof(buffer));
   
   while (read( sd, buffer, sizeof(buffer) )) {
-
+    
     //CLIENT INPUT
     printf("[SERVER %d] received: %s\n", getpid(), buffer );
     process( buffer );
@@ -169,12 +181,20 @@ void step1(char *s) {
   int len = getInput(chosen,in);
 
 
+  int next = nextPlayer(4,getTurnPlayer());
 
-  sb.sem_op = 1;
-  semop(sem,&sb,1);
+  //sb.sem_op = -1;
+  //semop(sems[getTurnPlayer()],&sb,1);
+  //printf("unblocking %d\n",sems[getTurnPlayer()]);
+  
+  //sb.sem_op = 1;
+  //semop(sems[next],&sb,1);
+  //printf("unblocking %d\n",sems[next]);
   
   if (len == 0) {
-    s = "Invalid selection(s)\n";
+    strcpy(s,"Invalid selection(s)");
+    sb.sem_op = 1;
+    semop(sems[getTurnPlayer()],&sb,1);
   }
 
   else {
@@ -182,7 +202,6 @@ void step1(char *s) {
     struct card selected[len];
 
     int first = getFirstPlayer(playersM,4,13);
-    int next = nextPlayer(4,getTurnPlayer());
     printf("next: %d\n",next);
     
     char * error = getCardsChosen(selected,chosen,len,playersM,getTurnPlayer());
@@ -193,11 +212,6 @@ void step1(char *s) {
       count++;
     }
     setTurnPlayer(next);
-    //blocks the client that just typed
-    if (*idToPass != getTurnPlayer()) {
-      sb.sem_op = 0;
-      semop(sem,&sb,1);
-      }
     
   }
     

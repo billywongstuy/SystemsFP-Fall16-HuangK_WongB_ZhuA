@@ -62,6 +62,7 @@ int getInput(int * chosen, char * in) {
     //VALID OPTIONS ARE 1-13
     if (n <= 0 || n > 13) {
       chosen[0] = 0;
+      //printf("wrong index\n");
       return 0;
     }
     else {

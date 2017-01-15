@@ -67,3 +67,8 @@ billyW -- 01/14/2017 10:49
 alvinZ -- 01/15/2017 12:25
 - Made it so players can interchange between spaces and commas when inputting cards selected
 - Card selection printing out as the order the players chose
+
+billyW -- 01/15/2017 17:13
+- Got semaphore blocking (in player order) working
+  * Works with the invalid input checker of getCardsfromInput
+

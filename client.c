@@ -35,12 +35,6 @@ int main( int argc, char *argv[] ) {
   sd = client_connect( host );
 
   char buffer[MESSAGE_BUFFER_SIZE];
-
-  //SEMAPHORE
-  int sem;
-  int semkey = ftok("server.c",22);
-  sem = semget(semkey,1,0);
-  printf("semaphore created: %d\n",sem);
   
   //GETS PLAYER ID
   read( sd, buffer, sizeof(buffer));
@@ -56,15 +50,27 @@ int main( int argc, char *argv[] ) {
   printf("pid: %d\n",playerId);
   
 
+  //SEMAPHORE
+  int sem;
+  int semkey = ftok("server.c",playerId);
+  sem = semget(semkey,1,0);
+  printf("semaphore created: %d\n",sem);
+
+  
   //INITIAL PLAYER INFO
   read( sd, buffer, sizeof(buffer) ); //This is what the server gets
   printf( "received: %s\n", buffer);
-
   
+  //SEMAPHORE OF NEXT
+    read(sd,buffer,sizeof(buffer));
+    int nextSem = atoi(buffer);
+    printf("nextsem: %d\n",nextSem);
+
   while (1) {
 
     sb.sem_op = -1;
     semop(sem,&sb,1);
+    printf("blocking %d\n",sem);
 
     //NEED TO FIGURE OUT ORDERING
     //CURRENTLY TURNS ARE LIKE tHIS
@@ -85,17 +91,16 @@ int main( int argc, char *argv[] ) {
     //PROCESSED RESULT
     read( sd, buffer, sizeof(buffer) ); //This is what the server gets
     printf( "received: %s\n", buffer);
-    
+
     //PLAYER INFO
     read( sd, buffer, sizeof(buffer) ); //This is what the server gets
     printf( "received: %s\n", buffer);
 
-    
-    //THE UNBLOCK UNLOCKS 0, NOT THE NEXTPLAYER
-    printf("unblock\n");
-    //sb.sem_op = 1;
-    //semop(sem,&sb,1);
-    printf("unblock done\n");
+    if (strcmp(buffer,"Invalid selection(s)") != 0) {
+      sb.sem_op = 1;
+      semop(nextSem,&sb,1);
+      printf("unblocking %d\n",nextSem);
+    }
   }
   
   return 0;
