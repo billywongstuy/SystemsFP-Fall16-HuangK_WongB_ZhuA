@@ -29,7 +29,7 @@ void setup() {
   players[1] = p2;
   players[2] = p3;
   players[3] = p4;
-  
+
   playersM = players;
   */
 
@@ -37,15 +37,15 @@ void setup() {
   playersM[1] = &p2;
   playersM[2] = &p3;
   playersM[3] = &p4;
-  
+
   printf("lolol\n");
-  
+
   setupDeck(deck);
-  
+
   distributeCards(deck,playersM,4);
 
   printf("11111\n");
-  
+
   sortCards(p1.hand,13);
   sortCards(p2.hand,13);
   sortCards(p3.hand,13);
@@ -56,7 +56,7 @@ int main() {
   srand(time(NULL));
 
   printf("start\n");
-  
+
   setup();
 
   printf("222\n");
@@ -65,7 +65,7 @@ int main() {
   printPlayer(p2);
   printPlayer(p3);
   printPlayer(p4);
-  
+
   int count = 0;
 
   int chosen[5];
@@ -74,28 +74,29 @@ int main() {
   char in[500];
   printf("Choose your card(s): ");
   fgets(in,sizeof(in),stdin);
-  
+
   int len = getInput(chosen,in);
 
-  
+
   if (len == 0) {
     printf("Invalid selection(s)\n");
   }
 
   else {
-    
+
     struct card selected[len];
 
     int first = getFirstPlayer(playersM,4,13);
     //int first = 0;
-    
+
     char * error = getCardsChosen(selected,chosen,len,playersM,first);
-    sortCards(selected,len);
-    
+
     while (count < len && selected[count].value != -1) {
       printCard(selected[count]);
       count++;
     }
+
+    sortCards(selected,len);
 
     printPlayer(p1);
     memPrintPlayer(playersM[0]);
@@ -108,5 +109,3 @@ int main() {
 //getCardsChosen
 //setup (also in server initialize)
 //distributeCards
-
-

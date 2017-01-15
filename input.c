@@ -38,79 +38,74 @@ char* stripper(char* stripping){
 //get input length
 int getInput(int * chosen, char * in) {
 
-  //Moved to main
-  /*char in[500];
-  printf("Choose your card(s): ");
-  fgets(in,sizeof(in),stdin);*/
-  
-  strtok(in,"\n");
+    //Moved to main
+    /*char in[500];
+    printf("Choose your card(s): ");
+    fgets(in,sizeof(in),stdin);*/
 
-  char *inS = in;
-  int count = 0;
-  char * t;
-  int n;
+    strtok(in,"\n");
 
-  while (t = strsep(&inS,",")) {
-    n = atoi(stripper(t));
-    //IF INVAlID OPTION, MAKES THE FIRST INDEX NULL
-    //VALID OPTIONS ARE 1-13
-    if (n <= 0 || n > 13) {
-      chosen[0] = 0;
-      return 0;
+    char *inS = stripper(in);
+    int count = 0;
+    char * t;
+    int n;
+
+    while (t = strsep(&inS,",")) {
+        n = atoi(stripper(t));
+        //IF INVAlID OPTION, MAKES THE FIRST INDEX NULL
+        //VALID OPTIONS ARE 1-13
+        if (n <= 0 || n > 13) {
+            chosen[0] = 0;
+            return 0;
+        }
+        else {
+            chosen[count] = n;
+        }
+        count++;
     }
-    else {
-      chosen[count] = n;
+    if(count == 1){
+        inS = stripper(in);
+        t = strsep(&inS, " ");
+        //printf("Checking: |%s|\n", t);
+        while (t = strsep(&inS," ")) {
+            n = atoi(stripper(t));
+            if (n <= 0 || n > 13) {
+                chosen[0] = 0;
+                return 0;
+            }
+            else {
+                chosen[count] = n;
+            }
+            count++;
+        }
     }
-    count++;
-  }
-  if(count == 1){
-    inS = stripper(in);
-    t = strsep(&inS, " ");
-    printf("Checking: |%s|\n", inS);
-    /*if(t == 0){
-      printf("go!");
-      t = strsep(&inS, " ");
-    }*/
-    while (t = strsep(&inS," ")) {
-      n = atoi(stripper(t));
-      //IF INVAlID OPTION, MAKES THE FIRST INDEX NULL
-      //VALID OPTIONS ARE 1-13
-      if (n <= 0 || n > 13) {
-	chosen[0] = 0;
-	return 0;
-      }
-      else {
-	chosen[count] = n;
-      }
-      count++;
+
+
+    int c = count;
+    for (c; c < 5; c++) {
+        chosen[c] = 0;
     }
-  }
 
-  int c = count;
-  for (c; c < 5; c++) {
-    chosen[c] = 0;
-  }
-
-  //printf("count: %d\n", count);
-  return count;
+    //printf("count: %d\n", count);
+    return count;
 
 }
 
 //Card choices will always be correct because of getInput handling
 char *  getCardsChosen(struct card *a, int * choices, int len, struct player ** players, int player) {
-  int i = 0;
-  struct card adding;
-  while (i < len) {
-    //SHOULDN'T TRIGGER THIS IF STATEMENT (DEBUG)
-    if (choices[i] <= 0) {
-      a[i].value = -1;
-      return "Invalid selection/s";
+    int i = 0;
+    struct card adding;
+    while (i < len) {
+        //SHOULDN'T TRIGGER THIS IF STATEMENT (DEBUG)
+        if (choices[i] <= 0) {
+            a[i].value = -1;
+            return "Invalid selection/s";
+        }
+        else {
+            adding = players[player]->hand[choices[i]-1];
+            a[i] = adding;
+            i++;
+        }
     }
-    else {
-      adding = players[player]->hand[choices[i]-1];
-      a[i] = adding;
-      i++;
-    }
-  }
-  return "";
+    return "";
 }
