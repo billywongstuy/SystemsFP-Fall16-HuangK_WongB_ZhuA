@@ -38,6 +38,10 @@ int turnNumber; //use this to check player turn
 char * turnPlayerInfo;
 int step;
 int *idToPass;
+int sem;
+int semkey;
+int sc;
+struct sembuf sb;
 //use pointers to access stuff as part of the global
 
 void process( char * s );
@@ -60,7 +64,7 @@ int main() {
 
   //NOW NEED SEMAPHORES IN THIS
   initialize();
-  
+  printf("f: %d\n",getFirstPlayer(playersM,4,13));
  
   while (1) {
   
@@ -107,6 +111,11 @@ void sub_server( int sd ) {
     printf("pid: %d\n",*idToPass);
     sprintf(buffer,"%d",*idToPass);
     write(sd,buffer,sizeof(buffer));
+    if (*idToPass != getTurnPlayer()) {
+      printf("block curr: %d   shown: %d\n",getTurnPlayer(),*idToPass);
+      sb.sem_op = 0;
+      semop(sem,&sb,1);
+    }
   }
   else {
     sprintf(buffer,"Player cap exceeded");
@@ -118,7 +127,8 @@ void sub_server( int sd ) {
   strcpy(start,memPrintPlayerClient(playersM[*idToPass]));
   sprintf(buffer,"%s",start);	
   write(sd,buffer,sizeof(buffer));  
-  
+
+  printf("b4 loop\n");
   
   while (read( sd, buffer, sizeof(buffer) )) {
 
@@ -127,14 +137,16 @@ void sub_server( int sd ) {
     process( buffer );
     printf("processed\n");
 
+    //PROCESSED INFO
+    write( sd, buffer, sizeof(buffer));    //This is what is passed to client
+    
     //PLAYER INFO
     strcpy(start,memPrintPlayerClient(playersM[*idToPass]));
     sprintf(buffer,"%s",start);	
     write(sd,buffer,sizeof(buffer));
-    read(sd,buffer,sizeof(buffer));
+    
 
-    //PROCESSED INFO
-    write( sd, buffer, sizeof(buffer));    //This is what is passed to client
+    printf("given2\n");
     
   }
   
@@ -149,7 +161,8 @@ void process( char * s ) {
 
 
 void step1(char *s) {
-  
+
+  printf("hero\n");
   int count = 0;
 
   int chosen[5];
@@ -169,17 +182,24 @@ void step1(char *s) {
     struct card selected[len];
 
     int first = getFirstPlayer(playersM,4,13);
-    //int first = 0;
+    int next = nextPlayer(4,getTurnPlayer());
+    printf("next: %d\n",next);
     
-    char * error = getCardsChosen(selected,chosen,len,playersM,first);
+    char * error = getCardsChosen(selected,chosen,len,playersM,getTurnPlayer());
     sortCards(selected,len);
     
     while (count < len && selected[count].value != -1) {
       printCard(selected[count]);
       count++;
     }
-
-    
+    setTurnPlayer(next);
+    //blocks the client that just typed
+    if (*idToPass != getTurnPlayer()) {
+      printf("AAblock curr: %d   shown: %d\n",getTurnPlayer(),*idToPass);
+      sb.sem_op = 0;
+      semop(sem,&sb,1);
+    }
+    //need to figure out how to unblock the next one
   }
     
 }
@@ -206,10 +226,8 @@ void initialize() {
 
   //ALSO MAKE SURE SETTING FIRST PLAYER WORKS
   //??? BLOCK UNTIL 4 PLAYERS CONNECTED
-  int sem;
-  int semkey = ftok("server.c",22);
-  int sc;
-  
+  semkey = ftok("server.c",22);
+   
   sem = semget(semkey,1,IPC_CREAT | 0644);
   printf("semaphore created: %d\n",sem);
 
@@ -217,7 +235,16 @@ void initialize() {
   su.val = 1;
   sc = semctl(sem,0,SETVAL,su);
   printf("value set: %d\n",sc);
+
   
+  struct sembuf sb;
+  sb.sem_num = 0;
+  sb.sem_flg = SEM_UNDO;
+
+  //sb.sem_op = 0;
+
+  //semop(sem,&sb,1);
+
   //now figure out blocking in scenarios with 
   
 }

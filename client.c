@@ -16,6 +16,10 @@
 int playerId;
 
 int main( int argc, char *argv[] ) {
+
+  struct sembuf sb;
+  sb.sem_num = 0;
+  sb.sem_flg = SEM_UNDO;
   
   char *host;
 
@@ -55,44 +59,34 @@ int main( int argc, char *argv[] ) {
   //INITIAL PLAYER INFO
   read( sd, buffer, sizeof(buffer) ); //This is what the server gets
   printf( "received: %s\n", buffer);
-  
+
   
   while (1) {
-    
-    //currently only lets players type one at a time
+
+    //NEED TO FIX FIGURE OUT HOW TO BLOCK IF NOT PLAYER TURN
+    //NEED TO FIGURE HOW TO NOT BLOCK IF INVALID INPUT
     printf("first player: %d\n",getTurnPlayer());
-
-    //NEED TO MAKE IT BLOCK UNTIL 4 PLAYERS ARE CONNECTED
-    //THEN BLOCK IF PLAYERID != GETTURNPLAYER
-      struct sembuf sb;
-      sb.sem_num = 0;
-      sb.sem_flg = SEM_UNDO;
-      printf("block\n");
-      sb.sem_op = -1;
-
-      semop(sem,&sb,1);
-
       
     
     printf("Choose your card(s): ");
     fgets( buffer, sizeof(buffer), stdin );
     char *p = strchr(buffer, '\n');
-    *p = 0;
-    
+    *p = 0;    
     write( sd, buffer, sizeof(buffer) ); //This is what is passed to server
 
-    
-      sb.sem_op = 1;
-      semop(sem,&sb,1);
-
-      
-    //PLAYER INFO
-    read( sd, buffer, sizeof(buffer) ); //This is what the server gets
-    printf( "received: %s\n", buffer);
 
     //PROCESSED RESULT
     read( sd, buffer, sizeof(buffer) ); //This is what the server gets
     printf( "received: %s\n", buffer);
+    
+    //PLAYER INFO
+    read( sd, buffer, sizeof(buffer) ); //This is what the server gets
+    printf( "received: %s\n", buffer);
+
+
+    printf("unblock\n");
+    sb.sem_op = 1;
+    semop(sem,&sb,1);
     
   }
   

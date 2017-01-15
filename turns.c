@@ -6,10 +6,12 @@
 #include "turns.h"
 
 int nextPlayer(int numP, int currP) {
+  printf("index of current player: %d\n",currP);
+  printf("length: %d\n",numP);
   if (currP == numP - 1) {
     return 0;
   }
-  return numP + 1;
+  return currP + 1;
 }
 
 int getFirstPlayer(struct player ** players, int numP, int handSize) {
