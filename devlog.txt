@@ -14,7 +14,7 @@ billyW -- 01/08/2017 20:24
 -Added method to randomly distribute the cards
 
 karenH -- 01/09/2017 15:26
--Made makefile better 
+-Made makefile better
 
 billyW -- 01/09/2017 15:34
 -Changed distributeCards to take player * array to accomodate for n amount of players
@@ -63,3 +63,7 @@ billyW -- 01/13/2017 22:01
 
 billyW -- 01/14/2017 10:49
 - Added a player check (only allows 4 players to connect)
+
+alvinZ -- 01/15/2017 12:25
+- Made it so players can interchange between spaces and commas when inputting cards selected
+- Card selection printing out as the order the players chose
