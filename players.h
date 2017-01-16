@@ -18,4 +18,6 @@ void distributeCards(struct card * deck, struct player ** players, int numP);
 
 void sortCards(struct card *hand, int len);
 
+void useCards(struct player *p, int *indices, int indLen);
+
 #endif

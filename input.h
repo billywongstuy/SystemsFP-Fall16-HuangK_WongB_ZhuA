@@ -5,7 +5,7 @@
 #include "players.h"
 #include "cards.h"
 
-int getInput(int * chosen, char * in);
+int getInput(int * chosen, char * in, int len);
 
 char* stripper(char* stripping);
 

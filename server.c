@@ -106,27 +106,20 @@ void sub_server( int sd ) {
     printf("PID: %d\n",*idToPass);
     sprintf(buffer,"%d",*idToPass);
     write(sd,buffer,sizeof(buffer));
-    if (*idToPass != getTurnPlayer()) {
-      printf("NOt connected turn\n");
-      printf("blocking %d\n",sems[*idToPass]);
-      sb.sem_op = -1;
-      semop(sems[*idToPass],&sb,1);
-    }
-    
 
-    /*
+    //BLOCKS EVERYONE AT DEFAULT
     sb.sem_op = -1;
     semop(sems[*idToPass],&sb,1);
-    
-    if (*idToPass == getTurnPlayer()) {
-      printf("connected turn\n");
-      printf("unblocking %d\n",sems[*idToPass]);
+
+    //If 4 PLAYERS ARE CONNECTED, UNBLOCKS THE FIRST PLAYER
+    if (*idToPass == 3) {
       sb.sem_op = 1;
-      semop(sems[*idToPass],&sb,1);
+      semop(sems[first],&sb,1);
     }
-    */
     
   }
+
+  //TOO MANY PLAYERS
   else {
     sprintf(buffer,"Player cap exceeded");
     write(sd,buffer,sizeof(buffer));
@@ -172,45 +165,32 @@ void process( char * s ) {
 void step1(char *s) {
 
   int count = 0;
-
   int chosen[5];
-
-
   char * in = s;
   
-  int len = getInput(chosen,in);
-
-
+  int len = getInput(chosen,in,playersM[getTurnPlayer()]->cardsLeft);
   int next = nextPlayer(4,getTurnPlayer());
 
-  //sb.sem_op = -1;
-  //semop(sems[getTurnPlayer()],&sb,1);
-  //printf("unblocking %d\n",sems[getTurnPlayer()]);
-  
-  //sb.sem_op = 1;
-  //semop(sems[next],&sb,1);
-  //printf("unblocking %d\n",sems[next]);
-  
+  //INVALID CHOICE
   if (len == 0) {
     strcpy(s,"Invalid selection(s)");
     sb.sem_op = 1;
     semop(sems[getTurnPlayer()],&sb,1);
   }
-
+  // PROHIBITED TO USE THE CARD(S)  e.g. wrong mode, too low
+  //elseif ...
   else {
     
     struct card selected[len];
-
-    int first = getFirstPlayer(playersM,4,13);
-    printf("next: %d\n",next);
-    
     char * error = getCardsChosen(selected,chosen,len,playersM,getTurnPlayer());
     sortCards(selected,len);
     
-    while (count < len && selected[count].value != -1) {
+    /*while (count < len && selected[count].value != -1) {
       printCard(selected[count]);
       count++;
-    }
+    }*/
+    useCards(playersM[getTurnPlayer()],chosen,len);
+    
     setTurnPlayer(next);
     
   }
@@ -218,14 +198,7 @@ void step1(char *s) {
 }
 
 
-/*
 
-int sem;
-int semkey;
-int sc;
-struct sembuf sb;
-
- */
 void initialize() {
   
   playersM[0] = &p1;
@@ -245,8 +218,6 @@ void initialize() {
   idToPass = (int *)malloc(sizeof(int));
   *idToPass = 0;
 
-
-  //SEMAPHORE
   
   //??? BLOCK UNTIL 4 PLAYERS CONNECTED
   semkey = ftok("server.c",22);

@@ -75,7 +75,7 @@ int main() {
   printf("Choose your card(s): ");
   fgets(in,sizeof(in),stdin);
 
-  int len = getInput(chosen,in);
+  int len = getInput(chosen,in,13);
 
 
   if (len == 0) {

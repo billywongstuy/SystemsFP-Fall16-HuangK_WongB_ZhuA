@@ -19,7 +19,7 @@ void printPlayer(struct player p) {
   printf("Cards left: %d\n",p.cardsLeft);
   int i;
   printf("Hand: \n");
-  for (i = 0; i < 13; i++) {
+  for (i = 0; i < p.cardsLeft; i++) {
     /*if(p.hand[i].suit % 2 == 0){
       //Red Suits
       printf(" %s\x1B[1;31m %s\x1B[37m |",values[p.hand[i].value],suits[p.hand[i].suit]);
@@ -47,7 +47,7 @@ void memPrintPlayer (struct player *p) {
   printf("Cards left: %d\n",p->cardsLeft);
   int i;
   printf("Hand: \n");
-  for (i = 0; i < 13; i++) {
+  for (i = 0; i < p->cardsLeft; i++) {
     if(p->hand[i].value == 7){
         printf("%s", values[p->hand[i].value]);
     }else{
@@ -69,7 +69,7 @@ char * printPlayerClient(struct player p) {
   sprintf(buf, "Cards left: %d\n",p.cardsLeft);
   int i;
   sprintf(buf + strlen(buf), "Hand: \n");
-  for (i = 0; i < 13; i++) {
+  for (i = 0; i < p.cardsLeft; i++) {
     if(p.hand[i].value == 7){
       sprintf(buf + strlen(buf), "%s", values[p.hand[i].value]);
     }else{
@@ -95,7 +95,7 @@ char * memPrintPlayerClient(struct player * p) {
   len += sprintf(buf + len, "\nYour Info\nCards left: %d\n",p->cardsLeft);
   int i;
   sprintf(buf + strlen(buf), "Hand: \n");
-  for (i = 0; i < 13; i++) {
+  for (i = 0; i < p->cardsLeft; i++) {
     if(p->hand[i].value == 7){
       len += sprintf(buf + len, "%s", values[p->hand[i].value]);
     }else{

@@ -36,7 +36,7 @@ char* stripper(char* stripping){
 
 
 //get input length
-int getInput(int * chosen, char * in) {
+int getInput(int * chosen, char * in, int len) {
   
   strtok(in,"\n");
   
@@ -60,7 +60,7 @@ int getInput(int * chosen, char * in) {
     n = atoi(t);
     //IF INVAlID OPTION, MAKES THE FIRST INDEX NULL
     //VALID OPTIONS ARE 1-13
-    if (n <= 0 || n > 13) {
+    if (n <= 0 || n > len) {
       chosen[0] = 0;
       //printf("wrong index\n");
       return 0;
