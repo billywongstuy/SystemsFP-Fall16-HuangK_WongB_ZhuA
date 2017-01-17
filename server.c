@@ -21,6 +21,17 @@
 #include "rules.h"
 
 
+//NEXT
+//WORK ON USED PILE
+//WORK ON RECENT MOVE
+//USER INTERFACE
+
+struct card usedCards[52];
+int amountUsed;
+struct card lastMove[5];
+int lastMoveAmount;
+
+
 union semun {
   int val;
   struct semid_ds *buf;
@@ -32,20 +43,17 @@ union semun {
 struct card deck[52];
 struct player p1,p2,p3,p4;
 struct player *playersM[4];
+
 int mode;  //0 for debug, 1 for single, 2 for double, 3 for triple, 5 for 5-combo
-int turnPlayer; //is an index for player who has to make their move
-int turnNumber; //use this to check player turn
 char * turnPlayerInfo;
 int step;
 int *idToPass;
-int sem;
-int semkey;
 
 int sems[4];
-
 int sc;
 struct sembuf sb;
-//use pointers to access stuff as part of the global
+
+int turnNumber;
 
 void process( char * s );
 void sub_server( int sd );
@@ -126,17 +134,21 @@ void sub_server( int sd ) {
     exit(0);
   }
 
+  
+  //SEMAPHORE OF NEXT
+  sprintf(buffer,"%d",sems[nextPlayer(4,*idToPass)]);
+  write(sd,buffer,sizeof(buffer));
+
+
   //INITIAL PLAYER INFO
   strcpy(start,memPrintPlayerClient(playersM[*idToPass]));
+  strcat(start,"  1   |   2  |   3  |   4  |   5  |   6  |   7  |   8  |   9  |  10  |  11  |  12  |  13  |\n\n" );
   sprintf(buffer,"%s",start);	
   write(sd,buffer,sizeof(buffer));  
 
-
-  //SEMAPHORE OF NEXT
-    sprintf(buffer,"%d",sems[nextPlayer(4,*idToPass)]);
-    write(sd,buffer,sizeof(buffer));
   
   while (read( sd, buffer, sizeof(buffer) )) {
+    
     
     //CLIENT INPUT
     printf("[SERVER %d] received: %s\n", getpid(), buffer );
@@ -144,9 +156,18 @@ void sub_server( int sd ) {
 
     //PROCESSED INFO
     write( sd, buffer, sizeof(buffer));    //This is what is passed to client
-    
+
+
     //PLAYER INFO
     strcpy(start,memPrintPlayerClient(playersM[*idToPass]));
+    strcat(start,"  1   |");
+
+    int i;
+    for (i = 0; i < playersM[*idToPass]->cardsLeft-1; i++) {
+      if (i >= 8) {sprintf(start + strlen(start),"  %d  |",i+2);}
+      else {sprintf(start + strlen(start),"   %d  |",i+2);}
+    }
+    strcat(start,"\n\n");    
     sprintf(buffer,"%s",start);	
     write(sd,buffer,sizeof(buffer));
     
@@ -189,9 +210,23 @@ void step1(char *s) {
       printCard(selected[count]);
       count++;
     }*/
+
+    for (count; count < len; count++) {
+      lastMove[count] = selected[count];
+      
+      usedCards[count+amountUsed] = selected[count];
+    }
+    amountUsed += len;
+    lastMoveAmount = len;
+
+    setLastMove(printChoice(selected,len));
+    
     useCards(playersM[getTurnPlayer()],chosen,len);
     
+    setAllCardsLeft(playersM[getTurnPlayer()]->cardsLeft,getTurnPlayer());
+    
     setTurnPlayer(next);
+    strcpy(s,"Valid selection(s)");
     
   }
     
@@ -218,25 +253,12 @@ void initialize() {
   idToPass = (int *)malloc(sizeof(int));
   *idToPass = 0;
 
-  
-  //??? BLOCK UNTIL 4 PLAYERS CONNECTED
-  semkey = ftok("server.c",22);
-   
-  sem = semget(semkey,1,IPC_CREAT | 0644);
-  printf("semaphore created: %d\n",sem);
-
-
-  //-------------------------
-  //ABOVE IS SINGULAR
+  amountUsed = 0;
 
   sb.sem_num = 0;
   sb.sem_flg = SEM_UNDO;
-  
   union semun su;
   su.val = 1;
-  sc = semctl(sem,0,SETVAL,su);
-  printf("value set: %d\n",sc);
-
   
   int i;
   for (i = 0; i < 4; i++) {
@@ -246,5 +268,11 @@ void initialize() {
     printf("value set: %d\n",sc);
   }
 
-  
+  turnNumber = 0;
+
+  setLastMove("This is the first move");
+  setAllCardsLeft(13,0);
+  setAllCardsLeft(13,1);
+  setAllCardsLeft(13,2);
+  setAllCardsLeft(13,3);
 }

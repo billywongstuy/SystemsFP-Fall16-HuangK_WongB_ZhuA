@@ -15,6 +15,7 @@
 
 int playerId;
 
+
 int main( int argc, char *argv[] ) {
 
   struct sembuf sb;
@@ -56,51 +57,63 @@ int main( int argc, char *argv[] ) {
   sem = semget(semkey,1,0);
   printf("semaphore created: %d\n",sem);
 
-  
+  printf("\033c");
+
+
+  //SEMAPHORE OF NEXT
+  read(sd,buffer,sizeof(buffer));
+  int nextSem = atoi(buffer);
+  //printf("nextsem: %d\n",nextSem);
+
   //INITIAL PLAYER INFO
   read( sd, buffer, sizeof(buffer) ); //This is what the server gets
-  printf( "received: %s\n", buffer);
-  
-  //SEMAPHORE OF NEXT
-    read(sd,buffer,sizeof(buffer));
-    int nextSem = atoi(buffer);
-    printf("nextsem: %d\n",nextSem);
+  printf( "%s", buffer);
+  printf("Waiting for your turn...\n");
 
   while (1) {
 
     sb.sem_op = -1;
     semop(sem,&sb,1);
-    printf("blocking %d\n",sem);
-
-    //NEED TO FIGURE OUT ORDERING
-    //CURRENTLY TURNS ARE LIKE tHIS
-
-    //first player -> 0 -> in order (exlcuding turn player)
+    //printf("blocking %d\n",sem);  
     
-    //NEED TO FIGURE HOW TO NOT BLOCK IF INVALID INPUT
-    printf("first player: %d\n",getTurnPlayer());
-      
+    printf("\033c");
+
+    printf("Last Move: %s\n\n",getLastMove());
+
+    int * racl = getAllCardsLeft();
+    int k;
+    for (k = 0; k < 4; k++) {
+      if (k != playerId) {printf("Player %d Cards Left: %d\n",k+1,racl[k]);}
+    }
     
+    printf("%s",buffer);
+
+
     printf("Choose your card(s): ");
     fgets( buffer, sizeof(buffer), stdin );
     char *p = strchr(buffer, '\n');
     *p = 0;    
     write( sd, buffer, sizeof(buffer) ); //This is what is passed to server
 
+    printf("\033c");
 
     //PROCESSED RESULT
     read( sd, buffer, sizeof(buffer) ); //This is what the server gets
     printf( "received: %s\n", buffer);
 
+
     //PLAYER INFO
     read( sd, buffer, sizeof(buffer) ); //This is what the server gets
-    printf( "received: %s\n", buffer);
+    printf( "%s", buffer);
+
 
     if (strcmp(buffer,"Invalid selection(s)") != 0) {
       sb.sem_op = 1;
       semop(nextSem,&sb,1);
-      printf("unblocking %d\n",nextSem);
+      //printf("unblocking %d\n",nextSem);
     }
+   
+
   }
   
   return 0;

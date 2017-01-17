@@ -70,5 +70,15 @@ alvinZ -- 01/15/2017 12:25
 
 billyW -- 01/15/2017 17:13
 - Got semaphore blocking (in player order) working
-  * Works with the invalid input checker of getCardsfromInput
+  • Works with the invalid input checker of getCardsfromInput
 
+billyW -- 01/16/2017 22:10
+- Worked on client interface
+- Client interface now additionally has:
+   • Last move
+   • Cards left of other players
+   • Indexes for cards the player(s) can choose from
+
+
+
+   

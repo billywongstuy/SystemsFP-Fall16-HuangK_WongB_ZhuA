@@ -5,7 +5,7 @@
 #include "printMethods.h"
 
 
-char *values[] = {"3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K", "A", "2"};
+char *values[] = {" 3", " 4", " 5", " 6", " 7", " 8", " 9", "10", " J", " Q", " K", " A", " 2"};
 char *suits[] = {"♦", "♣", "♥", "♠"};
 
 void printCard(struct card c) {
@@ -28,14 +28,14 @@ void printPlayer(struct player p) {
       printf(" %s\033[1;34m %s\x1B[37m |",values[p.hand[i].value],suits[p.hand[i].suit]);
   }*/
     if(p.hand[i].value == 7){
-        printf("%s", values[p.hand[i].value]);
+        printf(" %s", values[p.hand[i].value]);
     }else{
         printf(" %s", values[p.hand[i].value]);
     }
     if(p.hand[i].suit % 2 == 0){
-        printf("\x1B[31m %s\x1B[37m | ", suits[p.hand[i].suit]);
+        printf("\x1B[31m %s\x1B[37m |", suits[p.hand[i].suit]);
     }else{
-        printf("\x1B[34m %s\x1B[37m | ", suits[p.hand[i].suit]);
+        printf("\x1B[34m %s\x1B[37m |", suits[p.hand[i].suit]);
     }
   }
   printf("\x1B[0m\n\n");
@@ -49,14 +49,14 @@ void memPrintPlayer (struct player *p) {
   printf("Hand: \n");
   for (i = 0; i < p->cardsLeft; i++) {
     if(p->hand[i].value == 7){
-        printf("%s", values[p->hand[i].value]);
+        printf(" %s", values[p->hand[i].value]);
     }else{
         printf(" %s", values[p->hand[i].value]);
     }
     if(p->hand[i].suit % 2 == 0){
-        printf("\x1B[31m %s\x1B[37m | ", suits[p->hand[i].suit]);
+        printf("\x1B[31m %s\x1B[37m |", suits[p->hand[i].suit]);
     }else{
-        printf("\x1B[34m %s\x1B[37m | ", suits[p->hand[i].suit]);
+        printf("\x1B[34m %s\x1B[37m |", suits[p->hand[i].suit]);
     }
   }
   printf("\x1B[0m\n\n");
@@ -71,14 +71,14 @@ char * printPlayerClient(struct player p) {
   sprintf(buf + strlen(buf), "Hand: \n");
   for (i = 0; i < p.cardsLeft; i++) {
     if(p.hand[i].value == 7){
-      sprintf(buf + strlen(buf), "%s", values[p.hand[i].value]);
+      sprintf(buf + strlen(buf), " %s", values[p.hand[i].value]);
     }else{
-      sprintf(buf + strlen(buf), "%s", values[p.hand[i].value]);
+      sprintf(buf + strlen(buf), " %s", values[p.hand[i].value]);
     }
     if(p.hand[i].suit % 2 == 0){
-      sprintf(buf + strlen(buf), "\x1B[31m %s\x1B[37m | ", suits[p.hand[i].suit]);
+      sprintf(buf + strlen(buf), "\x1B[31m %s\x1B[37m |", suits[p.hand[i].suit]);
     }else{
-      sprintf(buf + strlen(buf), "\x1B[34m %s\x1B[37m | ", suits[p.hand[i].suit]);
+      sprintf(buf + strlen(buf), "\x1B[34m %s\x1B[37m |", suits[p.hand[i].suit]);
     }
   }
   sprintf(buf + strlen(buf), "\x1B[0m\n\n");
@@ -88,23 +88,41 @@ char * printPlayerClient(struct player p) {
 }
 
 
+//THE ONE SHOWN TO CLIENT
 char * memPrintPlayerClient(struct player * p) {
   char buf[1000];
   int len = 0;
   
-  len += sprintf(buf + len, "\nYour Info\nCards left: %d\n",p->cardsLeft);
+  len += sprintf(buf + len, "\nYour Info (Player %d)\n\nCards left: %d\n\n",p->id+1,p->cardsLeft);
   int i;
   sprintf(buf + strlen(buf), "Hand: \n");
   for (i = 0; i < p->cardsLeft; i++) {
-    if(p->hand[i].value == 7){
-      len += sprintf(buf + len, "%s", values[p->hand[i].value]);
-    }else{
-      len += sprintf(buf + len, "%s", values[p->hand[i].value]);
-    }
+    len += sprintf(buf + len, " %s", values[p->hand[i].value]);
     if(p->hand[i].suit % 2 == 0){
-      len += sprintf(buf + len, "\x1B[31m %s\x1B[37m | ", suits[p->hand[i].suit]);
+      len += sprintf(buf + len, "\x1B[31m %s\x1B[37m |", suits[p->hand[i].suit]);
     }else{
-      len += sprintf(buf + len, "\x1B[34m %s\x1B[37m | ", suits[p->hand[i].suit]);
+      len += sprintf(buf + len, "\x1B[34m %s\x1B[37m |", suits[p->hand[i].suit]);
+    }
+  }
+  len += sprintf(buf + len, "\x1B[0m\n\n");
+  
+  char * s = (char *)malloc(sizeof(char));
+  strcpy(s,buf);
+  return s;
+}
+
+
+char * printChoice (struct card *ch, int l) {
+  char buf[1000];
+  int len = 0;
+  
+  int i;
+  for (i = 0; i < l; i++) {
+    len += sprintf(buf + len, " %s", values[ch[i].value]);
+    if(ch[i].suit % 2 == 0){
+      len += sprintf(buf + len, "\x1B[31m %s\x1B[37m |", suits[ch[i].suit]);
+    }else{
+      len += sprintf(buf + len, "\x1B[34m %s\x1B[37m |", suits[ch[i].suit]);
     }
   }
   len += sprintf(buf + len, "\x1B[0m\n\n");

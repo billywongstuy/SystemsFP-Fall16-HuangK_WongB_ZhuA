@@ -17,16 +17,6 @@
 #include "networking.h"
 #include "printMethods.h"
 
-/*
-struct card deck[52];
-struct player p1,p2,p3,p4;
-struct player *players[4];
-int mode;  //0 for debug, 1 for single, 2 for double, 3 for triple, 5 for 5-combo
-int turnPlayer; //is an index for player who has to make their move
-int turnNumber; //use this to check player turn
-char * turnPlayerInfo;
-int step;
-*/
 
 void error_check( int i, char *s ) {
   if ( i < 0 ) {
@@ -94,15 +84,30 @@ int client_connect( char *host ) {
 void setup() {
   int shmem;
   int shmemkey = ftok("cards.c",40);
-  
   shmem = shmget(shmemkey, sizeof(int), IPC_CREAT | 0644);
-
   if (shmem == -1) {printf("shmem error: %s\n",strerror(errno));}
   int *turnP = shmat(shmem,NULL,0);
-
   if (*turnP == -1) {printf("shmat error: %s\n",strerror(errno));}
-
   *turnP = 0;
+
+
+  int shmem2;
+  int shmemkey2 = ftok("cards.c",83);  
+  shmem2 = shmget(shmemkey2, sizeof(int), IPC_CREAT | 0644);
+  if (shmem2 == -1) {printf("shmem2 error: %s\n",strerror(errno));}
+  char (*lastMove)[500];
+  lastMove = shmat(shmem2,NULL,0);
+
+  
+  int shmem3;
+  int shmemkey3 = ftok("cards.c",84);
+  shmem3 = shmget(shmemkey3, sizeof(int)*4, IPC_CREAT | 0644);
+  if (shmem3 == -1) {printf("shmem3 error: %s\n",strerror(errno));}
+  int *a,*b,*c,*d;
+  a = shmat(shmem3,NULL,0);
+  b = a+1;
+  c = b+1;
+  d = c+1;
 }
 
 
@@ -127,20 +132,54 @@ void setTurnPlayer(int n) {
   *turnP = n;
 }
 
-/*
-char * getHand(struct player p1) {
-  return printPlayerClient(p1);
+
+char * getLastMove() {
+  int shmem;
+  int shmemkey = ftok("cards.c",83);
+  shmem = shmget(shmemkey, sizeof(int), IPC_CREAT | 0644);
+  if (shmem == -1) {printf("shmem error: %s\n",strerror(errno));}
+  char (*lastMove)[500];
+  lastMove = shmat(shmem,NULL,0);
+  //if (*turnP == -1) {printf("shmat error: %s\n",strerror(errno));}
+  return *lastMove;
 }
 
-struct card * getDeck() {return deck;}
-struct player getp1() {return p1;}
-struct player getp2() {return p2;}
-struct player getp3() {return p3;}
-struct player getp4() {return p4;}
-struct player ** getPlayers() {return players;}
-int getMode() {return mode;}
-int getTurnPlayer() {return turnPlayer;}
-int getTurnNumber() {return turnNumber;}
-char * getTurnPlayerInfo() {return turnPlayerInfo;}
-int getStep() {return step;}
-*/
+
+void setLastMove(char * string) {
+  int shmem;
+  int shmemkey = ftok("cards.c",83);
+  shmem = shmget(shmemkey, sizeof(int), IPC_CREAT | 0644);
+  if (shmem == -1) {printf("shmem error: %s\n",strerror(errno));}
+  char (*lastMove)[500];
+  lastMove = shmat(shmem,NULL,0);
+  //if (*turnP == -1) {printf("shmat error: %s\n",strerror(errno));}
+  strcpy(*lastMove,string);
+}
+
+
+
+int * getAllCardsLeft() {
+  int shmem;
+  int shmemkey = ftok("cards.c",84);
+  shmem = shmget(shmemkey, sizeof(int)*4, IPC_CREAT | 0644);
+  if (shmem == -1) {printf("shmem error: %s\n",strerror(errno));}
+  int *a,*b,*c,*d;
+  a = shmat(shmem,NULL,0);
+  b = a+1;
+  c = b+1;
+  d = c+1;
+  return a;
+}
+
+
+void setAllCardsLeft(int newC, int index) {
+  int shmem;
+  int shmemkey = ftok("cards.c",84);
+  shmem = shmget(shmemkey, sizeof(int)*4, IPC_CREAT | 0644);
+  if (shmem == -1) {printf("shmem error: %s\n",strerror(errno));}
+  int *a,*b,*c,*d;
+  int *e;
+  a = shmat(shmem,NULL,0);
+  e = a+index;
+  *e = newC;
+}

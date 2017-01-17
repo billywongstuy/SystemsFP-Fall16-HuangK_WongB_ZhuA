@@ -15,6 +15,7 @@ int client_connect( char *host );
 
 void setup();
 
+/*
 struct card * getDeck();
 struct player getp1();
 struct player getp2();
@@ -22,12 +23,18 @@ struct player getp3();
 struct player getp4();
 struct player ** getPlayers();
 int getMode();
-int getTurnPlayer();
 int getTurnNumber();
 char * getTurnPlayerInfo();
 int getStep();
+*/
 
-
+int getTurnPlayer();
 void setTurnPlayer(int n);
+
+char * getLastMove();
+void setLastMove(char * string);
+
+int * getAllCardsLeft();
+void setAllCardsLeft(int newC, int index);
 
 #endif
