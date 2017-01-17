@@ -220,7 +220,7 @@ void step1(char *s) {
     amountUsed += len;
     lastMoveAmount = len;
 
-    setLastMove(printChoice(selected,len));
+    setLastMove(printChoice(selected,len,getTurnPlayer()));
     
     useCards(playersM[getTurnPlayer()],chosen,len);
     
