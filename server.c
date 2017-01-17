@@ -142,7 +142,7 @@ void sub_server( int sd ) {
 
   //INITIAL PLAYER INFO
   strcpy(start,memPrintPlayerClient(playersM[*idToPass]));
-  strcat(start,"  1   |   2  |   3  |   4  |   5  |   6  |   7  |   8  |   9  |  10  |  11  |  12  |  13  |\n\n" );
+  strcat(start,"  1  |  2  |  3  |  4  |  5  |  6  |  7  |  8  |  9  |  10 |  11 |  12 |  13 |\n\n" );
   sprintf(buffer,"%s",start);	
   write(sd,buffer,sizeof(buffer));  
 
