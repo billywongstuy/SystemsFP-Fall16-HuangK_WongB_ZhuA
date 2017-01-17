@@ -158,6 +158,18 @@ void sub_server( int sd ) {
     write( sd, buffer, sizeof(buffer));    //This is what is passed to client
 
 
+
+    //VARIABLES
+    sprintf(buffer,"%d",getTurnPlayer());
+    write(sd,buffer,sizeof(buffer));
+
+    write(sd,getLastMove(),sizeof(getLastMove()));
+    
+    int * toStringify = getAllCardsLeft();
+    sprintf(buffer,"%d,%d,%d,%d",toStringify[0],toStringify[1],toStringify[2],toStringify[3]);
+    write(sd,buffer,sizeof(buffer));
+    
+    
     //PLAYER INFO
     strcpy(start,memPrintPlayerClient(playersM[*idToPass]));
     strcat(start,"  1   |");
@@ -170,6 +182,8 @@ void sub_server( int sd ) {
     strcat(start,"\n\n");    
     sprintf(buffer,"%s",start);	
     write(sd,buffer,sizeof(buffer));
+
+    
     
   }
   
