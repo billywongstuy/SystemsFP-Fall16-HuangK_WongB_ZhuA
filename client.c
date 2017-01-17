@@ -13,14 +13,20 @@
 #include <errno.h>
 
 
-int playerId;
+//WORK ON
+//Better Organization and Order for Printing
+//Update the last move everytime a player moves
 
+int playerId;
+char * message;
 
 int main( int argc, char *argv[] ) {
 
   struct sembuf sb;
   sb.sem_num = 0;
   sb.sem_flg = SEM_UNDO;
+
+  message = (char *)malloc(sizeof(char));
   
   char *host;
 
@@ -65,6 +71,14 @@ int main( int argc, char *argv[] ) {
   int nextSem = atoi(buffer);
   //printf("nextsem: %d\n",nextSem);
 
+  //Initial cards left
+  int * racl = getAllCardsLeft();
+  int k;
+  for (k = 0; k < 4; k++) {
+    if (k != playerId) {printf("Player %d Cards Left: %d\n",k+1,racl[k]);}
+  }
+
+  
   //INITIAL PLAYER INFO
   read( sd, buffer, sizeof(buffer) ); //This is what the server gets
   printf( "%s", buffer);
@@ -78,10 +92,14 @@ int main( int argc, char *argv[] ) {
     
     printf("\033c");
 
+    if (strlen(message) > 0) {
+      printf("received; %s\n",message);
+      strcpy(message,"");
+    }
+    
     printf("Last Move: %s\n\n",getLastMove());
 
-    int * racl = getAllCardsLeft();
-    int k;
+    racl = getAllCardsLeft();
     for (k = 0; k < 4; k++) {
       if (k != playerId) {printf("Player %d Cards Left: %d\n",k+1,racl[k]);}
     }
@@ -99,19 +117,21 @@ int main( int argc, char *argv[] ) {
 
     //PROCESSED RESULT
     read( sd, buffer, sizeof(buffer) ); //This is what the server gets
-    printf( "received: %s\n", buffer);
+    strcpy(message,buffer);
+    printf( "received: %s\n", message);
 
-
+    printf("Last Move: %s\n\n",getLastMove());
+    
+    racl = getAllCardsLeft();
+    for (k = 0; k < 4; k++) {
+      if (k != playerId) {printf("Player %d Cards Left: %d\n",k+1,racl[k]);}
+    }
+    
     //PLAYER INFO
     read( sd, buffer, sizeof(buffer) ); //This is what the server gets
     printf( "%s", buffer);
 
-
-    if (strcmp(buffer,"Invalid selection(s)") != 0) {
-      sb.sem_op = 1;
-      semop(nextSem,&sb,1);
-      //printf("unblocking %d\n",nextSem);
-    }
+    printf("Waiting for your turn...\n");
    
 
   }

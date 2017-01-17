@@ -112,7 +112,7 @@ char * memPrintPlayerClient(struct player * p) {
 }
 
 
-char * printChoice (struct card *ch, int l) {
+char * printChoice (struct card *ch, int l, int tp) {
   char buf[1000];
   int len = 0;
   
@@ -125,7 +125,7 @@ char * printChoice (struct card *ch, int l) {
       len += sprintf(buf + len, "\x1B[34m %s\x1B[37m |", suits[ch[i].suit]);
     }
   }
-  len += sprintf(buf + len, "\x1B[0m\n\n");
+  len += sprintf(buf + len, " (Player %d)\x1B[0m\n\n",tp+1);
   
   char * s = (char *)malloc(sizeof(char));
   strcpy(s,buf);

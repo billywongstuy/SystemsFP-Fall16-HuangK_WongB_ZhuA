@@ -56,7 +56,7 @@ void sortCards(struct card *hand, int len) {
 
 
 
-
+//reverse sort
 void insertionSort(int *indices, int len) {
   //switched to insertion sort for effiency
   
@@ -64,7 +64,7 @@ void insertionSort(int *indices, int len) {
   int val;
   for (i = 1; i < len; i++) {
     val = indices[i];
-    for (k = i - 1; k >= 0 && indices[k] > val; k--) {
+    for (k = i - 1; k >= 0 && indices[k] < val; k--) {
       indices[k+1] = indices[k];
     }
     indices[k+1] = val;
@@ -78,10 +78,10 @@ void useCards(struct player *p, int *indices, int indLen) {
   int i;
   insertionSort(indices,indLen);
   for (i = 0; i < indLen; i++) {
-    cardSwap(p->hand,indices[i]-1-i,(p->cardsLeft)-1);
+    cardSwap(p->hand,indices[i]-1,(p->cardsLeft)-1);
     p->cardsLeft--;
-    sortCards(p->hand,p->cardsLeft);
   }
+  sortCards(p->hand,p->cardsLeft);
 }
 
 

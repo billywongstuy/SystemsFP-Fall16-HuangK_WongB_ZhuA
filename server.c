@@ -195,6 +195,7 @@ void step1(char *s) {
   //INVALID CHOICE
   if (len == 0) {
     strcpy(s,"Invalid selection(s)");
+    printf("wrong\n");
     sb.sem_op = 1;
     semop(sems[getTurnPlayer()],&sb,1);
   }
@@ -224,6 +225,10 @@ void step1(char *s) {
     useCards(playersM[getTurnPlayer()],chosen,len);
     
     setAllCardsLeft(playersM[getTurnPlayer()]->cardsLeft,getTurnPlayer());
+
+    sb.sem_op = 1;
+    semop(sems[next],&sb,1);
+    
     
     setTurnPlayer(next);
     strcpy(s,"Valid selection(s)");
