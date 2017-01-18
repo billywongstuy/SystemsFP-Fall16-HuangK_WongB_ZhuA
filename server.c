@@ -163,9 +163,6 @@ void sub_server( int sd ) {
     sprintf(buffer,"%d\n",gtp);
     write(sd,buffer,sizeof(buffer));
 
-
-    write(sd,"COME ON",16);
-    
     //strcpy(buffer,lastMoveString);
     char * lma = getLastMove();
     printf("glm: %s\n",lma);
