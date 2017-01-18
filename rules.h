@@ -5,7 +5,7 @@
 #include "players.h"
 
 
-//1 is success
+//0 is success
 //other numbers for different why invalid
 int validMove(struct card * choice);
 
@@ -14,3 +14,5 @@ char * getInvalidMessage(int e);
 
 
 #endif
+
+
