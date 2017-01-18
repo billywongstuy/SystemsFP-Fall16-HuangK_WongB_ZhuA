@@ -86,3 +86,6 @@ alvinZ -- 01/17/2017 15:30
 alvinZ + karenH -- 01/18/2017 15:23
 - Made rules for Big Two
 - More aesthetic printing
+
+karenH -- 01/18/2017 15:34
+- Updated rules.h with new function headers
