@@ -210,12 +210,12 @@ void sub_server( int sd ) {
     
     //PLAYER INFO
     strcpy(start,memPrintPlayerClient(playersM[*idToPass]));
-    strcat(start,"  1   |");
+    strcat(start,"  1  |");
 
     int i;
     for (i = 0; i < playersM[*idToPass]->cardsLeft-1; i++) {
       if (i >= 8) {sprintf(start + strlen(start),"  %d |",i+2);}
-      else {sprintf(start + strlen(start),"   %d |",i+2);}
+      else {sprintf(start + strlen(start),"  %d  |",i+2);}
     }
     strcat(start,"\n\n");    
     sprintf(buffer,"%s",start);
