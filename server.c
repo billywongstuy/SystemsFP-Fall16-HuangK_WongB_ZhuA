@@ -30,7 +30,7 @@ struct card usedCards[52];
 int amountUsed;
 struct card lastMove[5];
 int lastMoveAmount;
-
+char * lastMoveString;
 
 union semun {
   int val;
@@ -43,6 +43,7 @@ union semun {
 struct card deck[52];
 struct player p1,p2,p3,p4;
 struct player *playersM[4];
+int *allCardsLeft;
 
 int mode;  //0 for debug, 1 for single, 2 for double, 3 for triple, 5 for 5-combo
 char * turnPlayerInfo;
@@ -59,6 +60,7 @@ void process( char * s );
 void sub_server( int sd );
 void step1();
 void initialize();
+void sendUpdatedVars(int sd, char * buffer);
 
 
 void incID() {
@@ -146,29 +148,68 @@ void sub_server( int sd ) {
   sprintf(buffer,"%s",start);	
   write(sd,buffer,sizeof(buffer));  
 
+
+  //sendUpdatedVars(sd);
+
+  char varBuffer[1000];
   
-  while (read( sd, buffer, sizeof(buffer) )) {
+  while (1) {
+
+
     
+    int gtp = getTurnPlayer();
+    //write(sd,&gtp,sizeof(gtp));
+    //printf("ggggg: %d\n", gtp);
+    sprintf(buffer,"%d\n",gtp);
+    write(sd,buffer,sizeof(buffer));
+
+
+    write(sd,"COME ON",16);
+    
+    //strcpy(buffer,lastMoveString);
+    char * lma = getLastMove();
+    printf("glm: %s\n",lma);
+    strcpy(varBuffer,lma);
+    write(sd,varBuffer,sizeof(varBuffer));
+    //printf("lm non buf: %s\n",lastMoveString);
+    //printf("lm-pre: %s\n",buffer);
+    
+    int * acl = getAllCardsLeft();
+    int j;
+    for (j = 0; j < 4; j++) {
+      printf("acl: %d\t",acl[j]);
+    }
+    write(sd,acl,sizeof(acl));
+
+
+
+    read( sd, buffer, sizeof(buffer) );
     
     //CLIENT INPUT
     printf("[SERVER %d] received: %s\n", getpid(), buffer );
     process( buffer );
-
     //PROCESSED INFO
     write( sd, buffer, sizeof(buffer));    //This is what is passed to client
 
 
 
     //VARIABLES
-    sprintf(buffer,"%d",getTurnPlayer());
-    write(sd,buffer,sizeof(buffer));
+    gtp = getTurnPlayer();
+    write(sd,&gtp,sizeof(gtp));
+    
+    //printf("glm: %s\n",lastMoveString);
+    //strcpy(buffer,lastMoveString);
+    char * lms = getLastMove();
+    strcpy(varBuffer,lms);
+    write(sd,varBuffer,sizeof(varBuffer));
+    
+    acl = getAllCardsLeft();
+    for (j = 0; j < 4; j++) {
+      printf("acl[%d]: %d\n",j,acl[j]);
+    }
+    write(sd,acl,sizeof(acl));
+    
 
-    write(sd,getLastMove(),sizeof(getLastMove()));
-    
-    int * toStringify = getAllCardsLeft();
-    sprintf(buffer,"%d,%d,%d,%d",toStringify[0],toStringify[1],toStringify[2],toStringify[3]);
-    write(sd,buffer,sizeof(buffer));
-    
     
     //PLAYER INFO
     strcpy(start,memPrintPlayerClient(playersM[*idToPass]));
@@ -180,7 +221,11 @@ void sub_server( int sd ) {
       else {sprintf(start + strlen(start),"   %d  |",i+2);}
     }
     strcat(start,"\n\n");    
-    sprintf(buffer,"%s",start);	
+    sprintf(buffer,"%s",start);
+
+
+    //printf("player info to send:\n%s\n",buffer);
+
     write(sd,buffer,sizeof(buffer));
 
     
@@ -234,12 +279,15 @@ void step1(char *s) {
     amountUsed += len;
     lastMoveAmount = len;
 
+    lastMoveString = printChoice(selected,len,getTurnPlayer());
     setLastMove(printChoice(selected,len,getTurnPlayer()));
+
+    printf("lms updated: %s\n",lastMoveString);
     
     useCards(playersM[getTurnPlayer()],chosen,len);
     
     setAllCardsLeft(playersM[getTurnPlayer()]->cardsLeft,getTurnPlayer());
-
+    
     sb.sem_op = 1;
     semop(sems[next],&sb,1);
     
@@ -289,9 +337,17 @@ void initialize() {
 
   turnNumber = 0;
 
+  allCardsLeft = (int *)malloc(sizeof(int));
+  for (i=0;i<4;i++){allCardsLeft[i]=13;}
+
+  lastMoveString = (char *)malloc(sizeof(char));
+  strcpy(lastMoveString,"This is the first move");
   setLastMove("This is the first move");
+  
   setAllCardsLeft(13,0);
   setAllCardsLeft(13,1);
   setAllCardsLeft(13,2);
   setAllCardsLeft(13,3);
 }
+
+
