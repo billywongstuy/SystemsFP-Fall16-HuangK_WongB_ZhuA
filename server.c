@@ -214,8 +214,8 @@ void sub_server( int sd ) {
 
     int i;
     for (i = 0; i < playersM[*idToPass]->cardsLeft-1; i++) {
-      if (i >= 8) {sprintf(start + strlen(start),"  %d  |",i+2);}
-      else {sprintf(start + strlen(start),"   %d  |",i+2);}
+      if (i >= 8) {sprintf(start + strlen(start),"  %d |",i+2);}
+      else {sprintf(start + strlen(start),"   %d |",i+2);}
     }
     strcat(start,"\n\n");    
     sprintf(buffer,"%s",start);
