@@ -89,3 +89,8 @@ alvinZ + karenH -- 01/18/2017 15:23
 
 karenH -- 01/18/2017 15:34
 - Updated rules.h with new function headers
+
+alvinZ + karenH -- 01/19/2017 15:38
+- Made functions for checking combos
+- Updated rules.h
+- Started comparing 5-card combos with last move
