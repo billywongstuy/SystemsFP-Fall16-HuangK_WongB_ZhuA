@@ -109,6 +109,7 @@ void sub_server( int sd ) {
   int first = getFirstPlayer(playersM,4,13);
   setTurnPlayer(first);
   char *start = (char *)malloc(sizeof(char));
+
   
   //ASSIGNS PLAYER ID
   //IF TOO MANY PLAYERS, WRITES A MESSAGE INSTEAD OF ID
@@ -123,8 +124,10 @@ void sub_server( int sd ) {
 
     //If 4 PLAYERS ARE CONNECTED, UNBLOCKS THE FIRST PLAYER
     if (*idToPass == 3) {
+      printf("fourth connected\n");
       sb.sem_op = 1;
       semop(sems[first],&sb,1);
+      printf("unblocking %d\n",sems[first]);
     }
     
   }
@@ -150,12 +153,26 @@ void sub_server( int sd ) {
 
 
   //sendUpdatedVars(sd);
-
+  
   char varBuffer[1000];
+
+  //printf("before wait loop %d\n",getOkToStart());
+  //while (getOkToStart()) {
+  //printf("waiting as %d\n",*idToPass);
+  //}
+
+  printf("getturnplayerzzzz: %d\n",getTurnPlayer());
+
+
+  if (getTurnPlayer() == *idToPass) {
+    
+  }
   
   while (1) {
-
-
+    
+    //HOW DO I BLOCK THIS PORTION UNTIL 4 CLIENTS ARE CONNECTED
+    
+    read(sd,buffer,sizeof(buffer));
     
     int gtp = getTurnPlayer();
     //write(sd,&gtp,sizeof(gtp));
@@ -167,6 +184,7 @@ void sub_server( int sd ) {
     char * lma = getLastMove();
     printf("glm: %s\n",lma);
     strcpy(varBuffer,lma);
+    printf("varbuf: %s\n",varBuffer);
     write(sd,varBuffer,sizeof(varBuffer));
     //printf("lm non buf: %s\n",lastMoveString);
     //printf("lm-pre: %s\n",buffer);
@@ -174,12 +192,13 @@ void sub_server( int sd ) {
     int * acl = getAllCardsLeft();
     int j;
     for (j = 0; j < 4; j++) {
-      printf("acl: %d\t",acl[j]);
+      printf("acl-begin: %d\n",acl[j]);
     }
     write(sd,acl,sizeof(acl));
 
 
-
+    printf("send end\n");
+    
     read( sd, buffer, sizeof(buffer) );
     
     //CLIENT INPUT
@@ -228,6 +247,7 @@ void sub_server( int sd ) {
     
     
   }
+  
   
 }
 

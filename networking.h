@@ -37,4 +37,7 @@ void setLastMove(char * string);
 int * getAllCardsLeft();
 void setAllCardsLeft(int newC, int index);
 
+void setOkToStart();
+int getOkToStart();
+
 #endif

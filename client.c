@@ -94,12 +94,18 @@ int main( int argc, char *argv[] ) {
   printf( "%s", handBuf);
   printf("Waiting for your turn...\n");
 
+  //read(sd,buffer,sizeof(buffer));
+  
 
   while (1) {
-  
+
+    printf("blocking %d\n",sem);  
+    
     sb.sem_op = -1;
     semop(sem,&sb,1);
-    printf("blocking %d\n",sem);  
+
+
+    write(sd,"Turn start",10);
     
     //printf("\033c");
 
