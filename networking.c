@@ -120,7 +120,7 @@ void setup() {
 int getTurnPlayer() {
   int shmem;
   int shmemkey = ftok("cards.c",40);
-  shmem = shmget(shmemkey, sizeof(int), 0644);
+  shmem = shmget(shmemkey, sizeof(int), IPC_CREAT | 0644);
   if (shmem == -1) {printf("shmem error: %s\n",strerror(errno));}
   int *turnP = shmat(shmem,NULL,0);
   if (*turnP == -1) {printf("shmat error: %s\n",strerror(errno));}
@@ -131,7 +131,7 @@ int getTurnPlayer() {
 void setTurnPlayer(int n) {
   int shmem;
   int shmemkey = ftok("cards.c",40);
-  shmem = shmget(shmemkey, sizeof(int), 0644);
+  shmem = shmget(shmemkey, sizeof(int), IPC_CREAT | 0644);
   if (shmem == -1) {printf("shmem error: %s\n",strerror(errno));}
   int *turnP = shmat(shmem,NULL,0);
   if (*turnP == -1) {printf("shmat error: %s\n",strerror(errno));}
@@ -142,7 +142,7 @@ void setTurnPlayer(int n) {
 char * getLastMove() {
   int shmem;
   int shmemkey = ftok("cards.c",83);
-  shmem = shmget(shmemkey, sizeof(int), 0644);
+  shmem = shmget(shmemkey, sizeof(int), IPC_CREAT | 0644);
   if (shmem == -1) {printf("shmem error: %s\n",strerror(errno));}
   char (*lastMove)[500];
   lastMove = shmat(shmem,NULL,0);
@@ -154,7 +154,7 @@ char * getLastMove() {
 void setLastMove(char * string) {
   int shmem;
   int shmemkey = ftok("cards.c",83);
-  shmem = shmget(shmemkey, sizeof(int), 0644);
+  shmem = shmget(shmemkey, sizeof(int), IPC_CREAT | 0644);
   if (shmem == -1) {printf("shmem error: %s\n",strerror(errno));}
   char (*lastMove)[500];
   lastMove = shmat(shmem,NULL,0);
@@ -167,7 +167,7 @@ void setLastMove(char * string) {
 int * getAllCardsLeft() {
   int shmem;
   int shmemkey = ftok("cards.c",84);
-  shmem = shmget(shmemkey, sizeof(int)*4, 0644);
+  shmem = shmget(shmemkey, sizeof(int)*4, IPC_CREAT | 0644);
   if (shmem == -1) {printf("shmem error: %s\n",strerror(errno));}
   int *a,*b,*c,*d;
   a = shmat(shmem,NULL,0);
@@ -181,7 +181,7 @@ int * getAllCardsLeft() {
 void setAllCardsLeft(int newC, int index) {
   int shmem;
   int shmemkey = ftok("cards.c",84);
-  shmem = shmget(shmemkey, sizeof(int)*4, 0644);
+  shmem = shmget(shmemkey, sizeof(int)*4, IPC_CREAT | 0644);
   if (shmem == -1) {printf("shmem error: %s\n",strerror(errno));}
   int *a,*b,*c,*d;
   int *e;
@@ -194,7 +194,7 @@ void setAllCardsLeft(int newC, int index) {
 void setOkToStart() {
   int shmem;
   int shmemkey = ftok("cards.c",85);
-  shmem = shmget(shmemkey,sizeof(int),0644);
+  shmem = shmget(shmemkey,sizeof(int), IPC_CREAT | 0644);
   int *ok = shmat(shmem,NULL,0);
   *ok = 1;
 }
@@ -202,7 +202,7 @@ void setOkToStart() {
 int getOkToStart() {
   int shmem;
   int shmemkey = ftok("cards.c",85);
-  shmem = shmget(shmemkey,sizeof(int),0644);
+  shmem = shmget(shmemkey,sizeof(int), IPC_CREAT | 0644);
   int *ok = shmat(shmem,NULL,0);
   return *ok;
 }
