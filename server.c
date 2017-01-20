@@ -45,7 +45,7 @@ struct player p1,p2,p3,p4;
 struct player *playersM[4];
 int *allCardsLeft;
 
-int mode;  //0 for debug, 1 for single, 2 for double, 3 for triple, 5 for 5-combo
+int mode;  //MORE INFO IN RULES.C
 char * turnPlayerInfo;
 int step;
 int *idToPass;
@@ -75,8 +75,9 @@ int main() {
 
   sd = server_setup();
 
-  //NOW NEED SEMAPHORES IN THIS
   initialize();
+  setup(); //SHARED MEMORY
+  
   printf("f: %d\n",getFirstPlayer(playersM,4,13));
  
   while (1) {
@@ -105,10 +106,12 @@ int main() {
 
 void sub_server( int sd ) {
   char buffer[MESSAGE_BUFFER_SIZE];
+  char varBuffer[1000];
   
   int first = getFirstPlayer(playersM,4,13);
   setTurnPlayer(first);
   char *start = (char *)malloc(sizeof(char));
+
   
   //ASSIGNS PLAYER ID
   //IF TOO MANY PLAYERS, WRITES A MESSAGE INSTEAD OF ID
@@ -148,65 +151,43 @@ void sub_server( int sd ) {
   sprintf(buffer,"%s",start);	
   write(sd,buffer,sizeof(buffer));  
 
-
-  //sendUpdatedVars(sd);
-
-  char varBuffer[1000];
   
   while (1) {
-
-
     
+    read(sd,buffer,sizeof(buffer)); //THIS IS TO BLOCK
+
+    //VARIABLES P1
     int gtp = getTurnPlayer();
-    //write(sd,&gtp,sizeof(gtp));
-    //printf("ggggg: %d\n", gtp);
-    sprintf(buffer,"%d\n",gtp);
-    write(sd,buffer,sizeof(buffer));
+    write(sd,&gtp,sizeof(gtp));
 
-    //strcpy(buffer,lastMoveString);
-    char * lma = getLastMove();
-    printf("glm: %s\n",lma);
-    strcpy(varBuffer,lma);
+    char * lma = getLastMove();          strcpy(varBuffer,lma);
     write(sd,varBuffer,sizeof(varBuffer));
-    //printf("lm non buf: %s\n",lastMoveString);
-    //printf("lm-pre: %s\n",buffer);
     
-    int * acl = getAllCardsLeft();
-    int j;
-    for (j = 0; j < 4; j++) {
-      printf("acl: %d\t",acl[j]);
-    }
-    write(sd,acl,sizeof(acl));
+    int * acl = getAllCardsLeft();         int j;
+    for (j = 0; j < 4; j++) {write(sd,&acl[j],sizeof(acl[j]));}
+    //VARS END
 
-
-
-    read( sd, buffer, sizeof(buffer) );
+    
+    read( sd, buffer, sizeof(buffer) ); //LISTEN FOR CARD(S) CHOICE
     
     //CLIENT INPUT
     printf("[SERVER %d] received: %s\n", getpid(), buffer );
     process( buffer );
+    
     //PROCESSED INFO
-    write( sd, buffer, sizeof(buffer));    //This is what is passed to client
-
-
+    write( sd, buffer, sizeof(buffer)); //PASSED TO CLIENT
 
     //VARIABLES
     gtp = getTurnPlayer();
     write(sd,&gtp,sizeof(gtp));
     
-    //printf("glm: %s\n",lastMoveString);
-    //strcpy(buffer,lastMoveString);
-    char * lms = getLastMove();
-    strcpy(varBuffer,lms);
+    char * lms = getLastMove();       strcpy(varBuffer,lms);
     write(sd,varBuffer,sizeof(varBuffer));
     
     acl = getAllCardsLeft();
-    for (j = 0; j < 4; j++) {
-      printf("acl[%d]: %d\n",j,acl[j]);
-    }
-    write(sd,acl,sizeof(acl));
+    for (j = 0; j < 4; j++) {write(sd,&acl[j],sizeof(acl[j]));}
+    //VARS R2 END
     
-
     
     //PLAYER INFO
     strcpy(start,memPrintPlayerClient(playersM[*idToPass]));
@@ -220,14 +201,10 @@ void sub_server( int sd ) {
     strcat(start,"\n\n");    
     sprintf(buffer,"%s",start);
 
-
-    //printf("player info to send:\n%s\n",buffer);
-
     write(sd,buffer,sizeof(buffer));
-
-    
     
   }
+  
   
 }
 
@@ -251,43 +228,48 @@ void step1(char *s) {
   //INVALID CHOICE
   if (len == 0) {
     strcpy(s,"Invalid selection(s)");
-    printf("wrong\n");
     sb.sem_op = 1;
     semop(sems[getTurnPlayer()],&sb,1);
   }
-  // PROHIBITED TO USE THE CARD(S)  e.g. wrong mode, too low
-  //elseif ...
+  //VALID CHOICE
   else {
     
     struct card selected[len];
     char * error = getCardsChosen(selected,chosen,len,playersM,getTurnPlayer());
     sortCards(selected,len);
-    
-    /*while (count < len && selected[count].value != -1) {
-      printCard(selected[count]);
-      count++;
-    }*/
 
+
+    // PROHIBITED TO USE THE CARD(S)  e.g. wrong mode, too low
+    // PUT THE CHECK HERE
+    // IF NOT ALLOWED DON'T DO THE STUFF BELOW
+    // NEED TO MAKE SURE THE USEDCARDS AND AMOUNTUSED FUNCTION CORRECTLY
+    // NEED TO USE shared memory
+
+    //ALSO UNBLOCK THE CURRENT
+
+    printf("amt used: %d\n",amountUsed);
+    
+    
+    //ADDING CARDS TO USED STACK
     for (count; count < len; count++) {
       lastMove[count] = selected[count];
-      
       usedCards[count+amountUsed] = selected[count];
     }
     amountUsed += len;
     lastMoveAmount = len;
 
+    
+    //UPDATING VARIABLES IN SHM
     lastMoveString = printChoice(selected,len,getTurnPlayer());
     setLastMove(printChoice(selected,len,getTurnPlayer()));
-
-    printf("lms updated: %s\n",lastMoveString);
     
     useCards(playersM[getTurnPlayer()],chosen,len);
     
     setAllCardsLeft(playersM[getTurnPlayer()]->cardsLeft,getTurnPlayer());
-    
+
+    //SET UP THE NEXT PLAYER
     sb.sem_op = 1;
     semop(sems[next],&sb,1);
-    
     
     setTurnPlayer(next);
     strcpy(s,"Valid selection(s)");

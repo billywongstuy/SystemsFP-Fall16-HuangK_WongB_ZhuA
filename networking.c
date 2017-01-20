@@ -108,6 +108,12 @@ void setup() {
   b = a+1;
   c = b+1;
   d = c+1;
+
+  int okmem;
+  int okmemkey = ftok("cards.c",85);
+  okmem = shmget(okmemkey,sizeof(int),IPC_CREAT | 0644);
+  int *ok = shmat(okmem,NULL,0);
+  *ok = 0;
 }
 
 
@@ -182,4 +188,21 @@ void setAllCardsLeft(int newC, int index) {
   a = shmat(shmem,NULL,0);
   e = a+index;
   *e = newC;
+}
+
+
+void setOkToStart() {
+  int shmem;
+  int shmemkey = ftok("cards.c",85);
+  shmem = shmget(shmemkey,sizeof(int), IPC_CREAT | 0644);
+  int *ok = shmat(shmem,NULL,0);
+  *ok = 1;
+}
+
+int getOkToStart() {
+  int shmem;
+  int shmemkey = ftok("cards.c",85);
+  shmem = shmget(shmemkey,sizeof(int), IPC_CREAT | 0644);
+  int *ok = shmat(shmem,NULL,0);
+  return *ok;
 }

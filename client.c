@@ -90,124 +90,89 @@ int main( int argc, char *argv[] ) {
 
   
   //INITIAL PLAYER INFO
-  read( sd, handBuf, sizeof(handBuf) ); //This is what the server gets
+  read( sd, handBuf, sizeof(handBuf) ); //This is what the server sends
   printf( "%s", handBuf);
   printf("Waiting for your turn...\n");
 
+  
 
   while (1) {
-  
+
+    //printf("blocking %d\n",sem);  
     sb.sem_op = -1;
     semop(sem,&sb,1);
-    printf("blocking %d\n",sem);  
+
+
+    write(sd,"Turn start",10);
     
-    //printf("\033c");
+    printf("\033c"); //CLEAR
 
     if (strlen(message) > 0) {
       printf("received; %s\n",message);
       strcpy(message,"");
     }
 
-
-    printf("update before print start\n");
-
+    //UPDATING VARIABLES BEFORE CHOOSING
     
-    //read(sd,&turnPlayer,sizeof(int));
-    ///printf("tpa: %d\n",turnPlayer);
-
-    //int * st = (int *)malloc(sizeof(int));
-    //read(sd,st,sizeof(int));
-    //printf("tppp: %d\n",*st);
+    read(sd,&turnPlayer,sizeof(turnPlayer));
 
     read(sd,buffer,sizeof(buffer));
-    printf("buff num: %s\n",buffer);
-    turnPlayer = atoi(buffer);
-    printf("getting: %d\n",getTurnPlayer());
-    
-
-
-    read(sd,buffer,sizeof(buffer));
-    printf("lma: %s\n",buffer);
     strcpy(lastMove,buffer);
     
-    read(sd,allCardsLeft,sizeof(allCardsLeft));
     for (k = 0; k < 4; k++) {
-      printf("cla: %d\t",allCardsLeft[k]);
+      read(sd,&allCardsLeft[k],sizeof(allCardsLeft[k]));
     }
-    
-    printf("update before print endooooooooo\n");
-
-
-
-  
+    //END VARIABLE UPDATE
 
     
-
     printf("Last Move: %s\n\n",lastMove);
     
     for (k = 0; k < 4; k++) {
       if (k != playerId) {printf("Player %d Cards Left: %d\n",k+1,allCardsLeft[k]);}
     }
     
-    //This should print the player hand
     printf("%s",handBuf);
-
 
     printf("Choose your card(s): ");
     fgets( buffer, sizeof(buffer), stdin );
     char *p = strchr(buffer, '\n');
     *p = 0;    
     write( sd, buffer, sizeof(buffer) ); //This is what is passed to server
-
-    printf("\033c");
-
-
-
-
-  
     
-
+    printf("\033c");  //CLEAR
+    
     //PROCESSED RESULT
     read( sd, buffer, sizeof(buffer) ); //This is what the server gets
     strcpy(message,buffer);
     printf( "received-a: %s\n", message);
 
 
-
-
-     //VARIABLES
-    //printf("update time\n");
+    //VARIABLES ROUND 2
   
-  read(sd,&turnPlayer,sizeof(int));
-  //printf("tp: %d\n",turnPlayer);
-  
-  read(sd,buffer,sizeof(buffer));
-  strcpy(lastMove,buffer);
-  //printf("lm: %s\n",buffer);
-  
-  read(sd,allCardsLeft,sizeof(allCardsLeft));
-  for (k = 0; k < 4; k++) {
-    //printf("cl: %d\n",allCardsLeft[k]);
-  }
-
-
-
-  
+    read(sd,&turnPlayer,sizeof(int));
+        
+    read(sd,buffer,sizeof(buffer));
+    strcpy(lastMove,buffer);
+        
+    //read(sd,allCardsLeft,sizeof(allCardsLeft));
+    for (k = 0; k < 4; k++) {
+      read(sd,&allCardsLeft[k],sizeof(allCardsLeft[k]));
+    }
+    //END VARS R2
+    
+    
+    //WAITING FOR TURN TEXT
     printf("Last Move: %s\n\n",lastMove);
-
+    
     for (k = 0; k < 4; k++) {
       if (k != playerId) {printf("Player %d Cards Left: %d\n",k+1,allCardsLeft[k]);}
     }
 
-    
     //PLAYER INFO
     read( sd, handBuf, sizeof(handBuf) ); //This is what the server gets
     printf( "Info: %s", handBuf);
 
-    printf("Waiting for your turn...\n");
-
-
-    
+    printf("Waiting for your turn...\n");    
     
 
   }

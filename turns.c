@@ -7,7 +7,6 @@
 
 int nextPlayer(int numP, int currP) {
   if (currP == numP - 1) {
-    printf("back to zero\n");
     return 0;
   }
   return currP + 1;
