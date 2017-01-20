@@ -13,12 +13,54 @@
 #include "turns.h"
 #include "rules.h"
 
+char * getInvalidMessage(int e){
+  if(!e){
+    return "";
+  }
+  if(e == -3){
+    return "Start with 3 of Diamonds";
+  }
+  if(e == -2){
+    return "Not valid hand";
+  }
+  if(e == -1){
+    return "wrong number of cards";
+  }
+  if(e == 1){
+    return "Not strong enough";
+  }
+  if(e == 2){
+    return "Cards don't match";
+  }
+  if(e == 3){
+    return "Can't end with 2 of Spades";
+  }
+  
+}
 
-int validMove(int lenC, int lenL, struct card * choice, struct card * last){
-  if(lenC != lenL){
+int no3D(int lenC, int * choice){
+  if(choice[lenC-1] != 0){
+    return 1;
+    //Start with 3 of Diamonds!
+  }
+  return 0;
+}
+
+int validMove(int turn, int lenC, int lenL, int * choice, int * last){
+  if(turn == 1){
+    if(no3D(lenC, choice)){
+      return -3;
+    }
+    
+    int counter;
+    for(counter = 0; counter<lenL ; counter++){
+      last[counter] = 0;
+    }
+  } else if(lenC != lenL){
     return -1;
     //Wrong amount of cards
   }
+  
   if(lenC == 1){
     return validSingle(choice, last);
   }else if(lenC == 2){
@@ -34,11 +76,8 @@ int validMove(int lenC, int lenL, struct card * choice, struct card * last){
   //Working!
 }
 
-int validSingle(struct card * choice, struct card * last){
-  int val1 = choice[0].value*10 + choice[0].suit;
-  int val2 = last[0].value*10 + last[0].suit;
-
-  if(val1<val2){
+int validSingle(int * choice, int * last){
+  if(choice[0]<last[0]){
     return 1;
     //Not big enough
   }
@@ -46,21 +85,21 @@ int validSingle(struct card * choice, struct card * last){
   return 0;
 }
 
-int validDouble(struct card * choice, struct card * last){
+int validDouble(int * choice, int * last){
   int doubleCount;
-  int checkVal = choice[0].value;
+  int checkVal = choice[0]/10;
   for(doubleCount=1; doubleCount<3; doubleCount++){
-    if(choice[doubleCount].value != checkVal){
+    if(choice[doubleCount]/10 != checkVal){
       return 2;
       //Not matching
     }
   }
 
-  if(choice[0].value < last[0].value){
+  if(choice[0]/10 < last[0]/10){
     return 1;
   }
-  if(choice[0].value == last[0].value){
-    if(choice[0].suit < last[0].suit){
+  if(choice[0]/10 == last[0]/10){
+    if(choice[0]%10 < last[0]%10){
       return 1;
     }
   }
@@ -68,24 +107,24 @@ int validDouble(struct card * choice, struct card * last){
   return 0;
 }
 
-int validTriple(struct card * choice, struct card * last){
+int validTriple(int * choice, int * last){
   int tripleCount;
-  int checkVal = choice[0].value;
+  int checkVal = choice[0]/10;
   for(tripleCount=1; tripleCount<4; tripleCount++){
-    if(choice[tripleCount].value != checkVal){
+    if(choice[tripleCount]/10 != checkVal){
       return 2;
       //Not matching
     }
   }
 
-  if(choice[0].value < last[0].value){
+  if(choice[0]/10 < last[0]/10){
     return 1;
   }
 
   return 0;
 }
 
-int validCombo(struct card * cards, struct card * last){
+int validCombo(int * cards, int * last){
   //int cardsCombos[5] = {1, 2, 3, 4, 5};
   //1: Straight
   //2: Flush
@@ -94,31 +133,31 @@ int validCombo(struct card * cards, struct card * last){
   //5: Straight flush
   
   /*int cardsCount;
-  int cardsVal = cards[0].value;
+  int cardsVal = cards[0]/10;
   for(cardsCount = 1; cardsCount<5; cardsCount++){
-    if(cards[cardsCount].value != cardsVal){
+    if(cards[cardsCount]/10 != cardsVal){
       
     }
     }*/
-  int cardsCount;
+  /*int cardsCount;
   int hand[5];
   for(cardsCount = 0; cardsCount<5; cardsCount++){
-    hand[cardsCount] = cards[cardsCount].value*10 + cards[cardsCount].suit;
-  }
-  int handCombo = checkCombo(hand);
+    hand[cardsCount] = cards[cardsCount]/10 + cards[cardsCount]%10;
+    }*/
+  int handCombo = checkCombo(cards);
 
-  cardsCount=0;
+  /*cardsCount=0;
   int opponent[5];
   for(cardsCount = 0; cardsCount<5; cardsCount++){
-    opponent[cardsCount] = cards[cardsCount].value*10 + cards[cardsCount].suit;
-  }
-  int opponentCombo = checkCombo(hand);
+    opponent[cardsCount] = cards[cardsCount]/10 + cards[cardsCount]%10;
+    }*/
+  int opponentCombo = checkCombo(last);
 
   if(handCombo < opponentCombo){
     return 1;
   }
   if(handCombo == opponentCombo){
-    if(hand[2] < opponent[2]){
+    if(cards[2] < last[2]){
       return 1;
     }
   }

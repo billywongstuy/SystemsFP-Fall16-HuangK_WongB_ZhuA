@@ -7,15 +7,17 @@
 
 //0 is success
 //other numbers for different why invalid
-int validMove(int lenC, int lenL, struct card * choice, struct card * last);
+int no3D(int lenC, int *choice);
 
-int validSingle(struct card * choice, struct card * last);
+int validMove(int turn, int lenC, int lenL, int * choice, int * last);
 
-int validDouble(struct card * choice, struct card * last);
+int validSingle(int * choice, int * last);
 
-int validTriple(struct card * choice, struct card * last);
+int validDouble(int * choice, int * last);
 
-int validCombo(struct card * choice, struct card *last);
+int validTriple(int * choice, int * last);
+
+int validCombo(int * choice, int *last);
 
 int checkCombo(int * cards);
 
@@ -30,12 +32,13 @@ int checkBomb(int * cards);
 int checkSF(int * cards);
 
 char * getInvalidMessage(int e);
+//-3 START WITH 3 OF DIAMONDS
 //-2 what are you throwing out man...
 //-1 wrong amount of cards *except for first turn and freebies!!!
 // 0 all good 
 // 1 hand not strong enough
 // 2 cards are not matching
-//need who goes first and when game ends
+//need when game ends
 
 #endif
 
