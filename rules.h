@@ -7,15 +7,15 @@
 
 //0 is success
 //other numbers for different why invalid
-int validMove(int lenC, int lenL, struct card * choice, struct card * last);
+int validMove(int lenC, int lenL, int * choice, int * last);
 
-int validSingle(struct card * choice, struct card * last);
+int validSingle(int * choice, int * last);
 
-int validDouble(struct card * choice, struct card * last);
+int validDouble(int * choice, int * last);
 
-int validTriple(struct card * choice, struct card * last);
+int validTriple(int * choice, int * last);
 
-int validCombo(struct card * choice, struct card *last);
+int validCombo(int * choice, int *last);
 
 int checkCombo(int * cards);
 
