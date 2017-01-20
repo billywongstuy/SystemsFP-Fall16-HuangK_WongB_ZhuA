@@ -13,12 +13,54 @@
 #include "turns.h"
 #include "rules.h"
 
+char * getInvalidMessage(int e){
+  if(!e){
+    return "";
+  }
+  if(e == -3){
+    return "Start with 3 of Diamonds";
+  }
+  if(e == -2){
+    return "Not valid hand";
+  }
+  if(e == -1){
+    return "wrong number of cards";
+  }
+  if(e == 1){
+    return "Not strong enough";
+  }
+  if(e == 2){
+    return "Cards don't match";
+  }
+  if(e == 3){
+    return "Can't end with 2 of Spades";
+  }
+  
+}
 
-int validMove(int lenC, int lenL, int * choice, int * last){
-  if(lenC != lenL){
+int no3D(int lenC, int * choice){
+  if(choice[lenC-1] != 0){
+    return 1;
+    //Start with 3 of Diamonds!
+  }
+  return 0;
+}
+
+int validMove(int turn, int lenC, int lenL, int * choice, int * last){
+  if(turn == 1){
+    if(no3D(lenC, choice)){
+      return -3;
+    }
+    
+    int counter;
+    for(counter = 0; counter<lenL ; counter++){
+      last[counter] = 0;
+    }
+  } else if(lenC != lenL){
     return -1;
     //Wrong amount of cards
   }
+  
   if(lenC == 1){
     return validSingle(choice, last);
   }else if(lenC == 2){
@@ -115,7 +157,7 @@ int validCombo(int * cards, int * last){
     return 1;
   }
   if(handCombo == opponentCombo){
-    if(hand[2] < opponent[2]){
+    if(cards[2] < last[2]){
       return 1;
     }
   }
