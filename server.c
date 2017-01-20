@@ -26,10 +26,10 @@
 //WORK ON RECENT MOVE
 //USER INTERFACE
 
-struct card usedCards[52];
-int amountUsed;
-struct card lastMove[5];
-int lastMoveAmount;
+//struct card usedCards[52];
+//int amountUsed;
+//struct card lastMove[5];
+//int lastMoveAmount;
 char * lastMoveString;
 
 union semun {
@@ -75,6 +75,7 @@ int main() {
 
   sd = server_setup();
 
+  turnNumber = 1;
   initialize();
   setup(); //SHARED MEMORY
   
@@ -96,7 +97,7 @@ int main() {
       close( connection );
     }
     
-    
+    turnNumber++;
     incID();
     
   }
@@ -239,6 +240,13 @@ void step1(char *s) {
     sortCards(selected,len);
 
 
+    //MAKE ARRAY TO SEND TO RULES TO CHECK
+    int cardValues[len];
+    for (count = 0; count < len; count++) {
+      struct card curr = selected[count];
+      cardValues[count] = curr.value*10+curr.suit;
+    }
+
     // PROHIBITED TO USE THE CARD(S)  e.g. wrong mode, too low
     // PUT THE CHECK HERE
     // IF NOT ALLOWED DON'T DO THE STUFF BELOW
@@ -246,17 +254,16 @@ void step1(char *s) {
     // NEED TO USE shared memory
 
     //ALSO UNBLOCK THE CURRENT
+    
+    
 
-    printf("amt used: %d\n",amountUsed);
+    //SET THE STUFF
+    setLastCards(cardValues,len);
+    setLastAmount(len);
+
+    setUsedCards(cardValues,len);
+    setUsedAmount(len);
     
-    
-    //ADDING CARDS TO USED STACK
-    for (count; count < len; count++) {
-      lastMove[count] = selected[count];
-      usedCards[count+amountUsed] = selected[count];
-    }
-    amountUsed += len;
-    lastMoveAmount = len;
 
     
     //UPDATING VARIABLES IN SHM
@@ -298,8 +305,6 @@ void initialize() {
 
   idToPass = (int *)malloc(sizeof(int));
   *idToPass = 0;
-
-  amountUsed = 0;
 
   sb.sem_num = 0;
   sb.sem_flg = SEM_UNDO;

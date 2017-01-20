@@ -109,11 +109,48 @@ void setup() {
   c = b+1;
   d = c+1;
 
-  int okmem;
-  int okmemkey = ftok("cards.c",85);
-  okmem = shmget(okmemkey,sizeof(int),IPC_CREAT | 0644);
-  int *ok = shmat(okmem,NULL,0);
-  *ok = 0;
+
+  int lamem;
+  int lamemkey = ftok("cards.c",85);
+  lamem = shmget(lamemkey, sizeof(int), IPC_CREAT | 0644);
+  if (lamem == -1) {printf("lamem error: %s\n",strerror(errno));}
+  int *lastAmt = shmat(lamem,NULL,0);
+  *lastAmt = 0;
+
+
+  int lcmem;
+  int lcmemkey = ftok("cards.c",86);
+  lcmem = shmget(lcmemkey, sizeof(int)*5, IPC_CREAT | 0644);
+  if (lcmem == -1) {printf("lcmem error: %s\n",strerror(errno));}
+  int *lastCards = shmat(lcmem,NULL,0);
+  int i;
+  for (i = 0; i < 5; i++) {
+    *lastCards = 0;
+    lastCards += 1;
+  }
+
+
+
+
+  int uamem;
+  int uamemkey = ftok("cards.c",87);
+  uamem = shmget(uamemkey, sizeof(int), IPC_CREAT | 0644);
+  if (uamem == -1) {printf("uamem error: %s\n",strerror(errno));}
+  int *usedAmt = shmat(uamem,NULL,0);
+  *usedAmt = 0;
+
+
+  int ucmem;
+  int ucmemkey = ftok("cards.c",88);
+  ucmem = shmget(ucmemkey, sizeof(int)*52, IPC_CREAT | 0644);
+  if (ucmem == -1) {printf("ucmem error: %s\n",strerror(errno));}
+  int *usedCards = shmat(ucmem,NULL,0);
+  for (i = 0; i < 52; i++) {
+    *usedCards = 0;
+    usedCards += 1;
+  }
+  
+  //value*10+suit
 }
 
 
@@ -191,18 +228,97 @@ void setAllCardsLeft(int newC, int index) {
 }
 
 
-void setOkToStart() {
-  int shmem;
-  int shmemkey = ftok("cards.c",85);
-  shmem = shmget(shmemkey,sizeof(int), IPC_CREAT | 0644);
-  int *ok = shmat(shmem,NULL,0);
-  *ok = 1;
+
+void setLastAmount(int n) {
+  int lamem;
+  int lamemkey = ftok("cards.c",85);
+  lamem = shmget(lamemkey, sizeof(int), IPC_CREAT | 0644);
+  if (lamem == -1) {printf("lamem error: %s\n",strerror(errno));}
+  int *lastAmt = shmat(lamem,NULL,0);
+  *lastAmt = n;
 }
 
-int getOkToStart() {
-  int shmem;
-  int shmemkey = ftok("cards.c",85);
-  shmem = shmget(shmemkey,sizeof(int), IPC_CREAT | 0644);
-  int *ok = shmat(shmem,NULL,0);
-  return *ok;
+
+int getLastAmount() {
+  int lamem;
+  int lamemkey = ftok("cards.c",85);
+  lamem = shmget(lamemkey, sizeof(int), IPC_CREAT | 0644);
+  if (lamem == -1) {printf("lamem error: %s\n",strerror(errno));}
+  int *lastAmt = shmat(lamem,NULL,0);
+  return *lastAmt;
 }
+
+
+void setLastCards(int * ar, int len) {
+  int lcmem;
+  int lcmemkey = ftok("cards.c",86);
+  lcmem = shmget(lcmemkey, sizeof(int)*5, IPC_CREAT | 0644);
+  if (lcmem == -1) {printf("lcmem error: %s\n",strerror(errno));}
+  int *lastCards = shmat(lcmem,NULL,0);
+  int i;
+  for (i = 0; i < len; i++) {
+    *lastCards = ar[i];
+    lastCards += 1;
+  }
+  for (i; i < 5; i++) {
+    *lastCards = 0;
+    lastCards += 1;
+  }
+}
+
+
+int * getLastCards() {
+  int lcmem;
+  int lcmemkey = ftok("cards.c",86);
+  lcmem = shmget(lcmemkey, sizeof(int)*5, IPC_CREAT | 0644);
+  if (lcmem == -1) {printf("lcmem error: %s\n",strerror(errno));}
+  int *lastCards = shmat(lcmem,NULL,0);
+  return lastCards;
+}
+
+
+void setUsedAmount(int n) {
+  int uamem;
+  int uamemkey = ftok("cards.c",87);
+  uamem = shmget(uamemkey, sizeof(int), IPC_CREAT | 0644);
+  if (uamem == -1) {printf("uamem error: %s\n",strerror(errno));}
+  int *usedAmt = shmat(uamem,NULL,0);
+  *usedAmt += n;
+}
+
+int getUsedAmount() {
+  int uamem;
+  int uamemkey = ftok("cards.c",87);
+  uamem = shmget(uamemkey, sizeof(int), IPC_CREAT | 0644);
+  if (uamem == -1) {printf("uamem error: %s\n",strerror(errno));}
+  int *usedAmt = shmat(uamem,NULL,0);
+  return *usedAmt;
+}
+
+
+void setUsedCards(int * ar, int len) {
+  int ucmem;
+  int ucmemkey = ftok("cards.c",88);
+  ucmem = shmget(ucmemkey, sizeof(int)*52, IPC_CREAT | 0644);
+  if (ucmem == -1) {printf("ucmem error: %s\n",strerror(errno));}
+  int *usedCards = shmat(ucmem,NULL,0);
+  int i;
+  for (i = getUsedAmount(); i < len; i++) {
+    *usedCards = ar[i];
+    usedCards += 1;
+  }
+  for (i; i < 52; i++) {
+    *usedCards = 0;
+    usedCards += 1;
+  }
+}
+
+
+int * getUsedCards() {
+  int ucmem;
+  int ucmemkey = ftok("cards.c",88);
+  ucmem = shmget(ucmemkey, sizeof(int)*52, IPC_CREAT | 0644);
+  if (ucmem == -1) {printf("ucmem error: %s\n",strerror(errno));}
+  int *usedCards = shmat(ucmem,NULL,0);
+  return usedCards;
+} 
