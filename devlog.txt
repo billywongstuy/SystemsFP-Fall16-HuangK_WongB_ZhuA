@@ -97,3 +97,9 @@ alvinZ + karenH -- 01/19/2017 15:38
 
 billyW -- 01/19/2017 21:27
 - FINALLY fixed variable passing problem
+
+alvinZ + karenH -- 01/20/2017 15:32
+- Trump day yay! :'(
+- Error message (wrong cards placed) displaying
+- First move 3 of Diamonds checking
+- Updated basis behind rules
