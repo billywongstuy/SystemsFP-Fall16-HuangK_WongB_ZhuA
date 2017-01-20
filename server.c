@@ -243,15 +243,16 @@ void step1(char *s) {
     // PUT THE CHECK HERE
     // IF NOT ALLOWED DON'T DO THE STUFF BELOW
     // NEED TO MAKE SURE THE USEDCARDS AND AMOUNTUSED FUNCTION CORRECTLY
-    // MAY HAVE TO USE shared memory
+    // NEED TO USE shared memory
 
     //ALSO UNBLOCK THE CURRENT
+
+    printf("amt used: %d\n",amountUsed);
     
     
     //ADDING CARDS TO USED STACK
     for (count; count < len; count++) {
       lastMove[count] = selected[count];
-      
       usedCards[count+amountUsed] = selected[count];
     }
     amountUsed += len;
