@@ -218,12 +218,12 @@ int checkStraight(int * cards){
   int value = cards[0]/10;
   int counter;
   for(counter = 1; counter<5; counter++){
-    if(cards[counter]/10 != value--){
+    value--;
+    if(cards[counter]/10 != value){
       printf("STRAIGHT BAD!\n");
       return 3;
       //not valid card
     }
-    value--;
   }
 
   printf("STRAIGHT GOOD!\n");
