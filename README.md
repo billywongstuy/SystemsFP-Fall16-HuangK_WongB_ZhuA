@@ -14,8 +14,11 @@ Karen Huang, Billy Wong, Alvin Zhu
 
 ## How to Use
 
-
-
+1. Choose your cards by inputting the number below the card(s) you wish to pick.
+2. Input "p" if you want to pass. If 3 people pass in the row, you get a freebie! Throw out any valid hand. 
+3. Press enter to check if it is your turn. It will tell you on the top. The turn order is 1->2->3->4->1->etc. The first player has the 3 of Diamond(you must start with it).
+4. If you don't know basic rules, Google is your friend!!!
+5. No butterfly/two pairs or dragon hands. Four of a kind must be matched with a single!
 
 ## List of Files That SHOULD be in the Directory
 
@@ -49,5 +52,5 @@ turns.h
 ## Notes
 
 (Before we implement signals)
-* Be sure to exit all clients before exiting the server.
-  * Failure to comply will result in a server attachment error that will last for a short while.
+<b>*Be sure to exit all clients before exiting the server.
+  * Failure to comply will result in a server attachment error that will last for a short while.</b>
