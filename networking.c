@@ -164,6 +164,12 @@ void setup() {
   turnmem = shmget(turnmemkey,sizeof(int),IPC_CREAT | 0644);
   int *turn = shmat(turnmem,NULL,0);
   *turn = 1;
+
+  int fbmem;
+  int fbmemkey = ftok("cards.c",91);
+  fbmem = shmget(fbmemkey,sizeof(int),IPC_CREAT | 0644);
+  int *fb = shmat(fbmem,NULL,0);
+  *fb = 0;
 }
 
 
@@ -369,4 +375,29 @@ int getTurnNumber() {
   turnmem = shmget(turnmemkey,sizeof(int),IPC_CREAT | 0644);
   int *turn = shmat(turnmem,NULL,0);
   return *turn;
+}
+
+
+int getFreebieNo() {
+  int fbmem;
+  int fbmemkey = ftok("cards.c",91);
+  fbmem = shmget(fbmemkey,sizeof(int),IPC_CREAT | 0644);
+  int *fb = shmat(fbmem,NULL,0);
+  return *fb;
+}
+
+void resetFreebieNo() {
+  int fbmem;
+  int fbmemkey = ftok("cards.c",91);
+  fbmem = shmget(fbmemkey,sizeof(int),IPC_CREAT | 0644);
+  int *fb = shmat(fbmem,NULL,0);
+  *fb = 0;
+}
+
+void incFreeNo() {
+  int fbmem;
+  int fbmemkey = ftok("cards.c",91);
+  fbmem = shmget(fbmemkey,sizeof(int),IPC_CREAT | 0644);
+  int *fb = shmat(fbmem,NULL,0);
+  *fb += 1;
 }

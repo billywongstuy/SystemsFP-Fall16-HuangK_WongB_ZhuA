@@ -5,6 +5,7 @@
 #include <time.h>
 #include <fcntl.h>
 #include <signal.h>
+#include <ctype.h>
 
 #include <sys/types.h>
 #include <sys/sem.h>
@@ -80,7 +81,7 @@ int main() {
   setup(); //SHARED MEMORY
   
   printf("f: %d\n",getFirstPlayer(playersM,4,13));
- 
+  
   while (1) {
   
     connection = server_connect( sd );
@@ -234,14 +235,44 @@ void step1(char *s) {
   int len = getInput(chosen,in,playersM[getTurnPlayer()]->cardsLeft);
   int next = nextPlayer(4,getTurnPlayer());
 
+
+  printf("in: %s\n",in);
+  printf("strlen in; %d\n",strlen(in));
+  printf("in as a uppercase letter number: %d\n",toupper(in[0]));
+  
   //INVALID CHOICE
-  if (len == 0) {
+  if (len == 0 && toupper(in[0]) != 80) {
     strcpy(s,"Invalid selection(s)");
     sb.sem_op = 1;
     semop(sems[getTurnPlayer()],&sb,1);
   }
+  else if (strlen(in) == 1 && toupper(in[0]) == 80) {
+    setTurnPlayer(next);
+    setTurnNumber();
+    strcpy(s,"You passed\n");
+    
+    char * added = (char *)malloc(sizeof(getLastMove()) + 21);
+    strcpy(added,getLastMove());
+    strcat(added," (Last player passed)");
+    setLastMove(added);
+
+    //add shared memory freebie couner
+    //Increment freebie counter
+    //if the freebie counter hits 3
+    //set mode 0
+    incFreebieNo();
+    setMode(0);
+
+    char b[500];
+    sprintf(b,"Player %d gets a freebie",next+1);
+    setLastMove(b);
+  }
   //VALID CHOICE
   else {
+
+    if (getFreebieNo() == 3) {
+      resetFreebieNo();
+    }
     
     struct card selected[len];
     char * error = getCardsChosen(selected,chosen,len,playersM,getTurnPlayer());
@@ -259,11 +290,14 @@ void step1(char *s) {
 
     int allowed = validMove(getTurnNumber(),len,getLastAmount(),cardValues,getLastCards());
 
-    printf("turnno: %d\n",turnNumber);
-    if (getTurnNumber() != 1 && getMode() != len) {
+
+    //if freebie counter == 3 then ignore the rules
+    //afterwards set freebie counter to 0
+    //NEED TO INCORPORATE FREEBIES
+    if (mode != 0 && getMode() != len) {
       strcpy(s,"Wrong amount of cards");
     }
-    else if (!allowed == 0) {
+    else if (!allowed == 0 && mode != 0) {
       printf("not allowed\n");
       strcpy(s,getInvalidMessage(allowed));
     }

@@ -89,7 +89,7 @@ int validSingle(int * choice, int * last){
 int validDouble(int * choice, int * last){
   int doubleCount;
   int checkVal = choice[0]/10;
-  for(doubleCount=1; doubleCount<3; doubleCount++){
+  for(doubleCount=1; doubleCount<2; doubleCount++){
     if(choice[doubleCount]/10 != checkVal){
       return 2;
       //Not matching
@@ -111,7 +111,7 @@ int validDouble(int * choice, int * last){
 int validTriple(int * choice, int * last){
   int tripleCount;
   int checkVal = choice[0]/10;
-  for(tripleCount=1; tripleCount<4; tripleCount++){
+  for(tripleCount=1; tripleCount<3; tripleCount++){
     if(choice[tripleCount]/10 != checkVal){
       return 2;
       //Not matching
