@@ -368,8 +368,8 @@ void initialize() {
   union semun su;
   su.val = 1;
   
-  /*int i;
-  for (i = 0; i < 4; i++) {
+  int i;
+  /*for (i = 0; i < 4; i++) {
     sems[i] = semget(ftok("server.c",i),1,IPC_CREAT | 0644);
     printf("semaphore created: %d\n",sems[i]);
     sc = semctl(sems[i],0,SETVAL,su);
