@@ -37,5 +37,11 @@ int getUsedAmount();
 void setUsedCards(int * ar, int len);
 int * getUsedCards();
 
+void setMode(int m);
+int getMode();
+
+void setTurnNumber();
+int getTurnNumber();
+
 
 #endif

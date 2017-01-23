@@ -40,6 +40,7 @@ char * getInvalidMessage(int e){
 
 int no3D(int lenC, int * choice){
   if(choice[lenC-1] != 0){
+    printf("first move check/n");
     return 1;
     //Start with 3 of Diamonds!
   }

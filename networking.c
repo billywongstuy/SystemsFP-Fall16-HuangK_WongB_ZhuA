@@ -149,8 +149,21 @@ void setup() {
     *usedCards = 0;
     usedCards += 1;
   }
+
+
+  int modemem;
+  int modememkey = ftok("cards.c",90);
+  modemem = shmget(modememkey,sizeof(int),IPC_CREAT | 0644);
+  int *mode = shmat(modemem,NULL,0);
+  *mode = 0;
   
   //value*10+suit
+
+  int turnmem;
+  int turnmemkey = ftok("cards.c",89);
+  turnmem = shmget(turnmemkey,sizeof(int),IPC_CREAT | 0644);
+  int *turn = shmat(turnmem,NULL,0);
+  *turn = 1;
 }
 
 
@@ -322,3 +335,38 @@ int * getUsedCards() {
   int *usedCards = shmat(ucmem,NULL,0);
   return usedCards;
 } 
+
+void setMode(int m) {
+  int modemem;
+  int modememkey = ftok("cards.c",90);
+  modemem = shmget(modememkey,sizeof(int),IPC_CREAT | 0644);
+  int *mode = shmat(modemem,NULL,0);
+  *mode = m;
+}
+
+
+int getMode() {
+  int modemem;
+  int modememkey = ftok("cards.c",90);
+  modemem = shmget(modememkey,sizeof(int),IPC_CREAT | 0644);
+  int *mode = shmat(modemem,NULL,0);
+  return *mode;
+}
+
+
+void setTurnNumber() {
+  int turnmem;
+  int turnmemkey = ftok("cards.c",89);
+  turnmem = shmget(turnmemkey,sizeof(int),IPC_CREAT | 0644);
+  int *turn = shmat(turnmem,NULL,0);
+  *turn += 1;
+}
+
+
+int getTurnNumber() {
+  int turnmem;
+  int turnmemkey = ftok("cards.c",89);
+  turnmem = shmget(turnmemkey,sizeof(int),IPC_CREAT | 0644);
+  int *turn = shmat(turnmem,NULL,0);
+  return *turn;
+}

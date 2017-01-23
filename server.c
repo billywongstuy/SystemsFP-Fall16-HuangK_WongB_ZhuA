@@ -252,9 +252,23 @@ void step1(char *s) {
     int cardValues[len];
     for (count = 0; count < len; count++) {
       struct card curr = selected[count];
-      cardValues[count] = curr.value*10+curr.suit;
+      printf("oks: %d %d\n",curr.value*10,curr.suit);
+      cardValues[count] = (curr.value*10)+curr.suit;
+      printf("%d     ",(curr.value*10)+curr.suit);
     }
 
+    int allowed = validMove(getTurnNumber(),len,getLastAmount(),cardValues,getLastCards());
+
+    printf("turnno: %d\n",turnNumber);
+    if (getTurnNumber() != 1 && getMode() != len) {
+      strcpy(s,"Wrong amount of cards");
+    }
+    else if (!allowed == 0) {
+      printf("not allowed\n");
+      strcpy(s,getInvalidMessage(allowed));
+    }
+    
+    
     // PROHIBITED TO USE THE CARD(S)  e.g. wrong mode, too low
     // PUT THE CHECK HERE
     // IF NOT ALLOWED DON'T DO THE STUFF BELOW
@@ -264,15 +278,17 @@ void step1(char *s) {
     //ALSO UNBLOCK THE CURRENT
     
     
-
+    else {
     //SET THE STUFF
+      setTurnNumber();
+      
     setLastCards(cardValues,len);
     setLastAmount(len);
 
     setUsedCards(cardValues,len);
     setUsedAmount(len);
-    
 
+    setMode(len);
     
     //UPDATING VARIABLES IN SHM
     lastMoveString = printChoice(selected,len,getTurnPlayer());
@@ -288,7 +304,7 @@ void step1(char *s) {
     
     setTurnPlayer(next);
     strcpy(s,"Valid selection(s)");
-    
+    }
   }
     
 }
