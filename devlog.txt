@@ -103,3 +103,6 @@ alvinZ + karenH -- 01/20/2017 15:32
 - Error message (wrong cards placed) displaying
 - First move 3 of Diamonds checking
 - Updated basis behind rules
+
+billyW -- 01/22/2017 19:37
+- couldn't figure out network blocking, but found a compromise
