@@ -323,9 +323,17 @@ void step1(char *s) {
       //SET UP THE NEXT PLAYER
       //sb.sem_op = 1;
       //semop(sems[next],&sb,1);
-      
-      setTurnPlayer(next);
-      strcpy(s,"Valid selection(s)");
+
+      if (playersM[getTurnPlayer()]->cardsLeft == 0) {
+	strcpy(s,"YOU WON!!!!!!!!!!!!!!!!!");
+	char a[500];
+	sprintf(a,"GAME OVER!!! PLAYER %d HAS WON!!!",getTurnPlayer()+1);
+	setLastMove(a);
+      }
+      else {
+	setTurnPlayer(next);
+	strcpy(s,"Valid selection(s)");
+      }
     }
   }
     

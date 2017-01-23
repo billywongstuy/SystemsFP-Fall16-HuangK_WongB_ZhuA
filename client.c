@@ -125,13 +125,18 @@ int main( int argc, char *argv[] ) {
     
     
     printf("Last Move: %s\n\n",lastMove);
-
+    
     
     for (k = 0; k < 4; k++) {
       if (k != playerId) {printf("Player %d Cards Left: %d\n",k+1,allCardsLeft[k]);}
     }
     
     printf("%s",message);
+
+
+    if (strncmp(lastMove,"GAME OVER!!! PLAYER",19) == 0) {
+      exit(0);
+    }
 
     printf("If it's not your turn, press enter to check if it is your turn\n");
     printf("If it's your turn, choose your card(s):");
