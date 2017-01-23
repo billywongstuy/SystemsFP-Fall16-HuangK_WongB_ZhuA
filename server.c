@@ -243,9 +243,6 @@ void step1(char *s) {
     sb.sem_op = 1;
     semop(sems[getTurnPlayer()],&sb,1);
   }
-  else if (getMode() != len && getMode() > 0) {
-    strcpy(s,"Wrong amount of cards");
-  }
   else if (strlen(in) == 1 && toupper(in[0]) == 80) {
     setTurnPlayer(next);
     setTurnNumber();
@@ -264,6 +261,9 @@ void step1(char *s) {
       sprintf(b,"Player %d gets a freebie",next+1);
       setLastMove(b);
     }
+  }
+  else if (getMode() != len && getMode() > 0) {
+    strcpy(s,"Wrong amount of cards");
   }
   //VALID CHOICE
   else {
@@ -298,9 +298,8 @@ void step1(char *s) {
     }
     //sucess
     else {
-      if (getFreebieNo() == 3) {
-	resetFreebieNo();
-      }
+
+      resetFreebieNo();
       
       //SET THE STUFF
       setTurnNumber();
