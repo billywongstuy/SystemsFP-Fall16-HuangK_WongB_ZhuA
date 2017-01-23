@@ -294,7 +294,7 @@ void step1(char *s) {
     if (mode != 0 && getMode() != len) {
       strcpy(s,"Wrong amount of cards");
     }
-    else if (!allowed == 0 && mode != 0 && getFreebieNo() != 3) {
+    else if (allowed != 0 && mode != 0 && getFreebieNo() != 3) {
       printf("not allowed\n");
       strcpy(s,getInvalidMessage(allowed));
     }
