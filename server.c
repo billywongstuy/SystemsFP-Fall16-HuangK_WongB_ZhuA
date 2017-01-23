@@ -46,7 +46,6 @@ struct player p1,p2,p3,p4;
 struct player *playersM[4];
 int *allCardsLeft;
 
-int mode;  //MORE INFO IN RULES.C
 char * turnPlayerInfo;
 int step;
 int *idToPass;
@@ -235,10 +234,8 @@ void step1(char *s) {
   int len = getInput(chosen,in,playersM[getTurnPlayer()]->cardsLeft);
   int next = nextPlayer(4,getTurnPlayer());
 
-
-  printf("in: %s\n",in);
-  printf("strlen in; %d\n",strlen(in));
-  printf("in as a uppercase letter number: %d\n",toupper(in[0]));
+  printf("mode: %d\n",getMode());
+  printf("len: %d\n",len);
   
   //INVALID CHOICE
   if (len == 0 && toupper(in[0]) != 80) {
@@ -256,10 +253,7 @@ void step1(char *s) {
     strcat(added," (Last player passed)");
     setLastMove(added);
 
-    //add shared memory freebie couner
-    //Increment freebie counter
-    //if the freebie counter hits 3
-    //set mode 0
+    //pass count
     incFreebieNo();
     if (getFreebieNo() == 3) {
       setMode(0);
@@ -267,6 +261,9 @@ void step1(char *s) {
       sprintf(b,"Player %d gets a freebie",next+1);
       setLastMove(b);
     }
+  }
+  else if (getMode() != len && getMode() > 0) {
+    strcpy(s,"Wrong amount of cards");
   }
   //VALID CHOICE
   else {
@@ -291,53 +288,44 @@ void step1(char *s) {
     //if freebie counter == 3 then ignore the rules
     //afterwards set freebie counter to 0
     //NEED TO INCORPORATE FREEBIES
-    if (mode != 0 && getMode() != len) {
-      strcpy(s,"Wrong amount of cards");
-    }
-    else if (allowed != 0 && mode != 0 && getFreebieNo() != 3) {
+
+    printf("allowed: %d\n",allowed);
+    printf("get freebie no: %d\n",getFreebieNo());
+
+    if (allowed != 0 && getMode() != 0 && getFreebieNo() != 3) {
       printf("not allowed\n");
       strcpy(s,getInvalidMessage(allowed));
     }
-    
-    
-    // PROHIBITED TO USE THE CARD(S)  e.g. wrong mode, too low
-    // PUT THE CHECK HERE
-    // IF NOT ALLOWED DON'T DO THE STUFF BELOW
-    // NEED TO MAKE SURE THE USEDCARDS AND AMOUNTUSED FUNCTION CORRECTLY
-    // NEED TO USE shared memory
-
-    //ALSO UNBLOCK THE CURRENT
-    
+    //sucess
     else {
-      if (getFreebieNo() == 3) {
-	resetFreebieNo();
-      }
+
+      resetFreebieNo();
       
-    //SET THE STUFF
+      //SET THE STUFF
       setTurnNumber();
       
-    setLastCards(cardValues,len);
-    setLastAmount(len);
-
-    setUsedCards(cardValues,len);
-    setUsedAmount(len);
-
-    setMode(len);
-    
-    //UPDATING VARIABLES IN SHM
-    lastMoveString = printChoice(selected,len,getTurnPlayer());
-    setLastMove(printChoice(selected,len,getTurnPlayer()));
-    
-    useCards(playersM[getTurnPlayer()],chosen,len);
-    
-    setAllCardsLeft(playersM[getTurnPlayer()]->cardsLeft,getTurnPlayer());
-
-    //SET UP THE NEXT PLAYER
-    //sb.sem_op = 1;
-    //semop(sems[next],&sb,1);
-    
-    setTurnPlayer(next);
-    strcpy(s,"Valid selection(s)");
+      setLastCards(cardValues,len);
+      setLastAmount(len);
+      
+      setUsedCards(cardValues,len);
+      setUsedAmount(len);
+      
+      setMode(len);
+      
+      //UPDATING VARIABLES IN SHM
+      lastMoveString = printChoice(selected,len,getTurnPlayer());
+      setLastMove(printChoice(selected,len,getTurnPlayer()));
+      
+      useCards(playersM[getTurnPlayer()],chosen,len);
+      
+      setAllCardsLeft(playersM[getTurnPlayer()]->cardsLeft,getTurnPlayer());
+      
+      //SET UP THE NEXT PLAYER
+      //sb.sem_op = 1;
+      //semop(sems[next],&sb,1);
+      
+      setTurnPlayer(next);
+      strcpy(s,"Valid selection(s)");
     }
   }
     

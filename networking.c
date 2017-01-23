@@ -155,7 +155,7 @@ void setup() {
   int modememkey = ftok("cards.c",90);
   modemem = shmget(modememkey,sizeof(int),IPC_CREAT | 0644);
   int *mode = shmat(modemem,NULL,0);
-  *mode = 0;
+  *mode = -1;
   
   //value*10+suit
 

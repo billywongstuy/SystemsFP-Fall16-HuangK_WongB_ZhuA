@@ -146,6 +146,9 @@ int validCombo(int * cards, int * last){
     hand[cardsCount] = cards[cardsCount]/10 + cards[cardsCount]%10;
     }*/
   int handCombo = checkCombo(cards);
+  if(handCombo == -2){
+    return 2;
+  }
 
   /*cardsCount=0;
   int opponent[5];
