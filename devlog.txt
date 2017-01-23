@@ -109,3 +109,11 @@ billyW -- 01/22/2017 19:37
 
 karenH -- 01/23/2017 15:34
 - Updated readme
+
+alvinZ -- 01/23/2017 16:32
+- Fixes to rules.c
+- More error messages printing
+- Fix first 3 of Diamonds polish
+
+billW -- 01/23/2017 16:32
+- Adds modes, freebies, and rules into the server
