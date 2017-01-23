@@ -106,11 +106,8 @@ int main( int argc, char *argv[] ) {
     write(sd,"Turn start",10);
     
     printf("\033c"); //CLEAR
-
-    if (strlen(message) > 0) {
-      printf("received; %s\n",message);
-      strcpy(message,"");
-    }
+    
+    printf("\n");
 
     //UPDATING VARIABLES BEFORE CHOOSING
     
@@ -124,14 +121,17 @@ int main( int argc, char *argv[] ) {
     }
     //END VARIABLE UPDATE
 
+    printf("Choice Result: %s\n",handBuf);
+    
     
     printf("Last Move: %s\n\n",lastMove);
+
     
     for (k = 0; k < 4; k++) {
       if (k != playerId) {printf("Player %d Cards Left: %d\n",k+1,allCardsLeft[k]);}
     }
     
-    printf("%s",handBuf);
+    printf("%s",message);
 
     printf("If it's not your turn, press enter to check if it is your turn\n");
     printf("If it's your turn, choose your card(s):");
@@ -154,7 +154,8 @@ int main( int argc, char *argv[] ) {
     //VARIABLES ROUND 2
   
     read(sd,&turnPlayer,sizeof(int));
-        
+
+    strcpy(buffer,"");
     read(sd,buffer,sizeof(buffer));
     strcpy(lastMove,buffer);
         
