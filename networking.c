@@ -394,7 +394,7 @@ void resetFreebieNo() {
   *fb = 0;
 }
 
-void incFreeNo() {
+void incFreebieNo() {
   int fbmem;
   int fbmemkey = ftok("cards.c",91);
   fbmem = shmget(fbmemkey,sizeof(int),IPC_CREAT | 0644);

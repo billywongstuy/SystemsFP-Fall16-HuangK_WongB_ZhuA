@@ -44,4 +44,8 @@ void setTurnNumber();
 int getTurnNumber();
 
 
+int getFreebieNo();
+void incFreebieNo();
+void resetFreebieNo();
+
 #endif

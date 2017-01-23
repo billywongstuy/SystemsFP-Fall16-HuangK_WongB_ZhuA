@@ -261,18 +261,15 @@ void step1(char *s) {
     //if the freebie counter hits 3
     //set mode 0
     incFreebieNo();
-    setMode(0);
-
-    char b[500];
-    sprintf(b,"Player %d gets a freebie",next+1);
-    setLastMove(b);
+    if (getFreebieNo() == 3) {
+      setMode(0);
+      char b[500];
+      sprintf(b,"Player %d gets a freebie",next+1);
+      setLastMove(b);
+    }
   }
   //VALID CHOICE
   else {
-
-    if (getFreebieNo() == 3) {
-      resetFreebieNo();
-    }
     
     struct card selected[len];
     char * error = getCardsChosen(selected,chosen,len,playersM,getTurnPlayer());
@@ -297,7 +294,7 @@ void step1(char *s) {
     if (mode != 0 && getMode() != len) {
       strcpy(s,"Wrong amount of cards");
     }
-    else if (!allowed == 0 && mode != 0) {
+    else if (!allowed == 0 && mode != 0 && getFreebieNo() != 3) {
       printf("not allowed\n");
       strcpy(s,getInvalidMessage(allowed));
     }
@@ -311,8 +308,11 @@ void step1(char *s) {
 
     //ALSO UNBLOCK THE CURRENT
     
-    
     else {
+      if (getFreebieNo() == 3) {
+	resetFreebieNo();
+      }
+      
     //SET THE STUFF
       setTurnNumber();
       
