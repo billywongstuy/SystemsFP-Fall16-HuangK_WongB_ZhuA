@@ -54,7 +54,7 @@ int validMove(int turn, int lenC, int lenL, int * choice, int * last){
     }
     
     int counter;
-    for(counter = 0; counter<lenL ; counter++){
+    for(counter = 0; counter<5 ; counter++){
       last[counter] = 0;
     }
   } else if(lenC != lenL){
@@ -79,9 +79,11 @@ int validMove(int turn, int lenC, int lenL, int * choice, int * last){
 
 int validSingle(int * choice, int * last){
   if(choice[0]<last[0]){
+    printf("SINGLE BAD!\n");
     return 1;
     //Not big enough
   }
+  printf("SINGLE GOOD!\n");
   
   return 0;
 }
@@ -91,20 +93,24 @@ int validDouble(int * choice, int * last){
   int checkVal = choice[0]/10;
   for(doubleCount=1; doubleCount<2; doubleCount++){
     if(choice[doubleCount]/10 != checkVal){
+      printf("DOUBLE BAD!\n");
       return 2;
       //Not matching
     }
   }
 
   if(choice[0]/10 < last[0]/10){
+    printf("DOUBLE BAD!\n");
     return 1;
   }
   if(choice[0]/10 == last[0]/10){
     if(choice[0]%10 < last[0]%10){
+      printf("DOUBLE BAD!\n");
       return 1;
     }
   }
 
+  printf("DOUBLE GOOD!\n");
   return 0;
 }
 
@@ -113,15 +119,18 @@ int validTriple(int * choice, int * last){
   int checkVal = choice[0]/10;
   for(tripleCount=1; tripleCount<3; tripleCount++){
     if(choice[tripleCount]/10 != checkVal){
+      printf("TRIPLE BAD!\n");
       return 2;
       //Not matching
     }
   }
 
   if(choice[0]/10 < last[0]/10){
+    printf("TRIPLE BAD!\n");
     return 1;
   }
 
+  printf("TRIPLE GOOD!\n");
   return 0;
 }
 
@@ -147,7 +156,8 @@ int validCombo(int * cards, int * last){
     }*/
   int handCombo = checkCombo(cards);
   if(handCombo == -2){
-    return 2;
+    printf("COMBO BAD!\n");
+    return -2;
   }
 
   /*cardsCount=0;
@@ -158,30 +168,39 @@ int validCombo(int * cards, int * last){
   int opponentCombo = checkCombo(last);
 
   if(handCombo < opponentCombo){
+    printf("COMBO BAD!\n");
     return 1;
   }
   if(handCombo == opponentCombo){
+    printf("COMBO BAD!\n");
     if(cards[2] < last[2]){
       return 1;
     }
   }
-  
+
+  printf("COMBO BAD!\n");
   return 0;
 }
 
 int checkCombo(int *cards){
   if(!checkSF(cards)){
+    printf("SF!\n");
     return 5;
   }else if(!checkBomb(cards)){
+    printf("Bomb!\n");
     return 4;
   }else if(!checkHouse(cards)){
+    printf("House!\n");
     return 3;
   }else if(!checkFlush(cards)){
+    printf("Flush!\n");
     return 2;
   }else if(!checkStraight(cards)){
+    printf("Straight!\n");
     return 1;
   }
 
+  printf("COMBO BAD!\n");
   return -2;
   //Not a thing;
 }
@@ -191,12 +210,14 @@ int checkStraight(int * cards){
   int counter;
   for(counter = 1; counter<5; counter++){
     if(cards[counter]/10 != value--){
+      printf("STRAIGHT BAD!\n");
       return 3;
       //not valid card
     }
     value--;
   }
 
+  printf("STRAIGHT GOOD!\n");
   return 0;
 }
 
@@ -205,10 +226,12 @@ int checkFlush(int *cards){
   int counter;
   for(counter = 1; counter<5; counter++){
     if(cards[counter]%10 != suit){
+      printf("FLUSH BAD!\n");
       return 3;
     }
   }
 
+  printf("FLUSH GOOD!\n");
   return 0;
 }
 
@@ -217,21 +240,26 @@ int checkHouse(int *cards){
 
   if(cards[0]/10 == value){
     if(cards[1]/10 != value){
+      printf("HOUSE BAD!\n");
       return 3;
     }
     if(cards[3]/10 != cards[4]/10){
+      printf("HOUSE BAD!\n");
       return 3;
     }
   }
   if(cards[4]/10 == value){
     if(cards[3]/10 != value){
+      printf("HOUSE BAD!\n");
       return 3;
     }
     if(cards[0]/10 != cards[1]/10){
+      printf("HOUSE BAD!\n");
       return 3;
     }
   }
 
+  printf("HOUSE GOOD!\n");
   return 0;
 }
 
@@ -241,24 +269,29 @@ int checkBomb(int *cards){
   if(cards[0]/10 == value){
     for(counter=2; counter<4; counter++){
       if(cards[counter]/10 != value){
+	printf("BOMB BAD!\n");
 	return 3;
       }
     }
   }else{
     for(counter=2; counter<5; counter++){
       if(cards[counter]/10 != value){
+	printf("BOMB BAD!\n");
 	return 3;
       }
     }
   }
 
+  printf("BOMB GOOD!\n");
   return 0;
 }
 
 int checkSF(int *cards){
   if(checkStraight(cards) || checkFlush(cards)){
+    printf("SF BAD!\n");
     return 3;
   }
 
+  printf("SF GOOD!\n");
   return 0;
 }
