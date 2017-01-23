@@ -54,8 +54,10 @@ int validMove(int turn, int lenC, int lenL, int * choice, int * last){
     }
     
     int counter;
+    int setWeird=0;
     for(counter = 0; counter<5 ; counter++){
-      last[counter] = 0;
+      last[counter] = setWeird;
+      setWeird-=2;
     }
   } else if(lenC != lenL){
     return -1;
@@ -172,9 +174,16 @@ int validCombo(int * cards, int * last){
     return 1;
   }
   if(handCombo == opponentCombo){
-    printf("COMBO BAD!\n");
-    if(cards[2] < last[2]){
-      return 1;
+    if(handCombo == 1 || handCombo == 2 || handCombo == 5){
+      if(cards[0] < last[0]){
+	printf("Straight, Flush, SF BAD!\n");
+	return 1;
+      }
+    }else{
+      if(cards[2] < last[2]){
+	printf("House, Bomb BAD!\n");
+	return 1;
+      }
     }
   }
 
@@ -247,8 +256,7 @@ int checkHouse(int *cards){
       printf("HOUSE BAD!\n");
       return 3;
     }
-  }
-  if(cards[4]/10 == value){
+  }else if(cards[4]/10 == value){
     if(cards[3]/10 != value){
       printf("HOUSE BAD!\n");
       return 3;
@@ -257,6 +265,8 @@ int checkHouse(int *cards){
       printf("HOUSE BAD!\n");
       return 3;
     }
+  }else{
+    return -2;
   }
 
   printf("HOUSE GOOD!\n");

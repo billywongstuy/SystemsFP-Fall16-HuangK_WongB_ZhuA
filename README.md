@@ -54,3 +54,7 @@ turns.h
 (Before we implement signals)
 <b>*Be sure to exit all clients before exiting the server.
   * Failure to comply will result in a server attachment error that will last for a short while.</b>
+
+## Bugs/Unfinished Features
+1. Blocking not done properly so we compromised with the "Not your turn!!" statments
+2. Networking sometimes inconsistent so sometimes wouldn't pass the entire updated buffer
