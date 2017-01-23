@@ -122,13 +122,13 @@ void sub_server( int sd ) {
     write(sd,buffer,sizeof(buffer));
 
     //BLOCKS EVERYONE AT DEFAULT
-    sb.sem_op = -1;
-    semop(sems[*idToPass],&sb,1);
+    //sb.sem_op = -1;
+    //semop(sems[*idToPass],&sb,1);
 
     //If 4 PLAYERS ARE CONNECTED, UNBLOCKS THE FIRST PLAYER
     if (*idToPass == 3) {
-      sb.sem_op = 1;
-      semop(sems[first],&sb,1);
+      //sb.sem_op = 1;
+      //semop(sems[first],&sb,1);
     }
     
   }
@@ -168,12 +168,20 @@ void sub_server( int sd ) {
     for (j = 0; j < 4; j++) {write(sd,&acl[j],sizeof(acl[j]));}
     //VARS END
 
-    
+
+    int movePlayer = -1;
+
+    read(sd,&movePlayer,sizeof(movePlayer));
     read( sd, buffer, sizeof(buffer) ); //LISTEN FOR CARD(S) CHOICE
     
     //CLIENT INPUT
     printf("[SERVER %d] received: %s\n", getpid(), buffer );
-    process( buffer );
+    if (getTurnPlayer() == movePlayer) {
+      process( buffer );
+    }
+    else {
+      strcpy(buffer,"It's not your turn!!!");
+    }
     
     //PROCESSED INFO
     write( sd, buffer, sizeof(buffer)); //PASSED TO CLIENT
@@ -275,8 +283,8 @@ void step1(char *s) {
     setAllCardsLeft(playersM[getTurnPlayer()]->cardsLeft,getTurnPlayer());
 
     //SET UP THE NEXT PLAYER
-    sb.sem_op = 1;
-    semop(sems[next],&sb,1);
+    //sb.sem_op = 1;
+    //semop(sems[next],&sb,1);
     
     setTurnPlayer(next);
     strcpy(s,"Valid selection(s)");

@@ -99,8 +99,8 @@ int main( int argc, char *argv[] ) {
   while (1) {
 
     //printf("blocking %d\n",sem);  
-    sb.sem_op = -1;
-    semop(sem,&sb,1);
+    //sb.sem_op = -1;
+    //semop(sem,&sb,1);
 
 
     write(sd,"Turn start",10);
@@ -133,10 +133,14 @@ int main( int argc, char *argv[] ) {
     
     printf("%s",handBuf);
 
-    printf("Choose your card(s): ");
+    printf("If it's not your turn, press enter to check if it is your turn\n");
+    printf("If it's your turn, choose your card(s):");
     fgets( buffer, sizeof(buffer), stdin );
     char *p = strchr(buffer, '\n');
-    *p = 0;    
+    *p = 0;
+
+    write(sd,&playerId,sizeof(playerId));
+    
     write( sd, buffer, sizeof(buffer) ); //This is what is passed to server
     
     printf("\033c");  //CLEAR
