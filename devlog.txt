@@ -124,3 +124,7 @@ billyW -- 01/23/2017 17:00
 
 billyW -- 01/23/2017 19:53
 - Fixed turn one pass bug and unallowed turn 1 5-combo bug
+
+alvinZ -- 01/24/2017 0:13
+- Colorified text (red for error, blue for pass, green for good, yellow for win)
+- Standardized UI
