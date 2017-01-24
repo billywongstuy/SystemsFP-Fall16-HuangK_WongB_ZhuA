@@ -243,6 +243,9 @@ void step1(char *s) {
     sb.sem_op = 1;
     semop(sems[getTurnPlayer()],&sb,1);
   }
+  else if (getMode() == -1 && strlen(in) == 1 && toupper(in[0]) == 80) {
+    strcpy(s,"NO PASSING ON THE FIST TURN...");
+  }
   else if (strlen(in) == 1 && toupper(in[0]) == 80 && getMode() != -1) {
     setTurnPlayer(next);
     setTurnNumber();

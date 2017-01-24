@@ -71,7 +71,7 @@ int validMove(int turn, int lenC, int lenL, int * choice, int * last){
   }else if(lenC == 3){
     return validTriple(choice, last);
   }else if(lenC == 5){
-    return validCombo(choice, last);
+    return validCombo(choice, last,turn);
   }
   
   
@@ -136,7 +136,7 @@ int validTriple(int * choice, int * last){
   return 0;
 }
 
-int validCombo(int * cards, int * last){
+int validCombo(int * cards, int * last, int turn){
   //int cardsCombos[5] = {1, 2, 3, 4, 5};
   //1: Straight
   //2: Flush
@@ -167,6 +167,11 @@ int validCombo(int * cards, int * last){
   for(cardsCount = 0; cardsCount<5; cardsCount++){
     opponent[cardsCount] = cards[cardsCount]/10 + cards[cardsCount]%10;
     }*/
+
+  if (turn == 1) {
+    return 0;
+  }
+  
   int opponentCombo = checkCombo(last);
 
   if(handCombo < opponentCombo){

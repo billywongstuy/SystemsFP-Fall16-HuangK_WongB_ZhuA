@@ -119,5 +119,8 @@ billW -- 01/23/2017 16:32
 - Adds modes, freebies, and rules into the server
 
 billyW -- 01/23/2017 17:00
--Added winning sequence 
--This marks basic
+- Added winning sequence 
+- This marks basic
+
+billyW -- 01/23/2017 19:53
+- Fixed turn one pass bug and unallowed turn 1 5-combo bug

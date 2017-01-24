@@ -17,7 +17,7 @@ int validDouble(int * choice, int * last);
 
 int validTriple(int * choice, int * last);
 
-int validCombo(int * choice, int *last);
+int validCombo(int * choice, int *last, int turn);
 
 int checkCombo(int * cards);
 
