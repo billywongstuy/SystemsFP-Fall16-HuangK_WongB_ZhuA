@@ -62,3 +62,8 @@ Karen Huang, Billy Wong, Alvin Zhu
 1. Blocking not done properly so we compromised with the "Not your turn!!" statments
 2. Networking sometimes inconsistent so sometimes wouldn't pass the entire updated buffer
 3. Location of "Your Info" and "Choice Result" swapped if server and client are on the same IP address (or if the network passing screws up).
+
+## Screenshot
+
+UI should look something along the lines of this (at least if using one system for all 4 players).
+![Screenshot](https://lh4.googleusercontent.com/nXOdclhnm-GQU7XVVBFsAF0KbQ4Q3LbijHiW_bVCVOCSwXPNTvFG8cQdr_ZeHYF2gKJOBTa7fgU2qTY=w1301-h673)
