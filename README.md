@@ -66,4 +66,4 @@ Karen Huang, Billy Wong, Alvin Zhu
 ## Screenshot
 
 UI should look something along the lines of this (at least if using one system for all 4 players).
-![Screenshot](https://lh4.googleusercontent.com/nXOdclhnm-GQU7XVVBFsAF0KbQ4Q3LbijHiW_bVCVOCSwXPNTvFG8cQdr_ZeHYF2gKJOBTa7fgU2qTY=w1301-h673)
+https://drive.google.com/file/d/0B1jCTECz-7BDRm1OZ2xoeldDTDA/view?usp=sharing
