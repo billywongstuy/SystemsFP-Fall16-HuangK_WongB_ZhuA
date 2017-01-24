@@ -17,6 +17,9 @@ char * getInvalidMessage(int e){
   if(!e){
     return "";
   }
+  if(e == -4){
+    return "\x1B[31mPlease don't repeat cards...\x1B[0m\n";
+  }
   if(e == -3){
     return "\x1B[31mStart with 3 of Diamonds\x1B[0m\n";
   }
@@ -48,6 +51,21 @@ int no3D(int lenC, int * choice){
 }
 
 int validMove(int turn, int lenC, int lenL, int * choice, int * last){
+  if(lenC > 5){
+    return -1;
+  }
+
+  if(lenC > 1){
+    int handCheck;
+    int repeating = choice[0];
+    for(handCheck = 1; handCheck < lenC; handCheck++){
+      if(choice[handCheck]==repeating){
+        return -4;
+      }
+      repeating = choice[handCheck];
+    }
+  }
+
   if(turn == 1){
     if(no3D(lenC, choice)){
       return -3;

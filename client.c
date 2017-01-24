@@ -132,7 +132,11 @@ int main( int argc, char *argv[] ) {
 
 
     for (k = 0; k < 4; k++) {
-      if (k != playerId) {printf("Player %d Cards Left: %d\n",k+1,allCardsLeft[k]);}
+      if (k != playerId) {
+        if(k == turnPlayer){
+          printf("\x1B[32m");
+        }
+        printf("Player %d cards left: %d\x1B[0m\n",k+1,allCardsLeft[k]);}
     }
     printf("\n");
 
