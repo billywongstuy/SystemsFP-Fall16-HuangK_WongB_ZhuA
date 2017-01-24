@@ -79,7 +79,7 @@ int main() {
   initialize();
   setup(); //SHARED MEMORY
   
-  printf("f: %d\n",getFirstPlayer(playersM,4,13));
+  printf("first player id: %d\n",getFirstPlayer(playersM,4,13));
   
   while (1) {
   
@@ -142,8 +142,8 @@ void sub_server( int sd ) {
 
   
   //SEMAPHORE OF NEXT
-  sprintf(buffer,"%d",sems[nextPlayer(4,*idToPass)]);
-  write(sd,buffer,sizeof(buffer));
+  //sprintf(buffer,"%d",sems[nextPlayer(4,*idToPass)]);
+  //write(sd,buffer,sizeof(buffer));
 
 
   //INITIAL PLAYER INFO
@@ -368,13 +368,13 @@ void initialize() {
   union semun su;
   su.val = 1;
   
-  int i;
+  /*int i;
   for (i = 0; i < 4; i++) {
     sems[i] = semget(ftok("server.c",i),1,IPC_CREAT | 0644);
     printf("semaphore created: %d\n",sems[i]);
     sc = semctl(sems[i],0,SETVAL,su);
     printf("value set: %d\n",sc);
-  }
+    }*/
 
   turnNumber = 0;
 

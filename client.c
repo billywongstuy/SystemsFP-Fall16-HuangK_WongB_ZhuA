@@ -77,8 +77,8 @@ int main( int argc, char *argv[] ) {
 
 
   //SEMAPHORE OF NEXT
-  read(sd,buffer,sizeof(buffer));
-  int nextSem = atoi(buffer);
+  //read(sd,buffer,sizeof(buffer));
+  //int nextSem = atoi(buffer);
   //printf("nextsem: %d\n",nextSem);
 
   //Initial cards left
@@ -121,6 +121,9 @@ int main( int argc, char *argv[] ) {
     }
     //END VARIABLE UPDATE
 
+    if (turnPlayer == playerId) {
+      printf("IT'S YOUR TURN! CHOOSE A MOVE!\n");
+    }
     printf("Choice Result: %s\n",handBuf);
     
     
