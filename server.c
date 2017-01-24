@@ -70,7 +70,7 @@ void incID() {
 int main() {
 
   srand(time(NULL));
-  
+
   int sd, connection;
 
   sd = server_setup();
@@ -78,28 +78,28 @@ int main() {
   turnNumber = 1;
   initialize();
   setup(); //SHARED MEMORY
-  
+
   printf("first player id: %d\n",getFirstPlayer(playersM,4,13));
-  
+
   while (1) {
-  
+
     connection = server_connect( sd );
 
     int f = fork();
     if ( f == 0 ) {
-      
+
       close(sd);
-      
+
       sub_server( connection );
       exit(0);
     }
     else {
       close( connection );
     }
-    
+
     turnNumber++;
     incID();
-    
+
   }
   return 0;
 }
@@ -108,12 +108,12 @@ int main() {
 void sub_server( int sd ) {
   char buffer[MESSAGE_BUFFER_SIZE];
   char varBuffer[1000];
-  
+
   int first = getFirstPlayer(playersM,4,13);
   setTurnPlayer(first);
   char *start = (char *)malloc(sizeof(char));
 
-  
+
   //ASSIGNS PLAYER ID
   //IF TOO MANY PLAYERS, WRITES A MESSAGE INSTEAD OF ID
   if (*idToPass < 4) {
@@ -130,7 +130,7 @@ void sub_server( int sd ) {
       //sb.sem_op = 1;
       //semop(sems[first],&sb,1);
     }
-    
+
   }
 
   //TOO MANY PLAYERS
@@ -140,7 +140,7 @@ void sub_server( int sd ) {
     exit(0);
   }
 
-  
+
   //SEMAPHORE OF NEXT
   //sprintf(buffer,"%d",sems[nextPlayer(4,*idToPass)]);
   //write(sd,buffer,sizeof(buffer));
@@ -149,12 +149,12 @@ void sub_server( int sd ) {
   //INITIAL PLAYER INFO
   strcpy(start,memPrintPlayerClient(playersM[*idToPass]));
   strcat(start,"  1  |  2  |  3  |  4  |  5  |  6  |  7  |  8  |  9  |  10 |  11 |  12 |  13 |\n\n" );
-  sprintf(buffer,"%s",start);	
-  write(sd,buffer,sizeof(buffer));  
+  sprintf(buffer,"%s",start);
+  write(sd,buffer,sizeof(buffer));
 
-  
+
   while (1) {
-    
+
     read(sd,buffer,sizeof(buffer)); //THIS IS TO BLOCK
 
     //VARIABLES P1
@@ -163,7 +163,7 @@ void sub_server( int sd ) {
 
     char * lma = getLastMove();          strcpy(varBuffer,lma);
     write(sd,varBuffer,sizeof(varBuffer));
-    
+
     int * acl = getAllCardsLeft();         int j;
     for (j = 0; j < 4; j++) {write(sd,&acl[j],sizeof(acl[j]));}
     //VARS END
@@ -173,31 +173,31 @@ void sub_server( int sd ) {
 
     read(sd,&movePlayer,sizeof(movePlayer));
     read( sd, buffer, sizeof(buffer) ); //LISTEN FOR CARD(S) CHOICE
-    
+
     //CLIENT INPUT
     printf("[SERVER %d] received: %s\n", getpid(), buffer );
     if (getTurnPlayer() == movePlayer) {
       process( buffer );
     }
     else {
-      strcpy(buffer,"It's not your turn!!!");
+      strcpy(buffer,"\x1B[31mIt's not your turn!!!\x1B[0m\n");
     }
-    
+
     //PROCESSED INFO
     write( sd, buffer, sizeof(buffer)); //PASSED TO CLIENT
 
     //VARIABLES
     gtp = getTurnPlayer();
     write(sd,&gtp,sizeof(gtp));
-    
+
     char * lms = getLastMove();       strcpy(varBuffer,lms);
     write(sd,varBuffer,sizeof(varBuffer));
-    
+
     acl = getAllCardsLeft();
     for (j = 0; j < 4; j++) {write(sd,&acl[j],sizeof(acl[j]));}
     //VARS R2 END
-    
-    
+
+
     //PLAYER INFO
     strcpy(start,memPrintPlayerClient(playersM[*idToPass]));
     strcat(start,"  1  |");
@@ -207,14 +207,14 @@ void sub_server( int sd ) {
       if (i >= 8) {sprintf(start + strlen(start),"  %d |",i+2);}
       else {sprintf(start + strlen(start),"  %d  |",i+2);}
     }
-    strcat(start,"\n\n");    
+    strcat(start,"\n\n");
     sprintf(buffer,"%s",start);
 
     write(sd,buffer,sizeof(buffer));
-    
+
   }
-  
-  
+
+
 }
 
 
@@ -230,30 +230,30 @@ void step1(char *s) {
   int count = 0;
   int chosen[5];
   char * in = s;
-  
+
   int len = getInput(chosen,in,playersM[getTurnPlayer()]->cardsLeft);
   int next = nextPlayer(4,getTurnPlayer());
 
   printf("mode: %d\n",getMode());
   printf("len: %d\n",len);
-  
+
   //INVALID CHOICE
   if (len == 0 && toupper(in[0]) != 80) {
-    strcpy(s,"Invalid selection(s)");
+    strcpy(s,"\x1B[31mInvalid selection(s)\x1B[0m\n");
     sb.sem_op = 1;
     semop(sems[getTurnPlayer()],&sb,1);
   }
   else if (getMode() == -1 && strlen(in) == 1 && toupper(in[0]) == 80) {
-    strcpy(s,"NO PASSING ON THE FIST TURN...");
+    strcpy(s,"\x1B[31mNO PASSING ON THE FIRST TURN...\x1B[0m\n");
   }
   else if (strlen(in) == 1 && toupper(in[0]) == 80 && getMode() != -1) {
     setTurnPlayer(next);
     setTurnNumber();
-    strcpy(s,"You passed\n");
-    
+    strcpy(s,"\x1B[36mYou passed\n\x1B[0m");
+
     char * added = (char *)malloc(sizeof(getLastMove()) + 21);
     strcpy(added,getLastMove());
-    strcat(added," (Last player passed)");
+    strcat(added,"\x1B[36m (Last player passed)\x1B[0m\n");
     setLastMove(added);
 
     //pass count
@@ -261,16 +261,16 @@ void step1(char *s) {
     if (getFreebieNo() == 3) {
       setMode(0);
       char b[500];
-      sprintf(b,"Player %d gets a freebie",next+1);
+      sprintf(b,"\x1B[36mPlayer %d gets a freebie\x1B[0m\n\n",next+1);
       setLastMove(b);
     }
   }
   else if (getMode() != len && getMode() > 0) {
-    strcpy(s,"Wrong amount of cards");
+    strcpy(s,"\x1B[31mWrong amount of cards\x1B[0m\n");
   }
   //VALID CHOICE
   else {
-    
+
     struct card selected[len];
     char * error = getCardsChosen(selected,chosen,len,playersM,getTurnPlayer());
     sortCards(selected,len);
@@ -303,58 +303,58 @@ void step1(char *s) {
     else {
 
       resetFreebieNo();
-      
+
       //SET THE STUFF
       setTurnNumber();
-      
+
       setLastCards(cardValues,len);
       setLastAmount(len);
-      
+
       setUsedCards(cardValues,len);
       setUsedAmount(len);
-      
+
       setMode(len);
-      
+
       //UPDATING VARIABLES IN SHM
       lastMoveString = printChoice(selected,len,getTurnPlayer());
       setLastMove(printChoice(selected,len,getTurnPlayer()));
-      
+
       useCards(playersM[getTurnPlayer()],chosen,len);
-      
+
       setAllCardsLeft(playersM[getTurnPlayer()]->cardsLeft,getTurnPlayer());
-      
+
       //SET UP THE NEXT PLAYER
       //sb.sem_op = 1;
       //semop(sems[next],&sb,1);
 
       if (playersM[getTurnPlayer()]->cardsLeft == 0) {
-	strcpy(s,"YOU WON!!!!!!!!!!!!!!!!!");
+	strcpy(s,"\x1B[33mYOU WON!!!!!!!!!!!!!!!!!\x1B[0m\n");
 	char a[500];
-	sprintf(a,"GAME OVER!!! PLAYER %d HAS WON!!!",getTurnPlayer()+1);
+	sprintf(a,"\x1B[33mGAME OVER!!! PLAYER %d HAS WON!!!\x1B[0m\n\n",getTurnPlayer()+1);
 	setLastMove(a);
       }
       else {
 	setTurnPlayer(next);
-	strcpy(s,"Valid selection(s)");
+	strcpy(s,"\x1B[32mValid selection(s)\x1B[0m\n");
       }
     }
   }
-    
+
 }
 
 
 
 void initialize() {
-  
+
   playersM[0] = &p1;
   playersM[1] = &p2;
   playersM[2] = &p3;
   playersM[3] = &p4;
 
   setupDeck(deck);
-  
+
   distributeCards(deck,playersM,4);
-  
+
   sortCards(p1.hand,13);
   sortCards(p2.hand,13);
   sortCards(p3.hand,13);
@@ -367,7 +367,7 @@ void initialize() {
   sb.sem_flg = SEM_UNDO;
   union semun su;
   su.val = 1;
-  
+
   int i;
   /*for (i = 0; i < 4; i++) {
     sems[i] = semget(ftok("server.c",i),1,IPC_CREAT | 0644);
@@ -382,13 +382,11 @@ void initialize() {
   for (i=0;i<4;i++){allCardsLeft[i]=13;}
 
   lastMoveString = (char *)malloc(sizeof(char));
-  strcpy(lastMoveString,"This is the first move");
-  setLastMove("This is the first move");
-  
+  strcpy(lastMoveString,"This is the first move\n\n");
+  setLastMove("This is the first move\n\n");
+
   setAllCardsLeft(13,0);
   setAllCardsLeft(13,1);
   setAllCardsLeft(13,2);
   setAllCardsLeft(13,3);
 }
-
-

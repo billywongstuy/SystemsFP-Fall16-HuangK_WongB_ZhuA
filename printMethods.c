@@ -38,7 +38,7 @@ void printPlayer(struct player p) {
         printf("\x1B[34m %s\x1B[37m |", suits[p.hand[i].suit]);
     }
   }
-  printf("\x1B[0m\n\n");
+  printf("\x1B[0m\n");
 }
 
 
@@ -59,13 +59,13 @@ void memPrintPlayer (struct player *p) {
         printf("\x1B[34m %s\x1B[37m |", suits[p->hand[i].suit]);
     }
   }
-  printf("\x1B[0m\n\n");
+  printf("\x1B[0m\n");
 }
 
 
 char * printPlayerClient(struct player p) {
   char buf[1000];
-  
+
   sprintf(buf, "\x1B[1;37mCards left: %d\n",p.cardsLeft);
   int i;
   sprintf(buf + strlen(buf), "Hand: \n");
@@ -79,7 +79,7 @@ char * printPlayerClient(struct player p) {
       sprintf(buf + strlen(buf), "\x1B[34m %s\x1B[37m |", suits[p.hand[i].suit]);
     }
   }
-  sprintf(buf + strlen(buf), "\x1B[0m\n\n");
+  sprintf(buf + strlen(buf), "\x1B[0m\n");
   char * s = (char *)malloc(sizeof(char));
   strcpy(s,buf);
   return s;
@@ -90,7 +90,7 @@ char * printPlayerClient(struct player p) {
 char * memPrintPlayerClient(struct player * p) {
   char buf[1000];
   int len = 0;
-  
+
   len += sprintf(buf + len, "\x1B[1;37m\nYour Info (Player %d)\n\nCards left: %d\n\n",p->id+1,p->cardsLeft);
   int i;
   sprintf(buf + strlen(buf), "Hand: \n");
@@ -102,8 +102,8 @@ char * memPrintPlayerClient(struct player * p) {
       len += sprintf(buf + len, "\x1B[34m %s\x1B[37m |", suits[p->hand[i].suit]);
     }
   }
-  len += sprintf(buf + len, "\x1B[0m\n\n");
-  
+  len += sprintf(buf + len, "\x1B[0m\n");
+
   char * s = (char *)malloc(sizeof(char));
   strcpy(s,buf);
   return s;
@@ -113,7 +113,7 @@ char * memPrintPlayerClient(struct player * p) {
 char * printChoice (struct card *ch, int l, int tp) {
   char buf[1000];
   int len = 0;
-  
+
   int i;
   for (i = 0; i < l; i++) {
     len += sprintf(buf + len, "\x1B[1;37m%s", values[ch[i].value]);
@@ -124,7 +124,7 @@ char * printChoice (struct card *ch, int l, int tp) {
     }
   }
   len += sprintf(buf + len, " (Player %d)\x1B[0m\n\n",tp+1);
-  
+
   char * s = (char *)malloc(sizeof(char));
   strcpy(s,buf);
   return s;

@@ -18,24 +18,24 @@ char * getInvalidMessage(int e){
     return "";
   }
   if(e == -3){
-    return "Start with 3 of Diamonds";
+    return "\x1B[31mStart with 3 of Diamonds\x1B[0m\n";
   }
   if(e == -2){
-    return "Not valid hand";
+    return "\x1B[31mNot valid hand\x1B[0m\n";
   }
   if(e == -1){
-    return "wrong number of cards";
+    return "\x1B[31mWrong number of cards\x1B[0m\n";
   }
   if(e == 1){
-    return "Not strong enough";
+    return "\x1B[31mNot strong enough\x1B[0m\n";
   }
   if(e == 2){
-    return "Cards don't match";
+    return "\x1B[31mCards don't match\x1B[0m\n";
   }
   if(e == 3){
-    return "Can't end with 2 of Spades";
+    return "\x1B[31mCan't end with 2 of Spades\x1B[0m\n";
   }
-  
+
 }
 
 int no3D(int lenC, int * choice){
@@ -52,7 +52,7 @@ int validMove(int turn, int lenC, int lenL, int * choice, int * last){
     if(no3D(lenC, choice)){
       return -3;
     }
-    
+
     int counter;
     int setWeird=0;
     for(counter = 0; counter<5 ; counter++){
@@ -63,7 +63,7 @@ int validMove(int turn, int lenC, int lenL, int * choice, int * last){
     return -1;
     //Wrong amount of cards
   }
-  
+
   if(lenC == 1){
     return validSingle(choice, last);
   }else if(lenC == 2){
@@ -73,8 +73,8 @@ int validMove(int turn, int lenC, int lenL, int * choice, int * last){
   }else if(lenC == 5){
     return validCombo(choice, last,turn);
   }
-  
-  
+
+
   return 0;
   //Working!
 }
@@ -86,7 +86,7 @@ int validSingle(int * choice, int * last){
     //Not big enough
   }
   printf("SINGLE GOOD!\n");
-  
+
   return 0;
 }
 
@@ -143,12 +143,12 @@ int validCombo(int * cards, int * last, int turn){
   //3: Full House
   //4: Bomb
   //5: Straight flush
-  
+
   /*int cardsCount;
   int cardsVal = cards[0]/10;
   for(cardsCount = 1; cardsCount<5; cardsCount++){
     if(cards[cardsCount]/10 != cardsVal){
-      
+
     }
     }*/
   /*int cardsCount;
@@ -171,7 +171,7 @@ int validCombo(int * cards, int * last, int turn){
   if (turn == 1) {
     return 0;
   }
-  
+
   int opponentCombo = checkCombo(last);
 
   if(handCombo < opponentCombo){
