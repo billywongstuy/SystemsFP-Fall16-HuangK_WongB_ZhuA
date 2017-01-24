@@ -243,7 +243,7 @@ void step1(char *s) {
     sb.sem_op = 1;
     semop(sems[getTurnPlayer()],&sb,1);
   }
-  else if (strlen(in) == 1 && toupper(in[0]) == 80) {
+  else if (strlen(in) == 1 && toupper(in[0]) == 80 && getMode() != -1) {
     setTurnPlayer(next);
     setTurnNumber();
     strcpy(s,"You passed\n");
