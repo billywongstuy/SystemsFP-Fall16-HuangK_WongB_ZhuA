@@ -57,13 +57,14 @@ Karen Huang, Billy Wong, Alvin Zhu
 
 ## Notes
 
-(Before we implement signals)
 <b>
 * Be sure to exit all clients before exiting the server.
 * Failure to comply will result in a server attachment error that will last for a short while.
 </b>
 
+* Would be fixed if signals were implemented
+
 ## Bugs/Unfinished Features
 1. Blocking not done properly so we compromised with the "Not your turn!!" statments
 2. Networking sometimes inconsistent so sometimes wouldn't pass the entire updated buffer
-3. Location of "Your Info" and "Choice Result" swapped if server and client are on the same IP address.
+3. Location of "Your Info" and "Choice Result" swapped if server and client are on the same IP address (or if the network passing screws up).
