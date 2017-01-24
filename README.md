@@ -19,7 +19,7 @@ Karen Huang, Billy Wong, Alvin Zhu
 2. Whoever has the 3 of Diamond has the first move, though you must start with it.
 3. Press enter to refresh the user interface and see if it's your turn. You will know when it is your turn if it says "Invalid selection(s)" on the top. The turn order is 1->2->3->4->1->etc, based on whoever is the first player. NOTE: if anything screws up, repeatedly press enter until it looks good again. Also, make sure not to hold enter.
 4. To pick your cards, enter the corresponding number below each card. Separate your cards chosen with spaces or commas.
-   * Ex. 12,13 for your last two cards
+   * Ex. 1,2 for your first 2 cards
    
   Otherwise, to pass: 
 5. Input "p" if you want to pass. If 3 people pass in a row, you get a freebie! Throw out any valid hand for the freebie move. 
