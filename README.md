@@ -20,7 +20,8 @@ Karen Huang, Billy Wong, Alvin Zhu
 3. Press enter to refresh the user interface and see if it's your turn. You will know when it is your turn if it says "Invalid selection(s)" on the top. The turn order is 1->2->3->4->1->etc, based on whoever is the first player. NOTE: if anything screws up, repeatedly press enter until it looks good again. Also, make sure not to hold enter.
 4. To pick your cards, enter the corresponding number below each card. Separate your cards chosen with spaces or commas.
    * Ex. 12,13 for your last two cards
-Otherwise, to pass: 
+   
+  Otherwise, to pass: 
 5. Input "p" if you want to pass. If 3 people pass in a row, you get a freebie! Throw out any valid hand for the freebie move. 
 6. If you don't know basic rules, Google is your friend!!! NOTE: No butterfly/two pairs or dragon hands. Four of a kind must be matched with a single!
 7. When one player has no cards left, they win!
