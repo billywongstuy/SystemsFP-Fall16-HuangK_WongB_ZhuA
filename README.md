@@ -61,7 +61,8 @@ Karen Huang, Billy Wong, Alvin Zhu
 * Be sure to exit all clients before exiting the server.
 * Failure to comply will result in a server attachment error that will last for a short while.
 </b>
-* Would be fixed if signals were implemented
+
+  * Would be fixed if signals were implemented
 
 ## Bugs/Unfinished Features
 1. Blocking not done properly so we compromised with the "Not your turn!!" statments
