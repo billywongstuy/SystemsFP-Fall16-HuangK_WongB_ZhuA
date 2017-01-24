@@ -53,11 +53,11 @@ Technical Design (Topics -> Data structures -> Algorithms -> Other):
 *May incorporate GTK library for viewing used cards. Else, use a file.
 
 
-Breakdown (TBD):
+Breakdown:
 
-Karen:
-Billy:
-Alvin: 
+Karen: Bridge between networking and rules
+Billy: Networking
+Alvin: Rules, UI/aesthetics
 
   
 Timeline of Expected Completed Parts:
